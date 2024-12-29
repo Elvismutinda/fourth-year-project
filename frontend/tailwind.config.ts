@@ -10,6 +10,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      container: {
+        padding: '1rem',
+        center: true,
+      },
       colors: {
         primary: "#1F4F71",
         secondary: "#B5882D",
