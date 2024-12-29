@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import logoImage from "../assets/images/logosaas.png";
+import logoImage from "../../public/images/logosaas.png";
 import { MdMenu } from "react-icons/md";
 import { links } from "@/config/data";
 import Link from "next/link";

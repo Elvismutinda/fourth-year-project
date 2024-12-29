@@ -4,7 +4,7 @@ import { Button, Input, Spinner } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import logoImage from "../../assets/images/logosaas.png";
+import logoImage from "../../../public/images/logosaas.png";
 import { siteConfig } from "@/config/site";
 
 const RegisterForm = () => {
