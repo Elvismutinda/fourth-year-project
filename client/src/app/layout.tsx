@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import AppLayoutWrapper from "./layoutWrapper";
-import { ClerkProvider } from "@clerk/nextjs";
+// import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { Suspense } from "react";
 import { siteConfig } from "@/config/site";
@@ -27,17 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    // <ClerkProvider>
       <html lang="en">
         <body className={`${dmSans.variable} antialiased`}>
           <AppLayoutWrapper>
             <Suspense fallback={null}>
-              <div className="">{children}</div>
+              <div className="mx-auto w-full h-full justify-center items-center">{children}</div>
             </Suspense>
             <Toaster richColors closeButton />
           </AppLayoutWrapper>
         </body>
       </html>
-    </ClerkProvider>
+    // </ClerkProvider>
   );
 }

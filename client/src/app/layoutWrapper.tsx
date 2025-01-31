@@ -1,18 +1,12 @@
 "use client";
+
 import React from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import StoreProvider from "@/state/redux";
 
 export default function AppLayoutWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
-  return (
-
-      <NextThemesProvider attribute={"class"} defaultTheme={"light"}>
-          {children}
-      </NextThemesProvider>
-
-  );
+  return <StoreProvider>{children}</StoreProvider>;
 }
