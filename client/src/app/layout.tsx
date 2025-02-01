@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Mulish } from "next/font/google";
 import "./globals.css";
 import AppLayoutWrapper from "./layoutWrapper";
-// import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
-import { Suspense } from "react";
 import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
 
-const dmSans = DM_Sans({
+const mulishFont = Mulish({
   subsets: ["latin"],
-  display: "swap",
-  variable: "--font-dm-sans",
 });
 
 export const metadata: Metadata = {
@@ -27,17 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <ClerkProvider>
-      <html lang="en">
-        <body className={`${dmSans.variable} antialiased`}>
-          <AppLayoutWrapper>
-            <Suspense fallback={null}>
-              <div className="mx-auto w-full h-full justify-center items-center">{children}</div>
-            </Suspense>
-            <Toaster richColors closeButton />
-          </AppLayoutWrapper>
-        </body>
-      </html>
-    // </ClerkProvider>
+    <html lang="en">
+      <body className={cn(mulishFont.className, "antialiased")}>
+        <AppLayoutWrapper>
+            <div className="mx-auto w-full h-full justify-center items-center">
+              {children}
+            </div>
+          <Toaster richColors closeButton />
+        </AppLayoutWrapper>
+      </body>
+    </html>
   );
 }

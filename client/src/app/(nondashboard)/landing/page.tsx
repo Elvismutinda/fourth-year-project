@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
 import { useCarousel } from "@/hooks/useCarousel";
+import { Button } from "@/components/ui/button";
 
 const LoadingSkeleton = () => {
   return (
@@ -53,7 +54,7 @@ const Landing = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex justify-between items-center mt-12 h-[500px] rounded-lg bg-customgreys-secondarybg"
+        className="flex justify-between items-center mt-12 h-[500px] rounded-lg bg-[#130c49]"
       >
         <div className="basis-1/2 px-16 mx-auto">
           <h1 className="text-4xl font-bold mb-4">Cases</h1>
@@ -64,9 +65,9 @@ const Landing = () => {
           </p>
           <div className="w-fit">
             <Link href="/search" scroll={false}>
-              <div className="bg-primary-700 hover:bg-primary-600 px-4 py-2 rounded-md">
+              <Button variant="main" className="px-4 py-2 rounded-md font-semibold">
                 Search for Cases
-              </div>
+              </Button>
             </Link>
           </div>
         </div>
@@ -93,20 +94,22 @@ const Landing = () => {
         viewport={{ amount: 0.3, once: true }}
         className="mx-auto py-12 mt-10"
       >
-        <h2 className="text-2xl font-semibold mb-4">Featured Courses</h2>
-        <p className="text-customgreys-dirtyGrey mb-8">
-          From beginner to advanced, in all industries, we have the right
-          courses just for you and preparing your entire journey for learning
-          and making the most.
+        <h2 className="text-2xl text-[#2c3854] font-bold mb-4">Featured Practice Areas</h2>
+        <p className="text-[#2c3854] mb-8">
+          Explore our most popular practice areas to find the right case for you.
         </p>
 
         <div className="flex flex-wrap gap-4 mb-8">
           {[
-            "web development",
-            "enterprise IT",
-            "react nextjs",
-            "javascript",
-            "backend development",
+            "Employment and Labor Law",
+            "Litigation and Dispute Resolution",
+            "Family Law",
+            "Corporate and Business Law",
+            "Criminal Law",
+            "Intellectual Property Law",
+            "Real Estate Law",
+            "Estate Planning and Probate Law",
+            "Tax Law",
           ].map((tag, index) => (
             <span
               key={index}

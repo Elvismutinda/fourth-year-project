@@ -9,7 +9,7 @@ export default function AppLoader() {
   const router = useRouter();
 
   return (
-    <main className="flex gap-4 min-h-screen flex-col items-center justify-center text-center p-4 md:p-24 dark:text-gray-400">
+    <main className="flex gap-4 min-h-screen flex-col items-center justify-center text-center p-4 md:p-24 text-[#2c3854]">
       <HiDocumentSearch className="text-7xl" />
       <p className="text-3xl font-bold mt-4 text-center">Ooops!!</p>
       <p className="text-xl font-bold text-center">
@@ -19,7 +19,7 @@ export default function AppLoader() {
         You can go back to the home page and start from there
       </p>
       <div className="flex gap-4">
-        <Button variant="secondary" onClick={() => router.push("/")}>
+        <Button variant="default" onClick={() => router.push("/")}>
           Go back home
           <HiArrowRight />
         </Button>
