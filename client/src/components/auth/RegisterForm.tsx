@@ -10,7 +10,13 @@ import { LoaderCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { RegisterRequest, RegisterSchema } from "@/lib/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 import { toast } from "sonner";
 import { register } from "@/app/(auth)/register/actions";
 
@@ -25,7 +31,7 @@ const RegisterForm = () => {
       password: "",
       confirmPassword: "",
     },
-  })
+  });
 
   const handleRegister = (values: RegisterRequest) => {
     startTransition(() => {
@@ -36,8 +42,8 @@ const RegisterForm = () => {
           toast.success(data?.success);
         }
       });
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -55,7 +61,9 @@ const RegisterForm = () => {
                   width={40}
                   height={40}
                 />
-                <p className="text-[#fff] text-2xl font-bold">{siteConfig.name}</p>
+                <p className="text-[#fff] text-2xl font-bold">
+                  {siteConfig.name}
+                </p>
               </div>
               <h1 className="text-2xl font-bold text-[#fff] tracking-tight">
                 Create an account
@@ -86,73 +94,79 @@ const RegisterForm = () => {
           />
 
           <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Email"
-                      type="email"
-                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={isPending}
+                    placeholder="Email"
+                    type="email"
+                    className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Password"
-                      type="password"
-                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={isPending}
+                    placeholder="Password"
+                    type="password"
+                    className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Confirm Password"
-                      type="password"
-                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={isPending}
+                    placeholder="Confirm Password"
+                    type="password"
+                    className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <p className="text-sm text-slate-400">
-            By submitting, I agree to the Terms and Conditions and Privacy Policy.
+            By submitting, I agree to the Terms and Conditions and Privacy
+            Policy.
           </p>
 
           <div>
-            <Button variant="main" type="submit" className="h-10 w-full" disabled={isPending}>
+            <Button
+              variant="main"
+              type="submit"
+              className="h-10 w-full"
+              disabled={isPending}
+            >
               Register
               {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />}
             </Button>
           </div>
-          
+
           <p className="text-sm text-slate-400">
             Already have an account?{" "}
             <Link href="/login" className="text-[#32c06b] underline">

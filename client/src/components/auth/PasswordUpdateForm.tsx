@@ -20,9 +20,11 @@ import {
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { updatePassword } from "@/app/app/setting/actions";
+import { Button } from "../ui/button";
+import { LoaderCircle } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 const PasswordUpdateForm = () => {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<UpdatePasswordRequest>({
@@ -41,6 +43,8 @@ const PasswordUpdateForm = () => {
           toast.error(data?.error);
         } else {
           toast.success(data?.success);
+
+          signOut({ callbackUrl: "/login" });
         }
       });
     });
@@ -48,7 +52,10 @@ const PasswordUpdateForm = () => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handlePasswordUpdate)}>
+        <form
+          onSubmit={form.handleSubmit(handlePasswordUpdate)}
+          className="mx-auto sm:mx-0 sm:pl-8 flex w-full flex-col space-y-6 max-w-[360px] min-w-[320px]"
+        >
           <FormField
             control={form.control}
             name="password"
@@ -108,6 +115,18 @@ const PasswordUpdateForm = () => {
               </FormItem>
             )}
           />
+
+          <div>
+            <Button
+              variant="main"
+              type="submit"
+              className="h-10"
+              disabled={isPending}
+            >
+              Update
+              {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />}
+            </Button>
+          </div>
         </form>
       </Form>
     </>

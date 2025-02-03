@@ -55,7 +55,7 @@ export const updatePassword = async (values: UpdatePasswordRequest) => {
       .set({ password: hashedPassword })
       .where(eq(user.id, userId));
 
-    return { success: "Password updated!" };
+    return { success: "Password updated. Login with new password!" };
   } catch (error) {
     console.error("Failed to update password", error);
     return { error: "Something went wrong!" };

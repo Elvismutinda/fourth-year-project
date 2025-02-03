@@ -6,7 +6,7 @@ interface SiteShellProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const SiteShell = ({ children, className, ...props }: SiteShellProps) => {
   return (
-    <div className={cn("border-b border-border flex w-full overflow-hidden", className)} {...props}>
+    <div className={cn("grid items-start gap-8", className)} {...props}>
       {children}
     </div>
   );

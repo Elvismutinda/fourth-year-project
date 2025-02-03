@@ -10,7 +10,7 @@ interface SiteHeaderProps {
 
 const SiteHeader = ({ icon: Icon, heading, children }: SiteHeaderProps) => {
   return (
-    <div className="flex items-center justify-between py-3 pl-8 text-slate-500">
+    <div className="flex items-center justify-between py-3 pl-8 text-slate-500 border-b border-border">
       <div className="flex items-center gap-2">
         {Icon && (
           <div className="p-0.5 rounded-md border bg-slate-50">

@@ -26,10 +26,7 @@ export default async function SettingLayout({
       />
       <SidebarProvider defaultOpen={!isCollapsed}>
         <SettingSidebar items={settingConfig.sidebarNav} />
-        <SidebarInset>
-          <SidebarToggle />
-          {children}
-        </SidebarInset>
+        <SidebarInset>{children}</SidebarInset>
       </SidebarProvider>
     </>
   );
