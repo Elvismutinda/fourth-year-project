@@ -33,7 +33,7 @@ export function SidebarUserNav({ user }: { user: User }) {
       </PopoverTrigger>
       <PopoverContent className="flex flex-col justify-center text-sm ml-[70px] w-56 bg-[#2A2939] border border-gray-700 shadow-lg p-2 rounded-xl text-[#fff]">
         <Link
-          href="/setting/profile"
+          href="/app/setting/profile"
           className="flex gap-2 p-2 mt-1 hover:bg-gray-700 rounded-md cursor-pointer"
         >
           <Button className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#939395] hover:bg-[#939395] border-[#205DC2] transition">
