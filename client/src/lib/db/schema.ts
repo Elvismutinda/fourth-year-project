@@ -1,18 +1,24 @@
 import { InferSelectModel } from "drizzle-orm";
 import {
   pgTable,
+  pgEnum,
   varchar,
   timestamp,
   json,
   uuid,
   text,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
+
+export const userRole = pgEnum("userRole", ["USER", "PREMIUM"]);
 
 export const user = pgTable("User", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   name: varchar("name", { length: 64 }).notNull(),
-  email: varchar("email", { length: 64 }).notNull(),
-  password: varchar("password", { length: 64 }),
+  email: varchar("email", { length: 64 }).notNull().unique(),
+  emailVerified: timestamp("emailVerified"),
+  password: varchar("password", { length: 64 }).notNull(),
+  role: userRole("role").notNull().default("USER"),
 });
 
 export type User = InferSelectModel<typeof user>;
@@ -20,10 +26,10 @@ export type User = InferSelectModel<typeof user>;
 export const chat = pgTable("Chat", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   title: text("title").notNull(),
-  userId: uuid("user_id")
+  userId: uuid("userId")
     .notNull()
     .references(() => user.id),
-  createdAt: timestamp("created_at").notNull(),
+  createdAt: timestamp("createdAt").notNull(),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
@@ -35,7 +41,23 @@ export const message = pgTable("Message", {
     .references(() => chat.id),
   role: varchar("role").notNull(),
   content: json("content").notNull(),
-  createdAt: timestamp("created_at").notNull(),
+  createdAt: timestamp("createdAt").notNull(),
 });
 
 export type Message = InferSelectModel<typeof message>;
+
+export const verificationToken = pgTable(
+  "VerificationToken",
+  {
+    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    email: varchar("email", { length: 64 }).notNull(),
+    token: varchar("token", { length: 64 }).notNull().unique(),
+    expires: timestamp("expires").notNull(),
+  },
+  (table) => ({
+    emailTokenUnique: uniqueIndex("emailTokenUnique").on(
+      table.email,
+      table.token
+    ),
+  })
+);

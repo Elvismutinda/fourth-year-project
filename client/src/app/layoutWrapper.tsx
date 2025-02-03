@@ -1,12 +1,13 @@
-"use client";
-
 import React from "react";
-import StoreProvider from "@/state/redux";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "../../auth";
 
-export default function AppLayoutWrapper({
+export default async function AppLayoutWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <StoreProvider>{children}</StoreProvider>;
+  const session = await auth();
+
+  return <SessionProvider session={session}>{children}</SessionProvider>;
 }

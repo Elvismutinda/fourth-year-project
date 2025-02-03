@@ -6,7 +6,7 @@ import { useTransition } from "react";
 import { siteConfig } from "@/config/site";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { LuLoaderCircle } from "react-icons/lu";
+import { LoaderCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { RegisterRequest, RegisterSchema } from "@/lib/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,10 +30,10 @@ const RegisterForm = () => {
   const handleRegister = (values: RegisterRequest) => {
     startTransition(() => {
       register(values).then((data) => {
-        if (data.error) {
-          toast.error(data.error);
+        if (data?.error) {
+          toast.error(data?.error);
         } else {
-          toast.success(data.success);
+          toast.success(data?.success);
         }
       });
     })
@@ -149,7 +149,7 @@ const RegisterForm = () => {
           <div>
             <Button variant="main" type="submit" className="h-10 w-full" disabled={isPending}>
               Register
-              {isPending && <LuLoaderCircle className="h-4 w-4 animate-spin" />}
+              {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />}
             </Button>
           </div>
           

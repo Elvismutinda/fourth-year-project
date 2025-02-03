@@ -1,10 +1,16 @@
 import AppSidebar from "@/components/AppSidebar";
-import React from "react";
+import { auth } from "../../../auth";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await auth();
+
   return (
-    <div className="flex min-h-screen w-full">
-      <AppSidebar />
+    <div className="flex h-screen w-full">
+      <AppSidebar user={session?.user ?? {}} />
       {children}
     </div>
   );

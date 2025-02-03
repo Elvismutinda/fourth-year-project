@@ -7,7 +7,7 @@ import { useTransition } from "react";
 import { siteConfig } from "@/config/site";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { LuLoaderCircle } from "react-icons/lu";
+import { LoaderCircle } from "lucide-react";
 // import { FcGoogle } from "react-icons/fc";
 // import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
@@ -37,10 +37,10 @@ const LoginForm = () => {
   const handleLogin = (values: LoginRequest) => {
     startTransition(() => {
       login(values).then((data) => {
-        if (data.error) {
-          toast.error(data.error);
+        if (data?.error) {
+          toast.error(data?.error);
         } else {
-          toast.success(data.success);
+          toast.success(data?.success);
         }
       });
     });
@@ -113,9 +113,9 @@ const LoginForm = () => {
             )}
           />
 
-          <p className="text-sm underline text-[#32c06b] cursor-pointer">
+          {/* <p className="text-sm underline text-[#32c06b] cursor-pointer">
             Forgot password?
-          </p>
+          </p> */}
 
           <div>
             <Button
@@ -125,7 +125,7 @@ const LoginForm = () => {
               disabled={isPending}
             >
               Login
-              {isPending && <LuLoaderCircle className="h-4 w-4 animate-spin" />}
+              {isPending && <LoaderCircle className="h-4 w-4 animate-spin" />}
             </Button>
           </div>
           <p className="text-sm text-slate-400">

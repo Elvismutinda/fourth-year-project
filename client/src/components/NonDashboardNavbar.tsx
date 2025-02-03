@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import React from "react";
-import { HiOutlineBookOpen } from "react-icons/hi";
-import { FaRegBell } from "react-icons/fa";
+import { BookOpen } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Button } from "./ui/button";
 
 const NonDashboardNavbar = () => {
@@ -28,7 +28,7 @@ const NonDashboardNavbar = () => {
                 <span className="hidden sm:inline">Search Cases</span>
                 <span className="sm:hidden">Search</span>
               </Link>
-              <HiOutlineBookOpen
+              <BookOpen
                 className="absolute left-3 sm:left-5 top-1/2 transform -translate-y-1/2 text-[#fff] transition-all duration-300"
                 size={18}
               />
@@ -38,7 +38,7 @@ const NonDashboardNavbar = () => {
         <div className="flex items-center gap-2 sm:gap-4">
             <button className="relative w-7 h-7 sm:w-8 sm:h-8 bg-[#ededed] rounded-full flex items-center justify-center">
                 <span className="absolute top-0 right-0 bg-blue-500 h-1.5 sm:h-2 w-1.5 sm:w-2 rounded-full"></span>
-                <FaRegBell className="text-black w-4 h-4 sm:w-6 sm:h-6" />
+                <Bell className="text-black w-4 h-4 sm:w-6 sm:h-6" />
             </button>
 
           <Link href="/login">

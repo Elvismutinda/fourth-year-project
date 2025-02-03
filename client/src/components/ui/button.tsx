@@ -21,6 +21,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         main: "bg-[#61bd73] text-[#130c49] hover:bg-[#61bd73]/90",
         purple: "bg-[#2c3854] text-[#fff] hover:bg-[#2c3854]/90",
+        transparent: "bg-transparent text-inherit hover:bg-muted",
       },
       size: {
         default: "h-9 px-4 py-2",
