@@ -6,7 +6,7 @@ import { auth } from "../../../../auth";
 import Script from "next/script";
 import { SettingSidebar } from "../../../components/SettingSidebar";
 import { settingConfig } from "@/config/setting";
-import { SidebarToggle } from "@/components/SidebarToggle";
+import { AppHeader } from "@/components/AppHeader";
 
 export const experimental_ppr = true;
 
@@ -25,8 +25,19 @@ export default async function SettingLayout({
         strategy="beforeInteractive"
       />
       <SidebarProvider defaultOpen={!isCollapsed}>
-        <SettingSidebar items={settingConfig.sidebarNav} />
-        <SidebarInset>{children}</SidebarInset>
+        <div className="relative flex h-screen">
+          <SettingSidebar
+            items={settingConfig.sidebarNav}
+            className="ml-[70px] z-10"
+          />
+        </div>
+
+        <SidebarInset>
+          <div className="bg-[#1A1928] border-b border-border">
+            <AppHeader />
+          </div>
+          {children}
+        </SidebarInset>
       </SidebarProvider>
     </>
   );

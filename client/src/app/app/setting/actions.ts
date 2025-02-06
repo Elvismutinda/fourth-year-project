@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import {
   UpdatePasswordRequest,
   updatePasswordSchema,
+  UpdateProfileRequest,
+  updateProfileSchema,
 } from "@/lib/validations/user";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema";
@@ -58,6 +60,38 @@ export const updatePassword = async (values: UpdatePasswordRequest) => {
     return { success: "Password updated. Login with new password!" };
   } catch (error) {
     console.error("Failed to update password", error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const updateProfile = async (values: UpdateProfileRequest) => {
+  const validatedFields = updateProfileSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields!" };
+  }
+
+  const { firstName, lastName } = validatedFields.data;
+  const name = `${firstName} ${lastName}`;
+
+  try {
+    const session = await auth();
+
+    if (!session || !session?.user) {
+      return { error: "Unauthorized!" };
+    }
+
+    const userId = session.user.id;
+
+    if (!userId) {
+      return { error: "User ID is undefined!" };
+    }
+
+    await db.update(user).set({ name }).where(eq(user.id, userId));
+
+    return { success: "Profile updated. Login to reflect changes!" };
+  } catch (error) {
+    console.error("Failed to update profile", error);
     return { error: "Something went wrong!" };
   }
 };

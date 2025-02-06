@@ -1,3 +1,4 @@
+import ProfileUpdateForm from "@/components/auth/ProfileUpdateForm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteShell from "@/components/SiteShell";
 import { User } from "lucide-react";
@@ -11,6 +12,9 @@ const ProfilePage = () => {
   return (
     <SiteShell>
       <SiteHeader icon={User} heading="Account settings" />
+      <div className="">
+        <ProfileUpdateForm />
+      </div>
     </SiteShell>
   );
 };

@@ -19,7 +19,7 @@ type SettingSidebarProps = {
   items: SidebarNavItem[];
 };
 
-export function SettingSidebar({ items }: SettingSidebarProps) {
+export function SettingSidebar({ items, className }: SettingSidebarProps & { className?: string }) {
   const path = usePathname();
 
   if (!items.length) {
@@ -27,7 +27,7 @@ export function SettingSidebar({ items }: SettingSidebarProps) {
   }
 
   return (
-    <Sidebar className="group-data-[side=left]:border-r-0">
+    <Sidebar className={cn("group-data-[side=left]:border-r-0", className)}>
       <SidebarHeader>
         <SidebarMenu>
           <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">

@@ -14,11 +14,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { SidebarHistory } from "./SidebarHistory";
+import { cn } from "@/lib/utils";
 
-export function ChatSidebar({ user }: { user: User | undefined }) {
+export function ChatSidebar({ user, className }: { user: User | undefined } & { className?: string }) {
   const router = useRouter();
   return (
-    <Sidebar className="group-data-[side=left]:border-r-0">
+    <Sidebar className={cn("group-data-[side=left]:border-r-0", className)}>
       <SidebarHeader>
         <SidebarMenu>
           <div className="flex flex-row justify-between items-center">

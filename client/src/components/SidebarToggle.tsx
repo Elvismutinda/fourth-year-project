@@ -21,8 +21,8 @@ export function SidebarToggle({
       <TooltipTrigger asChild>
         <Button
           onClick={toggleSidebar}
-          variant="outline"
-          className="md:px-2 md:h-fit"
+          variant="transparent"
+          className="md:px-2 md:h-fit hover:bg-accent/20 rounded-sm"
         >
           <PanelRightOpen size={16} />
         </Button>

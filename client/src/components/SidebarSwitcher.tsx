@@ -9,38 +9,49 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import Link from "next/link";
 
 interface SidebarSwitcherProps {
   icon: LucideIcon | IconType;
   label: string;
+  href: string;
   isActive?: boolean;
 }
 
 const SidebarSwitcher = ({
   icon: Icon,
   label,
+  href,
   isActive,
 }: SidebarSwitcherProps) => {
   return (
-    <div className="flex flex-col items-center justify-center gap-y-1 cursor-pointer group">
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="transparent"
-              size="icon"
-              className={cn(
-                "size-9 p-2 rounded-md group-hover:bg-accent/20",
-                isActive ? "bg-accent/20" : "opacity-70"
-              )}
-            >
-              <Icon className="size-5 text-[#fff] group-hover:opacity-100 transition-all" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent align="end">{label}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
+    <Link href={href}>
+      <div className="flex flex-col items-center justify-center gap-y-1 cursor-pointer group">
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="transparent"
+                size="icon"
+                className={cn(
+                  "rounded-sm group-hover:bg-accent/20 transition-all",
+                  isActive ? "bg-accent/20" : "group-hover:bg-[#1A1928]"
+                )}
+              >
+                <Icon
+                  size={32}
+                  className={cn(
+                    "group-hover:opacity-100 transition-all group-hover:text-accent",
+                    isActive ? "text-accent" : "text-accent/40"
+                  )}
+                />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end">{label}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    </Link>
   );
 };
 

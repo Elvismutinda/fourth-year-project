@@ -34,7 +34,7 @@ export const login = async (values: LoginRequest) => {
       verificationToken.token
     );
 
-    return { success: "Confirmation email sent!" };
+    return { success: "Verification email sent!" };
   }
 
   try {

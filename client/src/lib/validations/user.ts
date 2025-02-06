@@ -17,4 +17,10 @@ export const updatePasswordSchema = z
     message: "Passwords do not match",
   });
 
+export const updateProfileSchema = z.object({
+  firstName: z.string({ required_error: "First name is required" }),
+  lastName: z.string({ required_error: "Last name is required" }),
+});
+
 export type UpdatePasswordRequest = z.infer<typeof updatePasswordSchema>;
+export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>;

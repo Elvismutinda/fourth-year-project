@@ -24,13 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn(mulishFont.className, "antialiased")}>
         <AppLayoutWrapper>
-            <div className="mx-auto w-full h-full justify-center items-center">
-              {children}
-            </div>
-          <Toaster richColors closeButton />
+          <div className="mx-auto w-full h-full justify-center items-center">
+            {children}
+          </div>
+          <Toaster richColors closeButton theme="dark" />
         </AppLayoutWrapper>
       </body>
     </html>

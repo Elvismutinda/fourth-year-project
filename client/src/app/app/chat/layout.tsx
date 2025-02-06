@@ -5,6 +5,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import { auth } from "../../../../auth";
 import Script from "next/script";
+import { AppHeader } from "@/components/AppHeader";
 
 export const experimental_ppr = true;
 
@@ -23,8 +24,16 @@ export default async function Layout({
         strategy="beforeInteractive"
       />
       <SidebarProvider defaultOpen={!isCollapsed}>
-        <ChatSidebar user={session?.user} />
-        <SidebarInset>{children}</SidebarInset>
+        <div className="relative flex h-screen bg-[#1A1928]">
+          <ChatSidebar user={session?.user} className="ml-[70px] z-10" />
+        </div>
+
+        <SidebarInset>
+          <div className="bg-[#1A1928] border-b border-border">
+            <AppHeader />
+          </div>
+          {children}
+        </SidebarInset>
       </SidebarProvider>
     </>
   );

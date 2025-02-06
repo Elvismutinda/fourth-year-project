@@ -9,8 +9,10 @@ export default async function AppLayout({
   const session = await auth();
 
   return (
-    <div className="flex h-screen w-full">
-      <AppSidebar user={session?.user ?? {}} />
+    <div className="relative flex h-screen w-full">
+      <div className="z-20">
+        <AppSidebar user={session?.user ?? {}} />
+      </div>
       {children}
     </div>
   );
