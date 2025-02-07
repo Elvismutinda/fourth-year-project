@@ -23,20 +23,19 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
 
   const _chats = await db.select().from(chat).where(eq(chat.userId, userId));
   if (!_chats || _chats.length === 0) {
-    return redirect("/app/chat");
+    return redirect("/app");
   }
 
   // const currentChat = _chats.find((chat) => chat.id === parseInt(chatId));
   return (
-    <div className="flex max-h-screen overflow-scroll">
+    <div className="flex h-screen overflow-scroll">
       <div className="flex w-full max-h-screen overflow-scroll">
-        {/* pdf viewer */}
-        <div className="max-h-screen p-4 oveflow-scroll flex-[5]">
+        <div className="max-h-screen p-4 oveflow-scroll flex-[5] ">
           {/* <PDFViewer pdf_url={currentChat?.pdfUrl || ""} /> */}
           <PDFViewer pdf_url="" />
         </div>
-        {/* chat component */}
-        <div className="flex-[3] border-l-4 border-l-slate-200">
+
+        <div className="flex-[3] border-l border-border">
           <Chat chatId={parseInt(chatId)} />
         </div>
       </div>

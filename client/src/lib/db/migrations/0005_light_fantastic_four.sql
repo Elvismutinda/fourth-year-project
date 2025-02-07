@@ -1,0 +1,1 @@
+ALTER TABLE "Chat" ADD COLUMN "file_key" text NOT NULL;

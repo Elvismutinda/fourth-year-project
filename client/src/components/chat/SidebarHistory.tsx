@@ -55,7 +55,7 @@ const PureChatItem = ({
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive}>
         <Link href={`/chat/${chat.id}`}>
-          <span>{chat.title}</span>
+          <span>{chat.fileName}</span>
         </Link>
       </SidebarMenuButton>
 

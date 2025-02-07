@@ -3,7 +3,7 @@ import { customProvider } from "ai";
 
 export const myProvider = customProvider({
   languageModels: {
-    "title-model": openai("gpt-3.5-turbo"),
-    "chat-model": openai("gpt-3.5-turbo"),
+    "title-model": openai("gpt-4o-mini"),
+    "chat-model": openai("gpt-4o-mini"),
   },
 });

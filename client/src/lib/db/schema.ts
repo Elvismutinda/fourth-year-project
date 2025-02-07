@@ -8,6 +8,8 @@ import {
   uuid,
   text,
   uniqueIndex,
+  vector,
+  serial,
 } from "drizzle-orm/pg-core";
 
 export const userRole = pgEnum("userRole", ["USER", "PREMIUM"]);
@@ -25,11 +27,12 @@ export type User = InferSelectModel<typeof user>;
 
 export const chat = pgTable("Chat", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
-  title: text("title").notNull(),
+  fileName: text("file_name").notNull(),
+  fileUrl: text("file_url").notNull(),
   userId: uuid("userId")
     .notNull()
     .references(() => user.id),
-  createdAt: timestamp("createdAt").notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
@@ -61,3 +64,13 @@ export const verificationToken = pgTable(
     ),
   })
 );
+
+export const documents = pgTable("documents", {
+  id: serial("id").primaryKey(),
+  userId: uuid("userId")
+    .notNull()
+    .references(() => user.id),
+  fileUrl: text("file_url").notNull(),
+  content: text("content").notNull(),
+  embedding: vector("embedding", { dimensions: 1536 }),
+});

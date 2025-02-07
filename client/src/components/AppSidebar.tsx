@@ -12,7 +12,7 @@ const AppSidebar = ({ user }: { user: User }) => {
   const pathname = usePathname();
 
   return (
-    <aside className="w-[70px] h-full bg-[#1A1928] flex flex-col items-center py-4 gap-y-2">
+    <aside className="w-[70px] h-full bg-[#1A1928] flex flex-col items-center py-4 gap-y-2 border-r border-[#2D2C3A]">
       <div className="mb-4">
         <Image
           src="/assets/images/logosaas.png"
@@ -26,14 +26,14 @@ const AppSidebar = ({ user }: { user: User }) => {
         <SidebarSwitcher
           icon={Home}
           label="Home"
-          href="/app/chat"
-          isActive={pathname.includes("/app/chat")}
+          href="/app/chat/new"
+          isActive={pathname.includes("/app/chat/new")}
         />
         <SidebarSwitcher
           icon={Brain}
-          label="RAG"
-          href="/app/rag"
-          isActive={pathname.includes("/app/rag")}
+          label="Chat"
+          href="/app/chat"
+          isActive={pathname.includes("/app/chat")}
         />
         <SidebarSwitcher
           icon={Scale}

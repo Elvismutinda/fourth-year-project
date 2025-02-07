@@ -32,8 +32,8 @@ export default async function SettingLayout({
           />
         </div>
 
-        <SidebarInset>
-          <div className="bg-[#1A1928] border-b border-border">
+        <SidebarInset className="bg-[#1A1928]">
+          <div className="border-b border-[#2D2C3A]">
             <AppHeader />
           </div>
           {children}

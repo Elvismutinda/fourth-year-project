@@ -31,8 +31,8 @@ const Chat = ({ chatId }: ChatProps) => {
     }
   }, [messages]);
   return (
-    <div className="flex flex-col min-w-0 h-dvh bg-[#1A1928]">
-      <div className="flex sticky top-0 py-1.5 bg-[#1A1928] items-center px-2">
+    <div className="flex flex-col min-w-0 h-dvh">
+      <div className="flex sticky top-0 py-1.5 items-center px-2">
         <h3 className="text-xl font-bold">Chat</h3>
       </div>
 
@@ -40,7 +40,7 @@ const Chat = ({ chatId }: ChatProps) => {
 
       <form
         onSubmit={handleSubmit}
-        className="flex mx-auto px-4 bg-[#1A1928] pb-4 md:pb-6 gap-2 w-full md:max-w-3xl"
+        className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl"
       >
         <Input
           value={input}

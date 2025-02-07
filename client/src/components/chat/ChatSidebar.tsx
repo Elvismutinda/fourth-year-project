@@ -35,7 +35,7 @@ export function ChatSidebar({ user, className }: { user: User | undefined } & { 
                   type="button"
                   className="p-2 h-fit"
                   onClick={() => {
-                    router.push("/app/");
+                    router.push("/app/chat/new");
                     router.refresh();
                   }}
                 >
