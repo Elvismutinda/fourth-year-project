@@ -50,6 +50,13 @@
       "when": 1738962843198,
       "tag": "0006_melted_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1739021531460,
+      "tag": "0007_damp_hardball",
+      "breakpoints": true
     }
   ]
 }

@@ -72,5 +72,5 @@ export const documents = pgTable("documents", {
     .references(() => user.id),
   fileUrl: text("file_url").notNull(),
   content: text("content").notNull(),
-  embedding: vector("embedding", { dimensions: 1536 }),
+  embedding: vector("embedding", { dimensions: 1024 }),
 });

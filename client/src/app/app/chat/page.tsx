@@ -17,7 +17,7 @@ export default async function ChatPage() {
         {/* pdf viewer */}
         <div className="max-h-screen p-4 oveflow-scroll flex-[5] ">
           {/* <PDFViewer pdf_url={currentChat?.pdfUrl || ""} /> */}
-          <PDFViewer pdf_url="" />
+          <PDFViewer fileUrl="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" />
         </div>
         {/* chat component */}
         <div className="flex-[3] border-l border-[#2D2C3A]">

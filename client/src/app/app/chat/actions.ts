@@ -19,6 +19,17 @@ export async function getChatsByUserId({ id }: { id: string }) {
   }
 }
 
+export async function getChatById({ id }: { id: string }) {
+  try {
+    const [selectedChat] = await db.select().from(chat).where(eq(chat.id, id));
+
+    return selectedChat;
+  } catch (error) {
+    console.error("Failed to get chat by id from database");
+    throw error;
+  }
+}
+
 export async function generateTitleFromUserMessage({
   message,
 }: {

@@ -57,7 +57,7 @@ const LoginForm = () => {
             <header className="block space-y-3">
               <div className="flex flex-row items-center gap-2">
                 <Image
-                  src="/assets/images/logosaas.png"
+                  src="/assets/icons/logosaas.png"
                   alt="logo"
                   width={40}
                   height={40}

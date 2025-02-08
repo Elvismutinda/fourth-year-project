@@ -60,7 +60,7 @@ export async function uploadToCloudinary(
   });
 }
 
-export function getCloudinaryUrl(file_key: string) {
-  const url = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${file_key}`;
-  return url;
+export function getCloudinaryUrl(file_url: string) {
+  // const url = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${file_key}`;
+  return file_url;
 }

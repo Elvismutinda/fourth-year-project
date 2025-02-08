@@ -1,29 +1,18 @@
-import { OpenAIApi, Configuration } from "openai-edge";
+import { VoyageEmbeddings } from "@langchain/community/embeddings/voyage";
 
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+const voyageEmbeddings = new VoyageEmbeddings({
+  apiKey: process.env.VOYAGE_API_KEY,
 });
-
-const openai = new OpenAIApi(config);
 
 export async function generateEmbedding(text: string) {
   try {
-    const response = await openai.createEmbedding({
-      model: "text-embedding-3-small",
-      input: text.replace(/\n/g, " "),
-    });
+    const embeddings = await voyageEmbeddings.embedQuery(
+      text.replace(/\n/g, " ")
+    );
 
-    const result = await response.json();
-
-    // Log the response from OpenAI
-    if (!result || !result.data || !result.data[0]) {
-      console.error("Invalid response from OpenAI embeddings API: ", result);
-      throw new Error("Invalid response from OpenAI embeddings API");
-    }
-
-    return result.data[0].embedding as number[];
+    return embeddings;
   } catch (error) {
-    console.error("Error calling OpenAI embeddings API: ", error);
+    console.error("Error calling Voyage AI embeddings API: ", error);
     throw error;
   }
 }

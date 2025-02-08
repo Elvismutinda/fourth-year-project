@@ -4,7 +4,7 @@ import md5 from "md5";
 import { Document } from "langchain/document";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { generateEmbedding } from "./embeddings";
-import { db } from "@/lib/db"; // Drizzle ORM instance
+import { db } from "@/lib/db";
 import { documents } from "./db/schema";
 import fs from "fs";
 

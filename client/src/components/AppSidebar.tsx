@@ -15,7 +15,7 @@ const AppSidebar = ({ user }: { user: User }) => {
     <aside className="w-[70px] h-full bg-[#1A1928] flex flex-col items-center py-4 gap-y-2 border-r border-[#2D2C3A]">
       <div className="mb-4">
         <Image
-          src="/assets/images/logosaas.png"
+          src="/assets/icons/logosaas.png"
           alt="logo"
           width={40}
           height={40}

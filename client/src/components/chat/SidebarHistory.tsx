@@ -28,6 +28,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Chat } from "@/lib/db/schema";
 import { fetcher } from "@/lib/utils";
@@ -46,15 +47,17 @@ const PureChatItem = ({
   chat,
   isActive,
   onDelete,
+  setOpenMobile,
 }: {
   chat: Chat;
   isActive: boolean;
   onDelete: (chatId: string) => void;
+  setOpenMobile: (open: boolean) => void;
 }) => {
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive}>
-        <Link href={`/chat/${chat.id}`}>
+        <Link href={`/app/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
           <span>{chat.fileName}</span>
         </Link>
       </SidebarMenuButton>
@@ -80,6 +83,7 @@ export const ChatItem = memo(PureChatItem, (prevProps, nextProps) => {
 });
 
 export function SidebarHistory({ user }: { user: User | undefined }) {
+  const { setOpenMobile } = useSidebar();
   const { id } = useParams();
   const pathname = usePathname();
   const {
@@ -220,6 +224,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setDeleteId(chatId);
                               setShowDeleteDialog(true);
                             }}
+                            setOpenMobile={setOpenMobile}
                           />
                         ))}
                       </>
@@ -239,6 +244,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setDeleteId(chatId);
                               setShowDeleteDialog(true);
                             }}
+                            setOpenMobile={setOpenMobile}
                           />
                         ))}
                       </>
@@ -258,6 +264,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setDeleteId(chatId);
                               setShowDeleteDialog(true);
                             }}
+                            setOpenMobile={setOpenMobile}
                           />
                         ))}
                       </>
@@ -277,6 +284,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setDeleteId(chatId);
                               setShowDeleteDialog(true);
                             }}
+                            setOpenMobile={setOpenMobile}
                           />
                         ))}
                       </>
@@ -296,6 +304,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setDeleteId(chatId);
                               setShowDeleteDialog(true);
                             }}
+                            setOpenMobile={setOpenMobile}
                           />
                         ))}
                       </>

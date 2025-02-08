@@ -21,7 +21,7 @@ import { Input } from "../ui/input";
 import { updateProfile } from "@/app/app/setting/actions";
 import { Button } from "../ui/button";
 import { LoaderCircle } from "lucide-react";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { signOut } from "next-auth/react";
 
 const ProfileUpdateForm = () => {

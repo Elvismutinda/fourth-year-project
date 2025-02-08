@@ -1,12 +1,11 @@
 import React from "react";
 
-type Props = { pdf_url: string };
+type Props = { fileUrl: string };
 
-const PDFViewer = ({ pdf_url }: Props) => {
-  pdf_url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+const PDFViewer = ({ fileUrl }: Props) => {
   return (
     <iframe
-      src={`https://docs.google.com/gview?url=${pdf_url}&embedded=true`}
+      src={`https://docs.google.com/gview?url=${fileUrl}&embedded=true`}
       className="w-full h-full"
     ></iframe>
   );

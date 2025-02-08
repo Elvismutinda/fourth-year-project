@@ -3,10 +3,12 @@
 import Link from "next/link";
 import React from "react";
 import { BookOpen } from "lucide-react";
-import { Bell } from "lucide-react";
 import { Button } from "./ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const NonDashboardNavbar = () => {
+  const user = useCurrentUser();
+
   return (
     <nav className="w-full flex justify-center bg-[#ededed]">
       <div className="flex justify-between items-center w-3/4 py-5">
@@ -19,7 +21,7 @@ const NonDashboardNavbar = () => {
             Intelaw
           </Link>
           <div className="flex items-center gap-4">
-            <div className="relative group">
+            <div className="hidden sm:block relative group">
               <Link
                 href="/search"
                 className="bg-[#2c3854] pl-10 sm:pl-14 pr-6 sm:pr-20 py-2.5 rounded-md text-[#fff] transition-all duration-300 text-sm "
@@ -35,17 +37,29 @@ const NonDashboardNavbar = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2 sm:gap-4">
-            <button className="relative w-7 h-7 sm:w-8 sm:h-8 bg-[#ededed] rounded-full flex items-center justify-center">
-                <span className="absolute top-0 right-0 bg-blue-500 h-1.5 sm:h-2 w-1.5 sm:w-2 rounded-full"></span>
-                <Bell className="text-black w-4 h-4 sm:w-6 sm:h-6" />
-            </button>
 
-          <Link href="/login">
-          <Button variant="purple" size="lg">
-            Login
-          </Button>
-          </Link>
+        <div className="flex items-center ml-2">
+          {user ? (
+            <Link href="/app/chat/new">
+              <Button variant="purple" size="lg">
+                Proceed to Research Tool
+              </Button>
+            </Link>
+          ) : (
+            <div className="flex justify-between items-center gap-2 mx-auto">
+            <Link href="/login">
+              <Button variant="main" size="lg">
+                Login
+              </Button>
+            </Link>
+
+            <Link href="/register">
+              <Button variant="purple" size="lg">
+                Register
+              </Button>
+            </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>
