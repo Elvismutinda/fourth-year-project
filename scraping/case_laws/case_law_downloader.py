@@ -2,7 +2,6 @@ import os
 import json
 from playwright.sync_api import sync_playwright, expect
 import traceback
-from utils import append_to_json, upload_to_aws, chunk_list, FILE_STORAGE
 import csv
 import re
 import uuid
@@ -33,10 +32,10 @@ def download_file(page, locator, output_dir='./output/case_laws'):
 	download.save_as(file_location)
 
 	# Save the download object
-	if FILE_STORAGE == 'aws':
-		file_location = upload_to_aws(file_location, f"case_laws/{file_name}")
-		# Delete the copied file
-		os.remove(local_file_location)
+	# if FILE_STORAGE == 'aws':
+	# 	file_location = upload_to_aws(file_location, f"case_laws/{file_name}")
+	# 	# Delete the copied file
+	# 	os.remove(local_file_location)
 
 	# Delete the temporary download file
 	download.delete()
@@ -75,6 +74,40 @@ def extract_table_data(page, locator):
 		error_message = traceback.format_exc()
 		print(error_message) # Log this to AWS Cloudwatch if FILE_STORAGE is set to 'aws'
 
+def chunk_list(lst, num_chunks):
+    # Calculate the size of each chunk
+    chunk_size = len(lst) // num_chunks
+    # Calculate the remainder to distribute among the first chunks
+    remainder = len(lst) % num_chunks
+
+    chunks = []
+    start = 0
+
+    for i in range(num_chunks):
+        # Calculate the end index for the current chunk
+        end = start + chunk_size + (1 if i < remainder else 0)
+        # Append the chunk to the list
+        chunks.append(lst[start:end])
+        # Update the start index for the next chunk
+        start = end
+
+    return (chunk_size, chunks)
+
+
+def append_to_json(data, filename):
+    if os.path.isfile(filename):
+        with open(filename, 'r', encoding='utf-8') as file:
+            existing_data = json.load(file)
+    else:
+        existing_data = []
+
+    existing_data.append(data)
+
+    with open(filename, 'w', encoding='utf-8') as file:
+        json.dump(existing_data, file, indent=4)
+    
+
+    return
 
 def download_files_from_links(urls, output_dir, case_file_path):
 	# Compile download link patterns - We will use this to detect download buttons

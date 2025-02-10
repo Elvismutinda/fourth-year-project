@@ -53,7 +53,7 @@ async def get_case_links():
     all_links_set = set()
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)  # Set headless to False if you want to see the browser actions
+        browser = await p.firefox.launch(headless=False)  # Set headless to False if you want to see the browser actions
         page = await browser.new_page()
 
         while url:

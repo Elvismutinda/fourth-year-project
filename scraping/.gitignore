@@ -166,3 +166,4 @@ links.csv
 results.csv
 *.pem
 .idea/
+scraper-venv

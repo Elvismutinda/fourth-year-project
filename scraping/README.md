@@ -2,7 +2,18 @@
 
 ### Folder
 
-Create required folders -> output/case_laws, acts, legal_notices
+Create required folders in the specific directories -> output/case_laws in case-laws directory and output/acts in acts directory
+
+### You could optionally use Python venv (using terminal)
+
+1. Ensure you have python3-venv installed.
+`sudo apt install python3-venv`
+
+2. Create the python virtual env
+`python3 -m venv scraper-venv`
+
+3. Activate the python virtual env
+`source scraper-venv/bin/activate`
 
 ### Install Dependencies
 
@@ -27,20 +38,17 @@ Create required folders -> output/case_laws, acts, legal_notices
 
 `pip install -r requirements.txt`
 
-
-### Environment Variables
-
-`AWS_ACCESS_KEY_ID`
-
-`AWS_SECRET_ACCESS_KEY`
-
-`FILE_STORAGE`
-
-`AWS_BUCKET`
-
 ### Run Script
 
 #### Case Laws
+
+`cd case_laws`
+
+`python3 case_link_scraper.py`
+
+`python3 case_law_downloader.py`
+
+OR run it using scraper.py in the root directory
 
 `nohup python scraper.py case_law_links &`
 
@@ -48,38 +56,6 @@ Create required folders -> output/case_laws, acts, legal_notices
 
 #### Acts
 
-`nohup python scraper.py acts_files`
+`cd acts`
 
-#### Legal Notices
-
-`nohup python scraper.py legal_files`
-
-#### Gazette Notices
-
-`python scraper.py gazette_files`
-
-#### Bills
-
-`python scraper.py bill_files`
-
-#### Repealed Statutes
-
-`python scraper.py repealed_files`
-
-#### Recent Legislation
-
-`python scraper.py recent_legislation_files`
-
-#### EAC Legislation
-
-`python scraper.py eac_legislation_files`
-
-#### County Legislative Information
-
-`python scraper.py county_legislation_files`
-
-#### Constitutional Amendment
-
-`python scraper.py constitutional_amendment_files`
-
-
+`python3 act_links_scraper.py`
