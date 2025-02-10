@@ -4,29 +4,76 @@ import { generateEmbedding } from "./embeddings";
 
 export async function getMatchesFromEmbeddings(
   embeddings: number[],
-  fileUrl: string
+  fileKey: string
 ) {
   try {
     const queryResult = await db.execute(
       sql`
-        SELECT content
+        SELECT content, embedding <=> (${sql.join(embeddings, sql`, `)})::vector AS similarity
         FROM documents
-        WHERE file_url = ${fileUrl}
-        ORDER BY embedding <=> ${embeddings}
+        WHERE file_url = ${fileKey}
+        ORDER BY similarity
         LIMIT 5;
-        `
+      `
     );
 
-    return queryResult.rows.map((row) => row.content);
+    console.log("Query embeddings:", embeddings);
+
+    return queryResult.rows.map((row) => ({
+      text: row.content,
+      score: row.similarity,
+    }));
   } catch (error) {
-    console.error("Error getting matches from embeddings", error);
+    console.error("Error querying embeddings from NeonDB:", error);
     throw error;
   }
 }
 
-export async function getContext(query: string, fileUrl: string) {
+export async function getContext(query: string, fileKey: string) {
   const queryEmbeddings = await generateEmbedding(query);
-  const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileUrl);
+  const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileKey);
 
-  return matches.join("\n").substring(0, 3000);
+  // Filter results with score > 0.7
+  const qualifyingDocs = matches.filter(
+    (match) => typeof match.score === "number" && match.score > 0.7
+  );
+
+  let docs = qualifyingDocs.map((match) => match.text);
+
+  return docs.join("\n").substring(0, 3000);
 }
+
+// import { sql } from "drizzle-orm";
+// import { db } from "./db";
+// import { generateEmbedding } from "./embeddings";
+
+// export async function getMatchesFromEmbeddings(
+//   embeddings: number[],
+//   fileUrl: string
+// ) {
+//   try {
+//     const queryResult = await db.execute(
+//       sql`
+//         SELECT content
+//         FROM documents
+//         WHERE file_url = ${fileUrl}
+//         ORDER BY embedding <=> ${embeddings}
+//         LIMIT 3;
+//         `
+//     );
+
+//     console.log("Query embeddings", embeddings);
+
+//     return queryResult.rows.map((row) => row.content);
+//   } catch (error) {
+//     console.error("Error getting matches from embeddings", error);
+//     throw error;
+//   }
+// }
+
+// export async function getContext(query: string, fileUrl: string) {
+//   const queryEmbeddings = await generateEmbedding(query);
+//   const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileUrl);
+
+//   return matches.join("\n").substring(0, 3000);
+// }

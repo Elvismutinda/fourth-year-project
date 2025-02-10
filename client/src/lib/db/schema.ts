@@ -21,14 +21,15 @@ export const user = pgTable("User", {
   emailVerified: timestamp("emailVerified"),
   password: varchar("password", { length: 64 }).notNull(),
   role: userRole("role").notNull().default("USER"),
+  phone: varchar("phone", { length: 15 }),
 });
 
 export type User = InferSelectModel<typeof user>;
 
 export const chat = pgTable("Chat", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
-  fileName: text("file_name").notNull(),
-  fileUrl: text("file_url").notNull(),
+  fileName: text("file_name"),
+  fileUrl: text("file_url"),
   userId: uuid("userId")
     .notNull()
     .references(() => user.id),

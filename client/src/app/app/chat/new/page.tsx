@@ -26,23 +26,11 @@ export default async function HomePage() {
     }
   }
   return (
-    <div className="min-h-screen ">
+    <div className="h-screen">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="flex flex-col items-center text-center">
           <div className="flex items-center">
             <h1 className="mr-3 text-5xl font-semibold">Upload Document</h1>
-          </div>
-
-          <div className="flex mt-2">
-            {isAuth && firstChat && (
-              <>
-                <Link href={`/app/chat/${firstChat.id}`}>
-                  <Button>
-                    Go to Chats <ArrowRight className="ml-2" />
-                  </Button>
-                </Link>
-              </>
-            )}
           </div>
 
           <p className="max-w-xl mt-1 text-lg text-slate-300">
@@ -51,6 +39,22 @@ export default async function HomePage() {
 
           {/* <span>Hello {userId}</span> */}
           <div className="w-full mt-4">{isAuth && <FileUpload />}</div>
+
+          <div className="flex flex-col mt-4">
+            {isAuth && firstChat && (
+              <>
+                <div className="space-y-2 mb-4 text-slate-300">
+                  <p>OR</p>
+                  <p>Do you want to revisit a previous chat?</p>
+                </div>
+                <Link href={`/app/chat/${firstChat.id}`}>
+                  <Button variant="main">
+                    Go to Chats <ArrowRight className="ml-2" />
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

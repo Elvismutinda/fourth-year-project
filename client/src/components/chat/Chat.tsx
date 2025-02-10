@@ -5,9 +5,6 @@ import { useChat } from "ai/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Message } from "ai";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Send } from "lucide-react";
 import { Messages } from "./Messages";
 import { ChatInput } from "./ChatInput";
 
@@ -60,19 +57,6 @@ const Chat = ({ chatId }: ChatProps) => {
         onSubmit={handleSubmit}
         className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl"
       >
-        {/* <Input
-          value={input}
-          // onChange={handleInputChange}
-          placeholder="Ask any question..."
-          className="w-full"
-        />
-        <Button
-          className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
-          disabled={input.length === 0}
-        >
-          <Send className="h-4 w-4" />
-        </Button> */}
-
         <ChatInput
           chatId={chatId}
           input={input}

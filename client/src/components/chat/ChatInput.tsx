@@ -106,7 +106,7 @@ export const ChatInput = ({
         value={input}
         onChange={handleInput}
         className={cx(
-          "min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-zinc-800 pb-10 text-[#fff] placeholder:text-zinc-400 border-zinc-700",
+          "min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-accent text-accent-foreground pb-10 placeholder:text-accent-foreground border-zinc-700",
           className
         )}
         rows={2}
@@ -144,7 +144,7 @@ function StopButton({
 }) {
   return (
     <Button
-      className="rounded-full p-1.5 h-fit bg-zinc-200 border border-zinc-600 text-zinc-800 hover:bg-zinc-200/80"
+      className="rounded-full p-1.5 h-fit bg-zinc-300 border border-zinc-600 text-zinc-800 hover:bg-zinc-300/20"
       onClick={(e) => {
         e.preventDefault();
         stop();
@@ -165,7 +165,7 @@ function SendButton({
 }) {
   return (
     <Button
-      className="rounded-full p-1.5 h-fit bg-zinc-200 border border-zinc-600 text-zinc-800 hover:bg-zinc-200/80"
+      className="rounded-full p-1.5 h-fit bg-zinc-300 border border-zinc-600 text-zinc-800 hover:bg-zinc-300/20"
       onClick={(e) => {
         e.preventDefault();
         submitForm();

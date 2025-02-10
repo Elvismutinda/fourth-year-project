@@ -23,23 +23,23 @@ const AppSidebar = ({ user }: { user: User }) => {
       </div>
 
       <nav className="flex flex-col gap-y-2">
-        <SidebarSwitcher
+        {/* <SidebarSwitcher
           icon={Home}
           label="Home"
           href="/app/chat/new"
           isActive={pathname.includes("/app/chat/new")}
-        />
+        /> */}
         <SidebarSwitcher
           icon={Brain}
           label="Chat"
-          href="/app/chat"
+          href="/app/chat/new"
           isActive={pathname.includes("/app/chat")}
         />
         <SidebarSwitcher
           icon={Scale}
           label="Case Laws"
-          href="/app/summarize"
-          isActive={pathname.includes("/app/summarize")}
+          href="/app/caselaws"
+          isActive={pathname.includes("/app/caselaws")}
         />
         <SidebarSwitcher
           icon={PencilLine}

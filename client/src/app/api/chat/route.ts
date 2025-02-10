@@ -4,17 +4,15 @@ import { chat, message as _messages } from "@/lib/db/schema";
 import { Message, streamText } from "ai";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { Configuration, OpenAIApi } from "openai-edge";
+// import { Configuration, OpenAIApi } from "openai-edge";
 import { auth } from "../../../../auth";
 import { myProvider } from "@/lib/ai/models";
 
-export const runtime = "edge";
+// const config = new Configuration({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
 
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(config);
+// const openai = new OpenAIApi(config);
 
 export const maxDuration = 30;
 
@@ -24,7 +22,7 @@ export async function POST(req: Request) {
   const session = await auth();
 
   if (!session || !session.user || !session.user.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
@@ -37,6 +35,11 @@ export async function POST(req: Request) {
 
     const fileUrl = _chats[0].fileUrl;
     const lastMessage = messages[messages.length - 1];
+
+    if (!fileUrl) {
+      return NextResponse.json({ error: "File not found" }, { status: 404 });
+    }
+
     const context = await getContext(lastMessage.content, fileUrl);
 
     const prompt = {

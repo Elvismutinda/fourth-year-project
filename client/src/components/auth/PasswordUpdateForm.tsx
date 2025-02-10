@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,11 +20,14 @@ import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { updatePassword } from "@/app/app/setting/actions";
 import { Button } from "../ui/button";
-import { LoaderCircle } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 const PasswordUpdateForm = () => {
   const [isPending, startTransition] = useTransition();
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
   const form = useForm<UpdatePasswordRequest>({
     resolver: zodResolver(updatePasswordSchema),
@@ -62,13 +65,28 @@ const PasswordUpdateForm = () => {
               <FormItem>
                 <FormLabel>Current password</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    placeholder="Enter current password"
-                    type="password"
-                    className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
-                  />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="Enter current password"
+                      type={showCurrentPassword ? "text" : "password"}
+                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
+                      onClick={() =>
+                        setShowCurrentPassword(!showCurrentPassword)
+                      }
+                    >
+                      {showCurrentPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,13 +100,26 @@ const PasswordUpdateForm = () => {
               <FormItem>
                 <FormLabel>New password</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    placeholder="Enter new password"
-                    type="password"
-                    className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
-                  />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="Enter new password"
+                      type={showNewPassword ? "text" : "password"}
+                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -102,13 +133,28 @@ const PasswordUpdateForm = () => {
               <FormItem>
                 <FormLabel>New password</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    placeholder="Confirm new password"
-                    type="password"
-                    className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
-                  />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="Confirm new password"
+                      type={showConfirmNewPassword ? "text" : "password"}
+                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
+                      onClick={() =>
+                        setShowConfirmNewPassword(!showConfirmNewPassword)
+                      }
+                    >
+                      {showConfirmNewPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

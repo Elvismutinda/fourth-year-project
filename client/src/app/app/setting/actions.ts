@@ -71,7 +71,7 @@ export const updateProfile = async (values: UpdateProfileRequest) => {
     return { error: "Invalid fields!" };
   }
 
-  const { firstName, lastName } = validatedFields.data;
+  const { firstName, lastName, phone } = validatedFields.data;
   const name = `${firstName} ${lastName}`;
 
   try {
@@ -87,7 +87,7 @@ export const updateProfile = async (values: UpdateProfileRequest) => {
       return { error: "User ID is undefined!" };
     }
 
-    await db.update(user).set({ name }).where(eq(user.id, userId));
+    await db.update(user).set({ name, phone }).where(eq(user.id, userId));
 
     return { success: "Profile updated. Login to reflect changes!" };
   } catch (error) {

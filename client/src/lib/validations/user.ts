@@ -20,6 +20,9 @@ export const updatePasswordSchema = z
 export const updateProfileSchema = z.object({
   firstName: z.string({ required_error: "First name is required" }),
   lastName: z.string({ required_error: "Last name is required" }),
+  phone: z
+  .string()
+  .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
 
 export type UpdatePasswordRequest = z.infer<typeof updatePasswordSchema>;

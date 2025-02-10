@@ -28,16 +28,14 @@ const ProfileUpdateForm = () => {
   const user = useCurrentUser();
   const [isPending, startTransition] = useTransition();
 
-  const [firstName, lastName] = user?.name?.split(" ") || [
-    "",
-    "",
-  ];
+  const [firstName, lastName] = user?.name?.split(" ") || ["", ""];
 
   const form = useForm<UpdateProfileRequest>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       firstName: firstName || "",
       lastName: lastName || "",
+      phone: user?.phone || "",
     },
   });
 
@@ -48,7 +46,7 @@ const ProfileUpdateForm = () => {
           toast.error(data?.error);
         } else {
           toast.success(data?.success);
-          
+
           signOut({ callbackUrl: "/login" });
         }
       });
@@ -93,6 +91,27 @@ const ProfileUpdateForm = () => {
                     {...field}
                     disabled={isPending}
                     placeholder="Last name"
+                    type="text"
+                    className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                  />
+                </FormControl>
+                <FormMessage />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone number</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={isPending}
+                    placeholder="Phone number"
                     type="text"
                     className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
                   />

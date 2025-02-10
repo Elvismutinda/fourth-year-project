@@ -19,7 +19,7 @@ export default function AppLoader() {
         You can go back to the home page and start from there
       </p>
       <div className="flex gap-4">
-        <Button variant="default" onClick={() => router.push("/")}>
+        <Button variant="purple" onClick={() => router.push("/")}>
           Go back home
           <HiArrowRight />
         </Button>
