@@ -32,7 +32,12 @@ const FileUpload = () => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
-    onDrop: async (acceptedFiles) => {
+    onDrop: async (acceptedFiles, fileRejections) => {
+      if (fileRejections.length > 0) {
+        toast.error("Only PDF files are allowed");
+        return;
+      }
+
       const file = acceptedFiles[0];
       if (file.size > 10 * 1024 * 1024) {
         // bigger than 10mb!

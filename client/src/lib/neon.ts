@@ -19,39 +19,46 @@ type PDFPage = {
  * Load a Cloudinary PDF into NeonDB
  */
 export async function loadCloudinaryToNeon(fileUrl: string, userId: string) {
-  // 1. Download PDF from Cloudinary and read it into memory
-  console.log("Downloading from Cloudinary...");
-
-  const file_name = await downloadFromCloudinary(fileUrl);
-  if (!file_name) {
-    throw new Error("Could not download from Cloudinary");
-  }
-
-  console.log("Loading PDF into memory: " + file_name);
-  const loader = new PDFLoader(file_name);
-  const pages = (await loader.load()) as PDFPage[];
-
-  // 2. Split and segment the PDF
-  console.log("Splitting and processing document...");
-  const documents = await Promise.all(pages.map(prepareDocument));
-
-  // 3. Vectorize and embed individual documents
-  console.log("Embedding document...");
-  const vectors = await Promise.all(documents.flat().map(embedDocument));
-
-  // 4. Upload to NeonDB
-  console.log("Storing embeddings in NeonDB...");
-  await storeEmbeddingsInNeon(vectors, fileUrl, userId);
-
-  // 5. Clean up temp file
   try {
+    // 1. Download PDF from Cloudinary and read it into memory
+    console.log("Downloading from Cloudinary...");
+
+    const file_name = await downloadFromCloudinary(fileUrl);
+    if (!file_name) {
+      throw new Error("Could not download from Cloudinary");
+    }
+
+    console.log("Loading PDF into memory: " + file_name);
+    const loader = new PDFLoader(file_name);
+    const pages = (await loader.load()) as PDFPage[];
+
+    if (!pages || pages.length === 0) {
+      throw new Error("PDF contains no pages");
+    }
+
+    // 2. Split and segment the PDF
+    console.log("Splitting and processing document...");
+    const allDocuments = await Promise.all(pages.map(prepareDocument));
+    const flattenedDocs = allDocuments.flat();
+
+    // 3. Vectorize and embed individual documents
+    console.log("Embedding document...");
+    const vectors = await Promise.all(flattenedDocs.map(embedDocument));
+    const validVectors = vectors.filter((v) => v !== null);
+
+    // 4. Upload to NeonDB
+    console.log("Storing embeddings in NeonDB...");
+    await storeEmbeddingsInNeon(validVectors, fileUrl, userId);
+
+    // 5. Clean up temp file
     fs.unlinkSync(file_name);
     console.log("Temp file deleted", file_name);
-  } catch (error) {
-    console.warn("Error deleting temp file", error);
-  }
 
-  return documents[0];
+    return flattenedDocs[0];
+  } catch (error) {
+    console.error("Error processing PDF: ", error);
+    throw error;
+  }
 }
 
 /**
@@ -59,6 +66,9 @@ export async function loadCloudinaryToNeon(fileUrl: string, userId: string) {
  */
 async function embedDocument(doc: Document) {
   try {
+    if (!doc.pageContent) {
+      throw new Error("Document has no content");
+    }
     const embeddings = await generateEmbedding(doc.pageContent);
     const hash = md5(doc.pageContent);
 
@@ -66,7 +76,7 @@ async function embedDocument(doc: Document) {
       id: hash,
       values: embeddings,
       metadata: {
-        text: doc.metadata.text,
+        text: doc.pageContent,
         pageNumber: doc.metadata.pageNumber,
       },
     };
@@ -85,6 +95,10 @@ async function storeEmbeddingsInNeon(
   userId: string
 ) {
   for (const vector of vectors) {
+    if (!vector) {
+      continue;
+    }
+
     await db.insert(documents).values({
       userId: userId,
       fileUrl: fileKey,
@@ -97,10 +111,10 @@ async function storeEmbeddingsInNeon(
 /**
  * Truncate text by bytes
  */
-export const truncateStringByBytes = (str: string, bytes: number) => {
-  const enc = new TextEncoder();
-  return new TextDecoder("utf-8").decode(enc.encode(str).slice(0, bytes));
-};
+// export const truncateStringByBytes = (str: string, bytes: number) => {
+//   const enc = new TextEncoder();
+//   return new TextDecoder("utf-8").decode(enc.encode(str).slice(0, bytes));
+// };
 
 /**
  * Splits text into smaller chunks
@@ -109,13 +123,16 @@ async function prepareDocument(page: PDFPage) {
   let { pageContent, metadata } = page;
   pageContent = pageContent.replace(/\n\n+/g, "\n");
 
-  const splitter = new RecursiveCharacterTextSplitter();
+  const splitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 1000,
+    chunkOverlap: 100,
+  });
   const docs = await splitter.splitDocuments([
     new Document({
       pageContent,
       metadata: {
         pageNumber: metadata.loc.pageNumber,
-        text: truncateStringByBytes(pageContent, 36000),
+        text: pageContent,
       },
     }),
   ]);

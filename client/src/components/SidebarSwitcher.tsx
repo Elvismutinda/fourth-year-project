@@ -39,7 +39,7 @@ const SidebarSwitcher = ({
                 )}
               >
                 <Icon
-                  size={32}
+                  size={20}
                   className={cn(
                     "group-hover:opacity-100 transition-all group-hover:text-accent",
                     isActive ? "text-accent" : "text-accent/40"

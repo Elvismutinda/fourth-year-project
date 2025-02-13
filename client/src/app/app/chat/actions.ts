@@ -2,7 +2,7 @@
 
 import { myProvider } from "@/lib/ai/models";
 import { db } from "@/lib/db";
-import { chat } from "@/lib/db/schema";
+import { chat, message } from "@/lib/db/schema";
 import { generateText, Message } from "ai";
 import { desc, eq } from "drizzle-orm";
 
@@ -26,6 +26,17 @@ export async function getChatById({ id }: { id: string }) {
     return selectedChat;
   } catch (error) {
     console.error("Failed to get chat by id from database");
+    throw error;
+  }
+}
+
+export async function deleteChatById({ id }: { id: string }) {
+  try {
+    await db.delete(message).where(eq(message.chatId, id));
+
+    return await db.delete(chat).where(eq(chat.id, id));
+  } catch (error) {
+    console.error("Failed to delete chat by id from database");
     throw error;
   }
 }

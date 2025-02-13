@@ -6,13 +6,22 @@ const voyageEmbeddings = new VoyageEmbeddings({
 
 export async function generateEmbedding(text: string) {
   try {
-    const embeddings = await voyageEmbeddings.embedQuery(
-      text.replace(/\n/g, " ")
-    );
+    const cleanedText = text.replace(/\n/g, " ").trim();
+    if (!cleanedText) {
+      throw new Error("Text is empty after cleaning, skipping embedding.");
+    }
+    console.log("Sending text to Voyage AI for embedding:", cleanedText.slice(0, 200), "...");
+
+    const embeddings = await voyageEmbeddings.embedQuery(cleanedText);
+    console.log("Voyage AI embedding response:", embeddings);
+
+    if (!embeddings || !Array.isArray(embeddings) || embeddings.length === 0) {
+      throw new Error("Voyage AI returned an empty or undefined embedding response.");
+    }
 
     return embeddings;
   } catch (error) {
-    console.error("Error calling Voyage AI embeddings API: ", error);
+    console.error("Error calling Voyage AI embeddings API:", error);
     throw error;
   }
 }

@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 // import { Configuration, OpenAIApi } from "openai-edge";
 import { auth } from "../../../../auth";
 import { myProvider } from "@/lib/ai/models";
+import { deleteChatById, getChatById } from "@/app/app/chat/actions";
 
 // const config = new Configuration({
 //   apiKey: process.env.OPENAI_API_KEY,
@@ -80,6 +81,38 @@ export async function POST(req: Request) {
     });
 
     return result.toDataStreamResponse();
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const chatId = searchParams.get("chatId");
+
+  if (!chatId) {
+    return NextResponse.json({ error: "Chat ID is required" }, { status: 404 });
+  }
+
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const chat = await getChatById({ id: chatId });
+
+    if (chat.userId !== session.user.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await deleteChatById({ id: chatId });
+
+    return NextResponse.json({ message: "Chat deleted" }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },

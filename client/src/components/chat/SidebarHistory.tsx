@@ -21,11 +21,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
@@ -33,7 +35,7 @@ import {
 import { Chat } from "@/lib/db/schema";
 import { fetcher } from "@/lib/utils";
 import Link from "next/link";
-import { Trash } from "lucide-react";
+import { Ellipsis, Trash } from "lucide-react";
 
 type GroupedChats = {
   today: Chat[];
@@ -63,6 +65,16 @@ const PureChatItem = ({
       </SidebarMenuButton>
 
       <DropdownMenu modal={true}>
+      <DropdownMenuTrigger asChild>
+          <SidebarMenuAction
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mr-0.5"
+            showOnHover={!isActive}
+          >
+            <Ellipsis />
+            <span className="sr-only">More</span>
+          </SidebarMenuAction>
+        </DropdownMenuTrigger>
+
         <DropdownMenuContent>
           <DropdownMenuItem
             className="cursor-pointer text-destructive focus:bg-destructive/15 focus:text-destructive dark:text-red-500"
@@ -102,7 +114,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const router = useRouter();
   const handleDelete = async () => {
-    const deletePromise = fetch(`/api/chat?id=${deleteId}`, {
+    const deletePromise = fetch(`/api/chat?chatId=${deleteId}`, {
       method: "DELETE",
     });
 
@@ -122,7 +134,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     setShowDeleteDialog(false);
 
     if (deleteId === id) {
-      router.push("/");
+      router.push("/app/chat/new");
     }
   };
 
