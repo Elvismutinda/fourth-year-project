@@ -4,18 +4,15 @@ import { chat, message as _messages } from "@/lib/db/schema";
 import { Message, streamText } from "ai";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-// import { Configuration, OpenAIApi } from "openai-edge";
+import { Configuration, OpenAIApi } from "openai-edge";
 import { auth } from "../../../../auth";
-import { myProvider } from "@/lib/ai/models";
 import { deleteChatById, getChatById } from "@/app/app/chat/actions";
 
-// const config = new Configuration({
-//   apiKey: process.env.OPENAI_API_KEY,
-// });
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-// const openai = new OpenAIApi(config);
-
-export const maxDuration = 30;
+const openai = new OpenAIApi(config);
 
 export async function POST(req: Request) {
   // const { chatId, messages }: { chatId: string; messages: Array<Message> } = await req.json();
@@ -56,13 +53,17 @@ export async function POST(req: Request) {
         END OF CONTEXT BLOCK.`,
     };
 
-    const result = streamText({
-      model: myProvider.languageModel("chat-model"),
+    const response = await openai.createChatCompletion({
+      model: "gpt-4o-mini",
       messages: [
         prompt,
         ...messages.filter((message: Message) => message.role === "user"),
       ],
-      onStepFinish: async () => {
+      stream: true,
+    });
+
+    const result = streamText.toDataStreamResponse(response, {
+      onStart: async () => {
         await db.insert(_messages).values({
           chatId,
           content: lastMessage.content,
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
           createdAt: new Date(),
         });
       },
-      onFinish: async (completion) => {
+      onCompletion: async (completion: string) => {
         await db.insert(_messages).values({
           chatId,
           content: completion,
@@ -80,7 +81,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return result.toDataStreamResponse();
+    return result;
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },

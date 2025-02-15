@@ -53,7 +53,7 @@ const SearchCase = () => {
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const response = await fetch("/data/cases.json");
+        const response = await fetch("/data/case_laws.json");
 
         if (!response.ok) {
           throw new Error(`HTTP error. Status: ${response.status}`);

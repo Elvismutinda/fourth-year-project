@@ -4,14 +4,16 @@ import { generateEmbedding } from "./embeddings";
 
 export async function getMatchesFromEmbeddings(
   embeddings: number[],
-  fileKey: string
+  fileUrl: string
 ) {
   try {
+    const embeddingsVectors = `[${embeddings.join(", ")}]`;
+
     const queryResult = await db.execute(
       sql`
-        SELECT content, embedding <=> (${sql.join(embeddings, sql`, `)})::vector AS similarity
+        SELECT content, 1 - (embedding <=> ${embeddingsVectors}::vector) AS similarity
         FROM documents
-        WHERE file_url = ${fileKey}
+        WHERE file_url = ${fileUrl}
         ORDER BY similarity
         LIMIT 5;
       `
@@ -29,9 +31,9 @@ export async function getMatchesFromEmbeddings(
   }
 }
 
-export async function getContext(query: string, fileKey: string) {
+export async function getContext(query: string, fileUrl: string) {
   const queryEmbeddings = await generateEmbedding(query);
-  const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileKey);
+  const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileUrl);
 
   // Filter results with score > 0.7
   const qualifyingDocs = matches.filter(
@@ -42,38 +44,3 @@ export async function getContext(query: string, fileKey: string) {
 
   return docs.join("\n").substring(0, 3000);
 }
-
-// import { sql } from "drizzle-orm";
-// import { db } from "./db";
-// import { generateEmbedding } from "./embeddings";
-
-// export async function getMatchesFromEmbeddings(
-//   embeddings: number[],
-//   fileUrl: string
-// ) {
-//   try {
-//     const queryResult = await db.execute(
-//       sql`
-//         SELECT content
-//         FROM documents
-//         WHERE file_url = ${fileUrl}
-//         ORDER BY embedding <=> ${embeddings}
-//         LIMIT 3;
-//         `
-//     );
-
-//     console.log("Query embeddings", embeddings);
-
-//     return queryResult.rows.map((row) => row.content);
-//   } catch (error) {
-//     console.error("Error getting matches from embeddings", error);
-//     throw error;
-//   }
-// }
-
-// export async function getContext(query: string, fileUrl: string) {
-//   const queryEmbeddings = await generateEmbedding(query);
-//   const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileUrl);
-
-//   return matches.join("\n").substring(0, 3000);
-// }
