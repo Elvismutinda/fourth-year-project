@@ -123,7 +123,6 @@ const SearchCase = () => {
               <SelectValue placeholder="Search judges..." />
             </SelectTrigger>
             <SelectContent>
-
               {Array.from(new Set(cases.map((c) => c.metadata["Judge(s):"])))
                 .filter((j) => j) // Remove empty values
                 .map((j) => (
@@ -172,7 +171,9 @@ const SearchCase = () => {
             {currentCases.map((caseLaw, index) => (
               <Card key={index}>
                 <CardHeader>
-                  <CardTitle className="text-xl">Case Law Title</CardTitle>
+                  <CardTitle className="text-xl">
+                    {caseLaw.metadata["Citation:"]}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-col gap-1 text-base">
@@ -191,15 +192,16 @@ const SearchCase = () => {
                     <Link href={caseLaw.url} target="_blank">
                       <Button variant="main">
                         <Download />
-                        Download PDF</Button>
+                        Download PDF
+                      </Button>
                     </Link>
 
                     <Link href={caseLaw.url} target="_blank">
                       <Button variant="purple">
                         <SquareArrowOutUpRight />
-                        View in KLR</Button>
+                        View in KLR
+                      </Button>
                     </Link>
-
                   </div>
                 </CardContent>
               </Card>
@@ -218,18 +220,22 @@ const SearchCase = () => {
                 />
               </PaginationItem>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
                   <PaginationItem key={page}>
                     <PaginationLink
                       onClick={() => setCurrentPage(page)}
                       className={`px-4 ${
-                        currentPage === page ? "bg-accent-foreground text-[#fff] hover:bg-accent-foreground hover:text-[#fff]" : ""
+                        currentPage === page
+                          ? "bg-accent-foreground text-[#fff] hover:bg-accent-foreground hover:text-[#fff]"
+                          : ""
                       }`}
                     >
                       {page}
                     </PaginationLink>
                   </PaginationItem>
-                ))}
+                )
+              )}
 
               <PaginationItem>
                 <PaginationNext

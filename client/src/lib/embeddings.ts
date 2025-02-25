@@ -1,30 +1,80 @@
-import { VoyageEmbeddings } from "@langchain/community/embeddings/voyage";
+import { HfInference } from "@huggingface/inference";
 
-const voyageEmbeddings = new VoyageEmbeddings({
-  apiKey: process.env.VOYAGE_API_KEY,
-});
+const HF_TOKEN = process.env.HF_TOKEN;
 
-export async function generateEmbedding(text: string) {
+if (!HF_TOKEN) {
+  throw new Error("Missing Hugging Face API token.");
+}
+
+const hf = new HfInference(HF_TOKEN);
+
+export async function generateEmbedding(text: string): Promise<number[]> {
   try {
     const cleanedText = text.replace(/\n/g, " ").trim();
     if (!cleanedText) {
       throw new Error("Text is empty after cleaning, skipping embedding.");
     }
-    console.log("Sending text to Voyage AI for embedding:", cleanedText.slice(0, 200), "...");
 
-    const embeddings = await voyageEmbeddings.embedQuery(cleanedText);
-    console.log("Voyage AI embedding response:", embeddings);
+    console.log(
+      "Sending text to Hugging Face for embedding:",
+      cleanedText.slice(0, 200),
+      "..."
+    );
 
-    if (!embeddings || !Array.isArray(embeddings) || embeddings.length === 0) {
-      throw new Error("Voyage AI returned an empty or undefined embedding response.");
+    const response = await hf.featureExtraction({
+      model: "sentence-transformers/all-MiniLM-L6-v2",
+      inputs: cleanedText,
+    });
+
+    if (!Array.isArray(response)) {
+      throw new Error("Hugging Face returned an invalid embedding response.");
     }
 
-    return embeddings;
+    console.log("Hugging Face embedding response:", response);
+    if (
+      Array.isArray(response) &&
+      response.every((item) => typeof item === "number")
+    ) {
+      return response as number[];
+    } else if (Array.isArray(response) && Array.isArray(response[0])) {
+      return response[0] as number[];
+    } else {
+      throw new Error("Unexpected response format from Hugging Face API.");
+    }
+    // return result.data[0].embedding as number[];
   } catch (error) {
-    console.error("Error calling Voyage AI embeddings API:", error);
+    console.error("Error calling Hugging Face embeddings API: ", error);
     throw error;
   }
 }
+
+// import { VoyageEmbeddings } from "@langchain/community/embeddings/voyage";
+
+// const voyageEmbeddings = new VoyageEmbeddings({
+//   apiKey: process.env.VOYAGE_API_KEY,
+// });
+
+// export async function generateEmbedding(text: string) {
+//   try {
+//     const cleanedText = text.replace(/\n/g, " ").trim();
+//     if (!cleanedText) {
+//       throw new Error("Text is empty after cleaning, skipping embedding.");
+//     }
+//     console.log("Sending text to Voyage AI for embedding:", cleanedText.slice(0, 200), "...");
+
+//     const embeddings = await voyageEmbeddings.embedQuery(cleanedText);
+//     console.log("Voyage AI embedding response:", embeddings);
+
+//     if (!embeddings || !Array.isArray(embeddings) || embeddings.length === 0) {
+//       throw new Error("Voyage AI returned an empty or undefined embedding response.");
+//     }
+
+//     return embeddings;
+//   } catch (error) {
+//     console.error("Error calling Voyage AI embeddings API:", error);
+//     throw error;
+//   }
+// }
 
 // import { OpenAIApi, Configuration } from "openai-edge";
 

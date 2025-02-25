@@ -4,15 +4,9 @@ import { chat, message as _messages } from "@/lib/db/schema";
 import { Message, streamText } from "ai";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { Configuration, OpenAIApi } from "openai-edge";
 import { auth } from "../../../../auth";
 import { deleteChatById, getChatById } from "@/app/app/chat/actions";
-
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(config);
+import { llm } from "@/lib/ai/hf_llm";
 
 export async function POST(req: Request) {
   // const { chatId, messages }: { chatId: string; messages: Array<Message> } = await req.json();
@@ -34,54 +28,34 @@ export async function POST(req: Request) {
     const fileUrl = _chats[0].fileUrl;
     const lastMessage = messages[messages.length - 1];
 
-    if (!fileUrl) {
-      return NextResponse.json({ error: "File not found" }, { status: 404 });
+    let context = "";
+
+    if (fileUrl) {
+      context = await getContext(lastMessage.content, fileUrl);
     }
 
-    const context = await getContext(lastMessage.content, fileUrl);
+    const response = await llm(lastMessage.content, context);
 
-    const prompt = {
-      role: "system",
-      content: `You are a highly formal AI legal assistant, designed to provide clear, concise, and professional responses to legal inquiries.
-        Your primary role is to assist users with legal research by retrieving relevant case law and statutory provisions from the provided context.
-        If the context does not contain the answer, respond with: "I'm sorry, but I cannot provide an answer based on the available information."
-        Avoid making assumptions or providing speculative answers.
-        Speak in a calm, precise, and authoritative manner, maintaining legal professionalism.
-        
-        CONTEXT BLOCK:
-        ${context}
-        END OF CONTEXT BLOCK.`,
-    };
+    await db.insert(_messages).values([
+      { chatId, content: lastMessage.content, role: "user", createdAt: new Date() },
+      { chatId, content: response, role: "assistant", createdAt: new Date() },
+    ]);
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-4o-mini",
-      messages: [
-        prompt,
-        ...messages.filter((message: Message) => message.role === "user"),
-      ],
-      stream: true,
-    });
+    // await db.insert(_messages).values({
+    //   chatId,
+    //   content: lastMessage.content,
+    //   role: "user",
+    //   createdAt: new Date(),
+    // });
 
-    const result = streamText.toDataStreamResponse(response, {
-      onStart: async () => {
-        await db.insert(_messages).values({
-          chatId,
-          content: lastMessage.content,
-          role: "user",
-          createdAt: new Date(),
-        });
-      },
-      onCompletion: async (completion: string) => {
-        await db.insert(_messages).values({
-          chatId,
-          content: completion,
-          role: "system",
-          createdAt: new Date(),
-        });
-      },
-    });
+    // await db.insert(_messages).values({
+    //   chatId,
+    //   content: response,
+    //   role: "system",
+    //   createdAt: new Date(),
+    // });
 
-    return result;
+    return NextResponse.json({ message: response }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },
