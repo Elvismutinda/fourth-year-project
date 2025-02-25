@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TAVILY_API_KEY = os.getenv("tvly_YOUR_API_KEY")
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 tavily_client= TavilyClient(api_key=TAVILY_API_KEY)
 
@@ -42,7 +42,6 @@ def tavily_search(query, max_results=5):
         "include_answer": True,  # Include a short answer to the query
         "include_raw_content": False,  # Exclude the raw content of the search results
         "include_domains": [
-            "kenyalaw.org/kl",  # Old official Kenya Law Reports site
             "new.kenyalaw.org" # New official Kenya Law Reports judgments
         ],  
         "exclude_domains": ["*"],  # Exclude non-legal sources unless explicitly included
