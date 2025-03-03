@@ -32,10 +32,10 @@ def download_file(page, locator, output_dir='./output/case_laws'):
 	download.save_as(file_location)
 
 	# Save the download object
-	# if FILE_STORAGE == 'aws':
-	# 	file_location = upload_to_aws(file_location, f"case_laws/{file_name}")
-	# 	# Delete the copied file
-	# 	os.remove(local_file_location)
+	if FILE_STORAGE == 'aws':
+		file_location = upload_to_aws(file_location, f"case_laws/{file_name}")
+		# Delete the copied file
+		os.remove(local_file_location)
 
 	# Delete the temporary download file
 	download.delete()
