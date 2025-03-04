@@ -85,7 +85,7 @@ const FileUpload = () => {
       {uploading || isPending ? (
         <>
           <Loader className="h-10 w-10 text-gray-500 animate-spin" />
-          <p className="mt-2 text-sm text-slate-400">Spilling Tea to GPT...</p>
+          <p className="mt-2 text-sm text-slate-400">Processing your document...</p>
         </>
       ) : (
         <>

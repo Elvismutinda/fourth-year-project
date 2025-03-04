@@ -46,7 +46,7 @@ const Chat = ({ chatId }: ChatProps) => {
     }
   }, [messages]);
   return (
-    <div className="flex flex-col min-w-0 h-dvh">
+    <div className="flex flex-col min-w-0 h-full">
       <div className="flex sticky top-0 py-1.5 items-center px-2">
         <h3 className="text-xl font-bold">Chat</h3>
       </div>
