@@ -15,7 +15,7 @@ export async function getMatchesFromEmbeddings(
         FROM documents
         WHERE file_url = ${fileUrl}
         ORDER BY similarity
-        LIMIT 5;
+        LIMIT 3;
       `
     );
 
