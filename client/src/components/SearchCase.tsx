@@ -25,6 +25,7 @@ import Link from "next/link";
 import { getCaseLaws } from "@/app/app/caselaws/actions";
 
 interface CaseLaw {
+  id: string;
   url: string;
   // file_location?: string;
   metadata: {
@@ -192,14 +193,15 @@ const SearchCase = () => {
         {currentCases.length > 0 ? (
           <div className="grid gap-4">
             {currentCases.map((caseLaw, index) => (
-              <Card key={index}>
+              <Link key={index} href={`/app/caselaws/${caseLaw.id}`} className="block">
+              <Card className="cursor-pointer transition-transform hover:scale-[1.02]">
                 <CardHeader>
-                  <CardTitle className="text-xl">
-                    {caseLaw.metadata["citation"]}
+                  <CardTitle className="text-xl font-bold">
+                  {caseLaw.metadata.citation.replace(/\s*copy\s*$/i, "")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex flex-col gap-1 text-base">
+                  <div className="space-y-2 py-2">
                     <p>
                       <strong>Court:</strong> {caseLaw.metadata["court"]}
                     </p>
@@ -208,26 +210,12 @@ const SearchCase = () => {
                       {caseLaw.metadata["case_number"]}
                     </p>
                     <p>
-                      <strong>Judge:</strong> {caseLaw.metadata["judges"]}
+                      <strong>Judges:</strong> {caseLaw.metadata["judges"]}
                     </p>
-                  </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Link href={caseLaw.url} target="_blank">
-                      <Button variant="main">
-                        <Download />
-                        Download PDF
-                      </Button>
-                    </Link>
-
-                    <Link href={caseLaw.url} target="_blank">
-                      <Button variant="purple">
-                        <SquareArrowOutUpRight />
-                        View in KLR
-                      </Button>
-                    </Link>
                   </div>
                 </CardContent>
               </Card>
+              </Link>
             ))}
           </div>
         ) : (

@@ -1,1 +1,0 @@
-ALTER TABLE "Chat" DROP COLUMN "file_key";

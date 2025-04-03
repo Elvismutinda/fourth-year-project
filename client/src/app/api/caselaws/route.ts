@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
 
     let caseQuery = db
       .select({
+        id: case_laws.id,
         url: case_laws.url,
         file_url: case_laws.file_url,
         metadata: case_laws.metadata,

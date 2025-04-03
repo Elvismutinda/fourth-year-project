@@ -87,8 +87,8 @@ export const klr_docs = pgTable("klr_docs", {
 });
 
 export const case_laws = pgTable("case_laws", {
-  id: serial("id").primaryKey(),
-  url: text("url"),
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  url: text("url").unique(),
   file_url: text("file_url"),
   metadata: jsonb("metadata"),
   issues: text("issues"),
