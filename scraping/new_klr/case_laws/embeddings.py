@@ -22,7 +22,7 @@ DB_URL = os.getenv("DATABASE_URL")
 embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 # Load a summarization model for extracting key sections
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+# summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 # Load case laws data
 with open('output/case_laws/case_laws.json', 'r', encoding='utf-8') as f:
@@ -43,45 +43,43 @@ def extract_text(pdf_path):
 
     return text.strip()
 
-def extract_issues(text):
-    """Extracts legal issues from case text using regex and summarization."""
-    issues_section = re.search(r"(Issues:|Key Issues:|Legal Issues:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
-    if issues_section:
-        return summarizer(issues_section.group(2), max_length=200, min_length=50, do_sample=False)[0]['summary_text']
-    return None
+# def extract_issues(text):
+#     """Extracts legal issues from case text using regex and summarization."""
+#     issues_section = re.search(r"(Issues:|Key Issues:|Legal Issues:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
+#     if issues_section:
+#         return summarizer(issues_section.group(2), max_length=200, min_length=50, do_sample=False)[0]['summary_text']
+#     return None
 
-def extract_legal_principles(text):
-    """Extracts legal principles by identifying references to laws, doctrines, and precedents."""
-    principles_section = re.findall(r"(Principle:|Legal Principle:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
-    return " ".join([p[1].strip() for p in principles_section]) if principles_section else None
+# def extract_legal_principles(text):
+#     """Extracts legal principles by identifying references to laws, doctrines, and precedents."""
+#     principles_section = re.findall(r"(Principle:|Legal Principle:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
+#     return " ".join([p[1].strip() for p in principles_section]) if principles_section else None
 
-def extract_ratio_decidendi(text):
-    """Extracts Ratio Decidendi by identifying key reasoning statements."""
-    ratio_section = re.search(r"(Ratio Decidendi:|Court's Reasoning:|Holding:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
-    if ratio_section:
-        return summarizer(ratio_section.group(2), max_length=200, min_length=50, do_sample=False)[0]['summary_text']
-    return None
+# def extract_ratio_decidendi(text):
+#     """Extracts Ratio Decidendi by identifying key reasoning statements."""
+#     ratio_section = re.search(r"(Ratio Decidendi:|Court's Reasoning:|Holding:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
+#     if ratio_section:
+#         return summarizer(ratio_section.group(2), max_length=200, min_length=50, do_sample=False)[0]['summary_text']
+#     return None
 
-def extract_reasoning(text):
-    """Extracts extended judicial reasoning."""
-    reasoning_section = re.search(r"(Reasoning:|Analysis:|Discussion:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
-    if reasoning_section:
-        return summarizer(reasoning_section.group(2), max_length=300, min_length=100, do_sample=False)[0]['summary_text']
-    return None
+# def extract_reasoning(text):
+#     """Extracts extended judicial reasoning."""
+#     reasoning_section = re.search(r"(Reasoning:|Analysis:|Discussion:)(.*?)(?=\n[A-Z])", text, re.DOTALL)
+#     if reasoning_section:
+#         return summarizer(reasoning_section.group(2), max_length=300, min_length=100, do_sample=False)[0]['summary_text']
+#     return None
 
-def store_in_db(url, metadata, text, embedding, issues, legal_principles, ratio_decidendi, reasoning):
+def store_in_db(url, file_url, metadata, text, embedding):
     """Store data into PostgreSQL."""
     try:
         conn = psycopg2.connect(dsn=DB_URL)
         cur = conn.cursor()
         cur.execute("""
-            INSERT INTO test_cases (url, file_url, metadata, content, embedding, issues, legal_principles, ratio_decidendi, reasoning)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO case_laws (url, file_url, metadata, content, embedding)
+            VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (url) DO UPDATE
-            SET metadata = EXCLUDED.metadata, content = EXCLUDED.content, embedding = EXCLUDED.embedding,
-                issues = EXCLUDED.issues, legal_principles = EXCLUDED.legal_principles,
-                ratio_decidendi = EXCLUDED.ratio_decidendi, reasoning = EXCLUDED.reasoning;
-        """, (url, json.dumps(metadata), text, np.array(embedding).tolist(), issues, legal_principles, ratio_decidendi, reasoning))
+            SET metadata = EXCLUDED.metadata, content = EXCLUDED.content, embedding = EXCLUDED.embedding;
+        """, (url, file_url, json.dumps(metadata), text, np.array(embedding).tolist()))
         conn.commit()
         cur.close()
         conn.close()
@@ -94,6 +92,7 @@ def process_case_laws():
     for case in case_laws:
         pdf_path = case.get('file_location')
         url = case.get('url')
+        file_url = case.get('file_url')
         metadata = case.get('metadata', {})
 
         if not os.path.exists(pdf_path):
@@ -102,19 +101,22 @@ def process_case_laws():
 
         print(f"Processing: {pdf_path}")
         text = extract_text(pdf_path)
+        if not text:
+            print("❌ No text extracted. Skipping.")
+            return
 
         if text:
             # Extract legal components
-            issues = extract_issues(text)
-            legal_principles = extract_legal_principles(text)
-            ratio_decidendi = extract_ratio_decidendi(text)
-            reasoning = extract_reasoning(text)
+            # issues = extract_issues(text)
+            # legal_principles = extract_legal_principles(text)
+            # ratio_decidendi = extract_ratio_decidendi(text)
+            # reasoning = extract_reasoning(text)
             
             # Generate embeddings
             embedding = embedding_model.encode(text)
             
             # Store in database
-            store_in_db(url, metadata, text, embedding, issues, legal_principles, ratio_decidendi, reasoning)
+            store_in_db(url, file_url, metadata, text, embedding)
         else:
             print(f"Skipping {pdf_path}, no text extracted.")
 
