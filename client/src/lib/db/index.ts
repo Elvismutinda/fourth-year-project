@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
-// this seems to not work on edge runtime
+// this seems to not work on edge runtime, so uncomment when migrating
 // import { config } from "dotenv";
 
 // config({ path: ".env.local" });

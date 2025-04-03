@@ -5,6 +5,7 @@ import {
   varchar,
   timestamp,
   json,
+  jsonb,
   uuid,
   text,
   uniqueIndex,
@@ -33,6 +34,9 @@ export const chat = pgTable("Chat", {
   userId: uuid("userId")
     .notNull()
     .references(() => user.id),
+  visibility: varchar("visibility", { enum: ["public", "private"] })
+    .notNull()
+    .default("private"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
 
@@ -72,6 +76,25 @@ export const documents = pgTable("documents", {
     .notNull()
     .references(() => user.id),
   fileUrl: text("file_url").notNull(),
+  content: text("content").notNull(),
+  embedding: vector("embedding", { dimensions: 384 }),
+});
+
+export const klr_docs = pgTable("klr_docs", {
+  file_id: text("file_id").primaryKey(),
+  content: text("content").notNull(),
+  embedding: vector("embedding", { dimensions: 384 }),
+});
+
+export const case_laws = pgTable("case_laws", {
+  id: serial("id").primaryKey(),
+  url: text("url"),
+  file_url: text("file_url"),
+  metadata: jsonb("metadata"),
+  issues: text("issues"),
+  legal_principles: text("legal_principles"),
+  ratio_decidendi: text("ratio_decidendi"),
+  reasoning: text("reasoning"),
   content: text("content").notNull(),
   embedding: vector("embedding", { dimensions: 384 }),
 });

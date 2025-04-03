@@ -22,20 +22,20 @@ import {
   PaginationPrevious,
 } from "./ui/pagination";
 import Link from "next/link";
+import { getCaseLaws } from "@/app/app/caselaws/actions";
 
 interface CaseLaw {
   url: string;
   // file_location?: string;
   metadata: {
-    "Case Number:": string;
-    "Parties:": string;
-    "Date Delivered:": string;
-    "Court:": string;
-    "Case Action:": string;
-    "Judge(s):": string;
-    "Citation:": string;
-    "Advocates:"?: string;
-    "Court Division:"?: string;
+    case_number: string;
+    date_published: string;
+    court: string;
+    case_action: string;
+    judges: string;
+    citation: string;
+    advocates?: string;
+    court_division?: string;
   };
 }
 
@@ -49,40 +49,63 @@ const SearchCase = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const casesPerPage = 10;
 
-  // Fetch case laws from JSON file
+  // useEffect(() => {
+  //   const fetchCases = async () => {
+  //     try {
+  //       const response = await getCaseLaws();
+  //       setCases(
+  //         response.map((item) => ({
+  //           ...item,
+  //           metadata: item.metadata as CaseLaw["metadata"],
+  //         }))
+  //       );
+  //       setFilteredCases(
+  //         response.map((item) => ({
+  //           ...item,
+  //           metadata: item.metadata as CaseLaw["metadata"],
+  //         }))
+  //       );
+  //     } catch (error) {
+  //       console.error("Error fetching cases: ", error);
+  //     }
+  //   };
+  //   fetchCases();
+  // }, []);
+
   useEffect(() => {
-    const fetchCases = async () => {
-      try {
-        const response = await fetch("/data/case_laws.json");
+  const fetchCases = async () => {
+    try {
+      const response = await getCaseLaws({
+        query,
+        judge,
+        court,
+        topic
+      });
+      setCases(response);
+      setFilteredCases(response);
+    } catch (error) {
+      console.error("Error fetching cases:", error);
+    }
+  };
 
-        if (!response.ok) {
-          throw new Error(`HTTP error. Status: ${response.status}`);
-        }
+  fetchCases();
+}, [query, judge, court, topic]);
 
-        const data: CaseLaw[] = await response.json();
-        console.log("fetched data: ", data);
-        setCases(data);
-        setFilteredCases(data);
-      } catch (error) {
-        console.error("Error fetching cases: ", error);
-      }
-    };
-    fetchCases();
-  }, []);
 
   // Filtering logic
   useEffect(() => {
     let results = cases.filter((c) =>
-      c.metadata["Parties:"].toLowerCase().includes(query.toLowerCase())
+      c.metadata?.case_number?.toLowerCase().includes(query.toLowerCase())
     );
-    if (judge)
-      results = results.filter((c) => c.metadata["Judge(s):"] === judge);
-    if (court) results = results.filter((c) => c.metadata["Court:"] === court);
+
+    if (judge) results = results.filter((c) => c.metadata?.judges === judge);
+    if (court) results = results.filter((c) => c.metadata?.court === court);
     if (topic)
-      results = results.filter((c) => c.metadata["Court Division:"] === topic);
+      results = results.filter((c) => c.metadata?.court_division === topic);
+
     setFilteredCases(results);
     setCurrentPage(1); // Reset pagination when filters change
-  }, [query, judge, court, cases]);
+  }, [query, judge, court, topic, cases]);
 
   // Pagination logic
   const indexOfLastCase = currentPage * casesPerPage;
@@ -123,7 +146,7 @@ const SearchCase = () => {
               <SelectValue placeholder="Search judges..." />
             </SelectTrigger>
             <SelectContent>
-              {Array.from(new Set(cases.map((c) => c.metadata["Judge(s):"])))
+              {Array.from(new Set(cases.map((c) => c.metadata["judges"])))
                 .filter((j) => j) // Remove empty values
                 .map((j) => (
                   <SelectItem key={j} value={j}>
@@ -139,7 +162,7 @@ const SearchCase = () => {
             </SelectTrigger>
             <SelectContent>
               {Array.from(
-                new Set(cases.map((c) => c.metadata["Court Division:"]))
+                new Set(cases.map((c) => c.metadata["court_division"]))
               )
                 .filter((c): c is string => !!c)
                 .map((c) => (
@@ -155,7 +178,7 @@ const SearchCase = () => {
               <SelectValue placeholder="Search courts..." />
             </SelectTrigger>
             <SelectContent>
-              {Array.from(new Set(cases.map((c) => c.metadata["Court:"])))
+              {Array.from(new Set(cases.map((c) => c.metadata["court"])))
                 .filter((c) => c)
                 .map((c) => (
                   <SelectItem key={c} value={c}>
@@ -172,20 +195,20 @@ const SearchCase = () => {
               <Card key={index}>
                 <CardHeader>
                   <CardTitle className="text-xl">
-                    {caseLaw.metadata["Citation:"]}
+                    {caseLaw.metadata["citation"]}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-col gap-1 text-base">
                     <p>
-                      <strong>Court:</strong> {caseLaw.metadata["Court:"]}
+                      <strong>Court:</strong> {caseLaw.metadata["court"]}
                     </p>
                     <p>
                       <strong>Case Number:</strong>{" "}
-                      {caseLaw.metadata["Case Number:"]}
+                      {caseLaw.metadata["case_number"]}
                     </p>
                     <p>
-                      <strong>Judge:</strong> {caseLaw.metadata["Judge(s):"]}
+                      <strong>Judge:</strong> {caseLaw.metadata["judges"]}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mt-2">

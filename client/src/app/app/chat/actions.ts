@@ -1,5 +1,7 @@
 "use server";
 
+import { VisibilityType } from "@/components/chat/VisibilitySelector";
+import { updateChatVisiblityById } from "@/data/chat";
 import { db } from "@/lib/db";
 import { chat, message } from "@/lib/db/schema";
 import { generateText, Message } from "ai";
@@ -57,3 +59,13 @@ export async function deleteChatById({ id }: { id: string }) {
 
 //   return title;
 // }
+
+export async function updateChatVisibility({
+  chatId,
+  visibility,
+}: {
+  chatId: string;
+  visibility: VisibilityType;
+}) {
+  await updateChatVisiblityById({ chatId, visibility });
+}

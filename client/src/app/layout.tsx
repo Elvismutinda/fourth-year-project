@@ -27,7 +27,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(mulishFont.className, "antialiased")}>
         <AppLayoutWrapper>
-          <div className="mx-auto w-full h-full justify-center items-center">
+          <div className="mx-auto min-h-screen justify-center items-center">
             {children}
           </div>
           <Toaster richColors closeButton theme="dark" />

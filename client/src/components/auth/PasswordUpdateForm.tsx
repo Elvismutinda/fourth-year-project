@@ -18,7 +18,7 @@ import {
 } from "../ui/form";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
-import { updatePassword } from "@/app/app/setting/actions";
+import { updatePassword } from "@/app/app/settings/actions";
 import { Button } from "../ui/button";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { signOut } from "next-auth/react";
@@ -56,7 +56,7 @@ const PasswordUpdateForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handlePasswordUpdate)}
-          className="mx-auto sm:mx-0 sm:pl-8 flex w-full flex-col space-y-6 max-w-[360px] min-w-[320px]"
+          className="grid gap-6 py-2"
         >
           <FormField
             control={form.control}
@@ -71,7 +71,7 @@ const PasswordUpdateForm = () => {
                       disabled={isPending}
                       placeholder="Enter current password"
                       type={showCurrentPassword ? "text" : "password"}
-                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                     />
                     <button
                       type="button"
@@ -106,7 +106,7 @@ const PasswordUpdateForm = () => {
                       disabled={isPending}
                       placeholder="Enter new password"
                       type={showNewPassword ? "text" : "password"}
-                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                     />
                     <button
                       type="button"
@@ -139,7 +139,7 @@ const PasswordUpdateForm = () => {
                       disabled={isPending}
                       placeholder="Confirm new password"
                       type={showConfirmNewPassword ? "text" : "password"}
-                      className="h-11 bg-gray-700/80 border-none rounded-xl text-[#fff] placeholder-slate-500"
+                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                     />
                     <button
                       type="button"
@@ -161,11 +161,11 @@ const PasswordUpdateForm = () => {
             )}
           />
 
-          <div>
+          <div className="flex flex-row items-center justify-end gap-2">
             <Button
               variant="main"
               type="submit"
-              className="h-10"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2"
               disabled={isPending}
             >
               Save

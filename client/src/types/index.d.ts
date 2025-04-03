@@ -25,3 +25,15 @@ export type SidebarNavItem = {
 export type SettingConfig = {
   sidebarNav: SidebarNavItem[];
 };
+
+export type NavItem = {
+  title: string;
+  href: string;
+  disabled?: boolean;
+};
+
+export type MainNavItem = NavItem;
+
+export type SettingsConfig = {
+  mainNav: MainNavItem[];
+};

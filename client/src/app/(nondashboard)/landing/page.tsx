@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useCarousel } from "@/hooks/use-carousel";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
-import { topics, useCases } from "@/config/topics";
+import { useCases } from "@/config/topics";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,

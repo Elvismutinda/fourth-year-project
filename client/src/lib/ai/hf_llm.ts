@@ -66,7 +66,8 @@ export async function llm(
   const response = await hf.chatCompletion({
     model: "meta-llama/Llama-3.2-3B-Instruct",
     messages,
-    max_tokens: 1500,
+    max_tokens: 512,
+    temperature: 0.5,
   });
 
   return (

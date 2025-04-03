@@ -21,6 +21,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -35,7 +39,15 @@ import {
 import { Chat } from "@/lib/db/schema";
 import { fetcher } from "@/lib/utils";
 import Link from "next/link";
-import { Ellipsis, Trash } from "lucide-react";
+import {
+  Ellipsis,
+  Share,
+  Trash,
+  Lock,
+  CheckCircle2,
+  Globe,
+} from "lucide-react";
+import { useChatVisibility } from "@/hooks/use-chat-visibility";
 
 type GroupedChats = {
   today: Chat[];
@@ -56,16 +68,24 @@ const PureChatItem = ({
   onDelete: (chatId: string) => void;
   setOpenMobile: (open: boolean) => void;
 }) => {
+  const { visibilityType, setVisibilityType } = useChatVisibility({
+    chatId: chat.id,
+    initialVisibility: chat.visibility,
+  });
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive}>
-        <Link href={`/app/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
+        <Link
+          href={`/app/chat/${chat.id}`}
+          onClick={() => setOpenMobile(false)}
+        >
           <span>{chat.fileName}</span>
         </Link>
       </SidebarMenuButton>
 
       <DropdownMenu modal={true}>
-      <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger asChild>
           <SidebarMenuAction
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mr-0.5"
             showOnHover={!isActive}
@@ -75,7 +95,42 @@ const PureChatItem = ({
           </SidebarMenuAction>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent>
+        <DropdownMenuContent side="bottom" align="end">
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="cursor-pointer">
+              <Share />
+              <span>Share</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  className="cursor-pointer flex-row justify-between"
+                  onClick={() => {
+                    setVisibilityType("private");
+                  }}
+                >
+                  <div className="flex flex-row gap-2 items-center">
+                    <Lock size={17} />
+                    <span>Private</span>
+                  </div>
+                  {visibilityType === "private" ? <CheckCircle2 size={17} /> : null}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer flex-row justify-between"
+                  onClick={() => {
+                    setVisibilityType("public");
+                  }}
+                >
+                  <div className="flex flex-row gap-2 items-center">
+                    <Globe size={17} />
+                    <span>Public</span>
+                  </div>
+                  {visibilityType === "public" ? <CheckCircle2 size={17} /> : null}
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+
           <DropdownMenuItem
             className="cursor-pointer text-destructive focus:bg-destructive/15 focus:text-destructive dark:text-red-500"
             onSelect={() => onDelete(chat.id)}
@@ -137,6 +192,18 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
       router.push("/app/chat/new");
     }
   };
+
+  if (!user) {
+    return (
+      <SidebarGroup>
+        <SidebarGroupContent>
+          <div className="px-2 text-zinc-500 w-full flex flex-row justify-center items-center text-sm gap-2">
+            Login to save and revisit previous chats!
+          </div>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    );
+  }
 
   if (isLoading) {
     return (

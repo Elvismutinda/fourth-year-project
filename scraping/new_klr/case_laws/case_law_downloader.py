@@ -15,12 +15,17 @@ def generate_file_name():
 def download_pdf(page, output_dir='./output/case_laws'):
     print(f"Attempting file download")
     file_location = None
+    file_url = None
+    base_url = "https://new.kenyalaw.org"
 
     try:
         # Check for a direct "Download PDF" button
         direct_pdf_button = page.locator("a:has-text('Download PDF')")
         if direct_pdf_button.count() > 0:
             print("Found direct PDF download button")
+            href = direct_pdf_button.get_attribute("href")
+            file_url = base_url + href if href else None
+            
             with page.expect_event('download', timeout=60000) as download_info:
                 direct_pdf_button.click()
             download = download_info.value
@@ -34,6 +39,9 @@ def download_pdf(page, output_dir='./output/case_laws'):
             # Select the PDF download link
             pdf_link = page.locator("ul.dropdown-menu a[href$='.pdf']")
             expect(pdf_link).to_be_visible(timeout=10000)
+            
+            href = pdf_link.get_attribute("href")
+            file_url = base_url + href if href else None
 
             with page.expect_event('download', timeout=60000) as download_info:
                 pdf_link.click()
@@ -46,11 +54,12 @@ def download_pdf(page, output_dir='./output/case_laws'):
         download.delete()
 
         print(f"Downloaded PDF: {file_name}")
+        print(f"PDF URL: {file_url}")
     except Exception:
         print("Failed to download PDF")
         print(traceback.format_exc())
 
-    return file_location
+    return file_location, file_url
 
 def extract_case_details(page):
     print(f"Extracting case details")
@@ -124,6 +133,7 @@ def download_files_from_links(urls, output_dir, case_file_path):
         for url in urls:
             print(f"🔍 Processing: {url}")
             file_location = None
+            file_url = None
             metadata = None
             page = browser.new_page()
 
@@ -132,12 +142,12 @@ def download_files_from_links(urls, output_dir, case_file_path):
                 metadata = extract_case_details(page)
 
                 # Download the PDF
-                file_location = download_pdf(page, output_dir)
+                file_location, file_url = download_pdf(page, output_dir)
 
                 if file_location and metadata:
                     with file_lock:
                         append_to_json(
-                            {"url": url, "file_location": file_location, "metadata": metadata},
+                            {"url": url, "file_location": file_location, "file_url": file_url, "metadata": metadata},
                             case_file_path
                         )
 

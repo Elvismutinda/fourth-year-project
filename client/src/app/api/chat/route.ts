@@ -1,7 +1,6 @@
 import { getContext } from "@/lib/context";
 import { db } from "@/lib/db";
 import { chat, message as _messages } from "@/lib/db/schema";
-import { Message, streamText } from "ai";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { auth } from "../../../../auth";
@@ -40,20 +39,6 @@ export async function POST(req: Request) {
       { chatId, content: lastMessage.content, role: "user", createdAt: new Date() },
       { chatId, content: response, role: "assistant", createdAt: new Date() },
     ]);
-
-    // await db.insert(_messages).values({
-    //   chatId,
-    //   content: lastMessage.content,
-    //   role: "user",
-    //   createdAt: new Date(),
-    // });
-
-    // await db.insert(_messages).values({
-    //   chatId,
-    //   content: response,
-    //   role: "system",
-    //   createdAt: new Date(),
-    // });
 
     return NextResponse.json({ message: response }, { status: 200 });
   } catch (error) {

@@ -14,12 +14,14 @@ export async function getMatchesFromEmbeddings(
         SELECT content, 1 - (embedding <=> ${embeddingsVectors}::vector) AS similarity
         FROM documents
         WHERE file_url = ${fileUrl}
-        ORDER BY similarity
-        LIMIT 3;
+        ORDER BY similarity DESC
+        LIMIT 5;
       `
     );
 
     console.log("Query embeddings:", embeddings);
+    console.log("Query fileUrl:", fileUrl);
+    console.log("Query result:", queryResult);
 
     return queryResult.rows.map((row) => ({
       text: row.content,
@@ -37,10 +39,12 @@ export async function getContext(query: string, fileUrl: string) {
 
   // Filter results with score > 0.7
   const qualifyingDocs = matches.filter(
-    (match) => typeof match.score === "number" && match.score > 0.7
+    (match) => typeof match.score === "number" && match.score > 0.5
   );
 
   let docs = qualifyingDocs.map((match) => match.text);
+
+  console.log("Qualifying docs:", docs);
 
   return docs.join("\n").substring(0, 3000);
 }

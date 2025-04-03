@@ -144,7 +144,7 @@ function StopButton({
 }) {
   return (
     <Button
-      className="rounded-full p-1.5 h-fit bg-zinc-300 border border-zinc-600 text-zinc-800 hover:bg-zinc-300/20"
+      className="rounded-lg p-1.5 h-fit bg-zinc-300 border border-zinc-600 text-zinc-800 hover:bg-zinc-300/20"
       onClick={(e) => {
         e.preventDefault();
         stop();
@@ -165,7 +165,7 @@ function SendButton({
 }) {
   return (
     <Button
-      className="rounded-full p-1.5 h-fit bg-zinc-300 border border-zinc-600 text-zinc-800 hover:bg-zinc-300/20"
+      className="rounded-lg p-1.5 h-fit bg-zinc-300 border border-zinc-600 text-zinc-800 hover:bg-zinc-300/20"
       onClick={(e) => {
         e.preventDefault();
         submitForm();
