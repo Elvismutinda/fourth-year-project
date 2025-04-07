@@ -39,12 +39,14 @@ const PasswordUpdateForm = () => {
   });
 
   const handlePasswordUpdate = (values: UpdatePasswordRequest) => {
+    const toastId = toast.loading("Updating password...");
+
     startTransition(() => {
       updatePassword(values).then((data) => {
         if (data?.error) {
-          toast.error(data?.error);
+          toast.error(data?.error, { id: toastId });
         } else {
-          toast.success(data?.success);
+          toast.success(data?.success, { id: toastId });
 
           signOut({ callbackUrl: "/login" });
         }

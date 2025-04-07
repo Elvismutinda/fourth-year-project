@@ -113,7 +113,9 @@ const PureChatItem = ({
                     <Lock size={17} />
                     <span>Private</span>
                   </div>
-                  {visibilityType === "private" ? <CheckCircle2 size={17} /> : null}
+                  {visibilityType === "private" ? (
+                    <CheckCircle2 size={17} />
+                  ) : null}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer flex-row justify-between"
@@ -125,7 +127,9 @@ const PureChatItem = ({
                     <Globe size={17} />
                     <span>Public</span>
                   </div>
-                  {visibilityType === "public" ? <CheckCircle2 size={17} /> : null}
+                  {visibilityType === "public" ? (
+                    <CheckCircle2 size={17} />
+                  ) : null}
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
@@ -395,17 +399,24 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
         </SidebarGroupContent>
       </SidebarGroup>
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-[#1A1928] border border-muted/20">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           </AlertDialogHeader>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="text-gray-400">
             This action cannot be undone. This will permanently delete your chat
             and remove it from our servers.
           </AlertDialogDescription>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+            <AlertDialogCancel className="bg-transparent text-inherit hover:bg-muted/10 hover:text-white-100 border-none">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-delete text-delete-foreground shadow-sm hover:bg-delete/90 h-9 px-4 py-2"
+            >
+              Delete Chat
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

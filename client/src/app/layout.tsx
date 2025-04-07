@@ -30,7 +30,7 @@ export default function RootLayout({
           <div className="mx-auto min-h-screen justify-center items-center">
             {children}
           </div>
-          <Toaster richColors closeButton theme="dark" />
+          <Toaster richColors theme="dark" />
         </AppLayoutWrapper>
       </body>
     </html>

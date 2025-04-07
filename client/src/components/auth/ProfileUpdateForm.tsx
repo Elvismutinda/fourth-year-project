@@ -40,12 +40,14 @@ const ProfileUpdateForm = () => {
   });
 
   const handleProfileUpdate = (values: UpdateProfileRequest) => {
+    const toastId = toast.loading("Updating account information...");
+
     startTransition(() => {
       updateProfile(values).then((data) => {
         if (data?.error) {
-          toast.error(data?.error);
+          toast.error(data?.error, { id: toastId });
         } else {
-          toast.success(data?.success);
+          toast.success(data?.success, { id: toastId });
 
           signOut({ callbackUrl: "/login" });
         }

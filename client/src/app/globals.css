@@ -53,6 +53,10 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --delete: 335.82 74.44% 35.29%;
+    --delete-foreground: 0 0% 100%;
+    --neutral: 326.3 20% 15.7%;
+    --back: 313.8 24.5% 10.4%;
   }
   .dark {
     --background: 240 10% 3.9%;

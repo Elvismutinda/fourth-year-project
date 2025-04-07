@@ -14,7 +14,7 @@ const SubscriptionPage = () => {
           <div className="mt-2 flex flex-col items-center justify-center text-right md:mt-0 md:flex-row md:items-center md:justify-center md:text-right">
             <div className="text-xl font-bold md:text-3xl">
               Ksh. 500
-              <span className="text-lg text-muted-foreground">/month</span>
+              <span className="text-lg text-muted/80">/month</span>
             </div>
           </div>
         </div>
@@ -30,7 +30,7 @@ const SubscriptionPage = () => {
                   )}
                   <h3 className="font-semibold">{item.title}</h3>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted/80">
                   {item.description}
                 </p>
               </div>
