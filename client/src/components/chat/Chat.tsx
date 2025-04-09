@@ -1,41 +1,37 @@
 "use client";
 
 import React from "react";
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Message } from "ai";
+import { UIMessage } from "ai";
 import { Messages } from "./Messages";
 import { ChatInput } from "./ChatInput";
+import { toast } from "sonner";
 
-type ChatProps = { chatId: string };
-
-const Chat = ({ chatId }: ChatProps) => {
+const Chat = ({ chatId }: { chatId: string }) => {
   const { data, isPending } = useQuery({
     queryKey: ["chat", chatId],
     queryFn: async () => {
-      const response = await axios.post<Message[]>("/api/get-messages", {
+      const response = await axios.post<Array<UIMessage>>("/api/get-messages", {
         chatId,
       });
       return response.data;
     },
   });
 
-  const {
-    messages,
-    setMessages,
-    input,
-    setInput,
-    handleSubmit,
-    isLoading,
-    stop,
-  } = useChat({
-    api: "/api/chat",
-    body: {
-      chatId,
-    },
-    initialMessages: data || [],
-  });
+  const { messages, setMessages, input, setInput, handleSubmit, status, stop } =
+    useChat({
+      api: "/api/chat",
+      body: {
+        chatId,
+      },
+      initialMessages: data || [],
+      onError: (err) => {
+        console.error("Error in chat", err);
+        toast.error("An error occurred while sending the message.");
+      },
+    });
   React.useEffect(() => {
     const messageContainer = document.getElementById("message-container");
     if (messageContainer) {
@@ -51,7 +47,7 @@ const Chat = ({ chatId }: ChatProps) => {
         <h3 className="text-xl font-bold">Chat</h3>
       </div>
 
-      <Messages messages={messages} isLoading={isLoading} />
+      <Messages messages={messages} status={status} />
 
       <form
         onSubmit={handleSubmit}
@@ -61,9 +57,8 @@ const Chat = ({ chatId }: ChatProps) => {
           chatId={chatId}
           input={input}
           setInput={setInput}
-          // handleInputChange={handleInputChange}
           handleSubmit={handleSubmit}
-          isLoading={isLoading}
+          status={status}
           stop={stop}
           setMessages={setMessages}
         />

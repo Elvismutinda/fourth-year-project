@@ -13,16 +13,20 @@ import { useLocalStorage, useWindowSize } from "usehooks-ts";
 import { Textarea } from "../ui/textarea";
 import { FaStop, FaArrowUp } from "react-icons/fa6";
 import { Button } from "../ui/button";
-import { Message } from "ai";
+import { ChatRequestOptions, Message, UIMessage } from "ai";
 import type { UseChatHelpers } from "@ai-sdk/react";
+import { SuggestedActions } from "./SuggestedActions";
 
-export const ChatInput = ({
+export const CaseLawChatInput = ({
   chatId,
   input,
   setInput,
   handleSubmit,
   status,
+  stop,
+  messages,
   setMessages,
+  append,
   className,
 }: {
   chatId: string;
@@ -31,7 +35,9 @@ export const ChatInput = ({
   handleSubmit: UseChatHelpers["handleSubmit"];
   status: UseChatHelpers["status"];
   stop: () => void;
+  messages: Array<UIMessage>;
   setMessages: UseChatHelpers["setMessages"];
+  append: UseChatHelpers["append"];
   className?: string;
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -92,8 +98,13 @@ export const ChatInput = ({
       textareaRef.current?.focus();
     }
   }, [handleSubmit, setLocalStorageInput, chatId, width]);
+
   return (
     <div className="relative w-full flex flex-col gap-4">
+      {messages.length === 0 && (
+        <SuggestedActions append={append} chatId={chatId} />
+      )}
+
       <Textarea
         ref={textareaRef}
         placeholder="Ask any question..."

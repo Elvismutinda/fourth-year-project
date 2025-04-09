@@ -130,7 +130,7 @@ const HistoryPage = () => {
         </div>
       </section>
 
-      <section className="-m-4 w-fit space-y-2 rounded-lg border border-muted-foreground/10 p-4 hover:bg-red-800/20">
+      <section className="-m-4 w-fit space-y-2 rounded-lg border border-muted-foreground/10 p-4 hover:bg-transparent/50">
         <h2 className="text-2xl font-bold">Danger Zone</h2>
         <div className="space-y-6">
           <p className="text-sm text-muted/80">
@@ -140,7 +140,7 @@ const HistoryPage = () => {
           <div className="flex flex-row gap-2">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-destructive-foreground shadow-sm h-9 px-4 py-2 border border-red-800/20 bg-red-800/20 hover:bg-red-800">
+                <Button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-destructive-foreground shadow-sm h-9 px-4 py-2 border border-red-800/50 bg-red-800/50 hover:bg-red-800">
                   <Trash />
                   Delete Chat History
                 </Button>
@@ -154,13 +154,13 @@ const HistoryPage = () => {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel className="bg-transparent text-inherit hover:bg-muted/10 hover:text-white-100 border-none">
+                  <AlertDialogCancel className="bg-transparent text-inherit hover:bg-transparent/30 hover:text-white-100 border-none">
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
                     disabled={isPending}
                     onClick={handleHistoryDelete}
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-delete text-delete-foreground shadow-sm hover:bg-delete/90 h-9 px-4 py-2"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-red-800 text-delete-foreground shadow-sm hover:bg-red-800/90 h-9 px-4 py-2"
                   >
                     Delete History
                   </AlertDialogAction>

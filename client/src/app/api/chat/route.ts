@@ -8,7 +8,7 @@ import { deleteChatById, getChatById } from "@/app/app/chat/actions";
 import { llm } from "@/lib/ai/hf_llm";
 
 export async function POST(req: Request) {
-  // const { chatId, messages }: { chatId: string; messages: Array<Message> } = await req.json();
+  // const { chatId, messages }: { chatId: string; messages: Array<UIMessage> } = await req.json();
 
   const session = await auth();
 
@@ -35,13 +35,21 @@ export async function POST(req: Request) {
 
     const response = await llm(lastMessage.content, context);
 
+    console.log("Response:", response);
+
     await db.insert(_messages).values([
-      { chatId, content: lastMessage.content, role: "user", createdAt: new Date() },
+      {
+        chatId,
+        content: lastMessage.content,
+        role: "user",
+        createdAt: new Date(),
+      },
       { chatId, content: response, role: "assistant", createdAt: new Date() },
     ]);
 
     return NextResponse.json({ message: response }, { status: 200 });
   } catch (error) {
+    console.log("Error in POST /api/chat:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -64,7 +72,7 @@ export async function DELETE(req: Request) {
   }
 
   try {
-    const chat = await getChatById({ id: chatId });
+    const chat = await getChatById({ chatId });
 
     if (chat.userId !== session.user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

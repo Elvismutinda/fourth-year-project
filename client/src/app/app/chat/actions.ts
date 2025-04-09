@@ -20,9 +20,12 @@ export async function getChatsByUserId({ id }: { id: string }) {
   }
 }
 
-export async function getChatById({ id }: { id: string }) {
+export async function getChatById({ chatId }: { chatId: string }) {
   try {
-    const [selectedChat] = await db.select().from(chat).where(eq(chat.id, id));
+    const [selectedChat] = await db
+      .select()
+      .from(chat)
+      .where(eq(chat.id, chatId));
 
     return selectedChat;
   } catch (error) {

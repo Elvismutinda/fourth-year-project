@@ -17,7 +17,7 @@ const SettingsLayout = async ({ children }: { children: React.ReactNode }) => {
       <div className="flex justify-between items-center pb-8">
         <Link
           href="/app/chat/new"
-          className={cn(buttonVariants({ variant: "ghost" }))}
+          className="justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 px-4 py-2 flex items-center hover:bg-transparent/30"
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
           Back to Chat
@@ -31,7 +31,11 @@ const SettingsLayout = async ({ children }: { children: React.ReactNode }) => {
             });
           }}
         >
-          <Button variant="ghost" type="submit">
+          <Button
+            variant="transparent"
+            type="submit"
+            className="justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 px-4 py-2 flex items-center hover:bg-transparent/30"
+          >
             Sign Out
           </Button>
         </Form>

@@ -6,6 +6,9 @@ import { Download, SquareArrowOutUpRight } from "lucide-react";
 import { getCaseLawById, getSimilarCases } from "../actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CaseLawChat from "@/components/chat/CaseLawChat";
+import { auth } from "../../../../../auth";
+import { redirect } from "next/navigation";
+import { getChatById } from "../../chat/actions";
 
 type CaselawPageProps = {
   params: {
