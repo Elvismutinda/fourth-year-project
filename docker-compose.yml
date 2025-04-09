@@ -1,0 +1,40 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://llm:8000
+    env_file:
+      - client/.env.local
+    volumes:
+      - frontend_data:/app/node_modules
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:3000 || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - intelaw-network
+  
+  llm:
+    build:
+      context: ./local-llm/llama.cpp
+      dockerfile: Dockerfile
+    volumes:
+      - ./local-llm/llama.cpp/models:/app/models
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - intelaw-network
+
+networks:
+  intelaw-network:
+    driver: bridge
+
+volumes:
+  frontend_data:
