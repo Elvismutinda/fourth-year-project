@@ -167,3 +167,4 @@ results.csv
 *.pem
 .idea/
 scraper-venv
+esheria.py
