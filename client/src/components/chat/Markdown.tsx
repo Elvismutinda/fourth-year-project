@@ -1,4 +1,5 @@
 import Link from "next/link";
+import React, { memo } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -91,10 +92,15 @@ const components: Partial<Components> = {
 
 const remarkPlugins = [remarkGfm];
 
-export const Markdown = ({ children }: { children: string }) => {
+export const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   return (
     <ReactMarkdown components={components} remarkPlugins={remarkPlugins}>
       {children}
     </ReactMarkdown>
   );
 };
+
+export const Markdown = memo(
+  NonMemoizedMarkdown,
+  (prevProps, nextProps) => prevProps.children === nextProps.children
+);

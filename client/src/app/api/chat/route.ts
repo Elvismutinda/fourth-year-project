@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { auth } from "../../../../auth";
 import { deleteChatById, getChatById } from "@/app/app/chat/actions";
-import { llm } from "@/lib/ai/hf_llm";
+import { chat_llm } from "@/lib/ai/hf_llm";
 
 export async function POST(req: Request) {
   // const { chatId, messages }: { chatId: string; messages: Array<UIMessage> } = await req.json();
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       context = await getContext(lastMessage.content, fileUrl);
     }
 
-    const response = await llm(lastMessage.content, context);
+    const response = await chat_llm(lastMessage.content, context);
 
     console.log("Response:", response);
 

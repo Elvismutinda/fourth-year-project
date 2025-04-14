@@ -1,5 +1,5 @@
 {
-  "id": "20735c59-6374-4cb6-b718-61da09eb18f6",
+  "id": "b1c3259d-dad0-42a4-9642-d655b9df19ab",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -142,7 +142,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -199,7 +199,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -265,7 +265,7 @@
         },
         "content": {
           "name": "content",
-          "type": "json",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -288,7 +288,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },

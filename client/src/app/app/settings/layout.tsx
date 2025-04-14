@@ -1,8 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Form from "next/form";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { auth, signOut } from "../../../../auth";
 import { ChevronLeft } from "lucide-react";
 import SettingsNav from "@/components/settings/SettingsNav";

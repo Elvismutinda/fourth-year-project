@@ -1,23 +1,17 @@
 "use client";
 
 import cx from "classnames";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useLocalStorage, useWindowSize } from "usehooks-ts";
 import { Textarea } from "../ui/textarea";
 import { FaStop, FaArrowUp } from "react-icons/fa6";
 import { Button } from "../ui/button";
-import { ChatRequestOptions, Message, UIMessage } from "ai";
+import { UIMessage } from "ai";
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { SuggestedActions } from "./SuggestedActions";
 
-export const CaseLawChatInput = ({
+export const PureCaseLawChatInput = ({
   chatId,
   input,
   setInput,
@@ -140,12 +134,22 @@ export const CaseLawChatInput = ({
   );
 };
 
-function StopButton({
+export const CaseLawChatInput = memo(
+  PureCaseLawChatInput,
+  (prevProps, nextProps) => {
+    if (prevProps.input !== nextProps.input) return false;
+    if (prevProps.status !== nextProps.status) return false;
+
+    return true;
+  }
+);
+
+function PureStopButton({
   stop,
   setMessages,
 }: {
   stop: () => void;
-  setMessages: Dispatch<SetStateAction<Array<Message>>>;
+  setMessages: UseChatHelpers["setMessages"];
 }) {
   return (
     <Button
@@ -153,7 +157,7 @@ function StopButton({
       onClick={(e) => {
         e.preventDefault();
         stop();
-        setMessages([]);
+        setMessages((messages) => messages);
       }}
     >
       <FaStop size={14} />
@@ -161,7 +165,9 @@ function StopButton({
   );
 }
 
-function SendButton({
+const StopButton = memo(PureStopButton);
+
+function PureSendButton({
   submitForm,
   input,
 }: {
@@ -181,3 +187,8 @@ function SendButton({
     </Button>
   );
 }
+
+const SendButton = memo(PureSendButton, (prevProps, nextProps) => {
+  if (prevProps.input !== nextProps.input) return false;
+  return true;
+});

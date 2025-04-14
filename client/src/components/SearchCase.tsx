@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Download, Search, SquareArrowOutUpRight } from "lucide-react";
+import { Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -23,6 +23,7 @@ import {
 } from "./ui/pagination";
 import Link from "next/link";
 import { getCaseLaws } from "@/app/app/caselaws/actions";
+import { Skeleton } from "./ui/skeleton";
 
 interface CaseLaw {
   id: string;
@@ -48,6 +49,8 @@ const SearchCase = () => {
   const [cases, setCases] = useState<CaseLaw[]>([]);
   const [filteredCases, setFilteredCases] = useState<CaseLaw[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
   const casesPerPage = 10;
 
   // useEffect(() => {
@@ -74,24 +77,26 @@ const SearchCase = () => {
   // }, []);
 
   useEffect(() => {
-  const fetchCases = async () => {
-    try {
-      const response = await getCaseLaws({
-        query,
-        judge,
-        court,
-        topic
-      });
-      setCases(response);
-      setFilteredCases(response);
-    } catch (error) {
-      console.error("Error fetching cases:", error);
-    }
-  };
+    const fetchCases = async () => {
+      try {
+        setLoading(true);
+        const response = await getCaseLaws({
+          query,
+          judge,
+          court,
+          topic,
+        });
+        setCases(response);
+        setFilteredCases(response);
+      } catch (error) {
+        console.error("Error fetching cases:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchCases();
-}, [query, judge, court, topic]);
-
+    fetchCases();
+  }, [query, judge, court, topic]);
 
   // Filtering logic
   useEffect(() => {
@@ -190,31 +195,51 @@ const SearchCase = () => {
           </Select>
         </div>
 
-        {currentCases.length > 0 ? (
+        {loading ? (
+          <div className="grid gap-4">
+            {Array.from({ length: 2 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-52 rounded-xl border bg-card text-card-foreground"
+              >
+                <Skeleton className="h-6 w-3/4 my-8 mx-6" />
+                <div className="space-y-4 my-8 mx-6">
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-4 w-1/3" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : currentCases.length > 0 ? (
           <div className="grid gap-4">
             {currentCases.map((caseLaw, index) => (
-              <Link key={index} href={`/app/caselaws/${caseLaw.id}`} className="block">
-              <Card className="cursor-pointer transition-transform hover:scale-[1.02]">
-                <CardHeader>
-                  <CardTitle className="text-xl font-bold">
-                  {caseLaw.metadata.citation.replace(/\s*copy\s*$/i, "")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2 py-2">
-                    <p>
-                      <strong>Court:</strong> {caseLaw.metadata["court"]}
-                    </p>
-                    <p>
-                      <strong>Case Number:</strong>{" "}
-                      {caseLaw.metadata["case_number"]}
-                    </p>
-                    <p>
-                      <strong>Judges:</strong> {caseLaw.metadata["judges"]}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+              <Link
+                key={index}
+                href={`/app/caselaws/${caseLaw.id}`}
+                className="block"
+              >
+                <Card className="cursor-pointer transition-transform hover:scale-[1.02]">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-bold">
+                      {caseLaw.metadata.citation.replace(/\s*copy\s*$/i, "")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 py-2">
+                      <p>
+                        <strong>Court:</strong> {caseLaw.metadata["court"]}
+                      </p>
+                      <p>
+                        <strong>Case Number:</strong>{" "}
+                        {caseLaw.metadata["case_number"]}
+                      </p>
+                      <p>
+                        <strong>Judges:</strong> {caseLaw.metadata["judges"]}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
               </Link>
             ))}
           </div>

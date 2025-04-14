@@ -44,7 +44,7 @@ Provide responses strictly based on legal documents, case law, and acts availabl
  * @param additionalContext - (Optional) Extra context to guide the response.
  * @returns The AI's response.
  */
-export async function llm(
+export async function chat_llm(
   query: string,
   additionalContext?: string
 ): Promise<string> {
@@ -72,6 +72,51 @@ export async function llm(
     response.choices[0]?.message?.content ??
     "I'm sorry, but I couldn't generate a response."
   );
+}
+
+export async function draft_llm(
+  documentType: string,
+  fieldDetails?: Record<string, string>
+): Promise<string> {
+  console.log("Document Type in draft_llm:", documentType);
+  console.log("Field Details in draft_llm:", fieldDetails);
+
+  const fieldsString = fieldDetails
+    ? Object.entries(fieldDetails)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join("\n")
+    : "";
+
+  const DRAFT_PROMPT = `
+    You are a legal expert drafting a ${documentType} document template under Kenyan law.
+
+    ### Field Details:
+    ${fieldsString}
+
+    If provided, use the details to generate a professional and legally accurate document.
+  `;
+
+  const messages = [
+    { role: "system", content: SYSTEM_PROMPT },
+    { role: "user", content: DRAFT_PROMPT },
+  ];
+
+  const response = await hf.chatCompletion({
+    model: "meta-llama/Llama-3.2-3B-Instruct",
+    messages,
+    max_tokens: 1024,
+    temperature: 0.7,
+  });
+
+  console.log("Response from Hugging Face:", JSON.stringify(response, null, 2));
+
+  const document = response.choices[0]?.message?.content;
+  if (!document) {
+    console.error("Error: Failed to generate valid document.");
+    return "I'm sorry, but I couldn't generate the document.";
+  }
+
+  return document;
 }
 
 // const SYSTEM_PROMPT = `
@@ -137,4 +182,3 @@ export async function llm(
 //     return "There was an error contacting the local LLM server.";
 //   }
 // }
-

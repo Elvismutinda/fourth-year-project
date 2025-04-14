@@ -34,7 +34,7 @@ const CaseLawChat = ({
     stop,
     append,
   } = useChat({
-    api: "/api/chat",
+    api: "/api/caselaws",
     body: {
       chatId,
     },

@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { db } from "@/lib/db";
 import { auth } from "../../../../../auth";
 import { chat } from "@/lib/db/schema";
@@ -7,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Chat",
+  description: "Chat with your documents",
+};
 
 export default async function HomePage() {
   const session = await auth();
