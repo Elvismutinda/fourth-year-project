@@ -16,7 +16,7 @@ export const AppHeader = async () => {
   }
 
   return (
-    <div className="flex flex-row justify-between px-2 py-1">
+    <div className="flex flex-row items-center flex-nowrap h-full justify-between px-2 py-0.5">
       <SidebarToggle />
 
       <div className="flex flex-row items-center">

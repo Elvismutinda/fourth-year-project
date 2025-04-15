@@ -25,7 +25,7 @@ export default async function Layout({
       />
       <SidebarProvider defaultOpen={!isCollapsed}>
         <div className="relative flex h-screen bg-[#1A1928]">
-          <ChatSidebar user={session?.user} className="ml-[70px] z-10" />
+          <ChatSidebar user={session?.user} className="ml-[4.25rem] z-10" />
         </div>
 
         <SidebarInset className="bg-[#1A1928]">

@@ -47,7 +47,9 @@ const SidebarSwitcher = ({
                 />
               </Button>
             </TooltipTrigger>
-            <TooltipContent align="end">{label}</TooltipContent>
+            <TooltipContent side="right" sideOffset={10}>
+              {label}
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>

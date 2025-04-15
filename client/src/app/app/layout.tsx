@@ -10,10 +10,10 @@ export default async function AppLayout({
 
   return (
     <div className="relative flex h-screen w-full bg-[#1A1928]">
-      <div className="z-20">
+      <div className="fixed top-0 left-0 z-20 h-full">
         <AppSidebar user={session?.user ?? {}} />
       </div>
-      {children}
+      <main className="ml-[4.25rem] flex-1 ">{children}</main>
     </div>
   );
 }

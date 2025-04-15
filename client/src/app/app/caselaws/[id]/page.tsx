@@ -31,6 +31,11 @@ const CaselawPage = async (props: CaselawPageProps) => {
     file_url: string;
     url: string;
     content: string;
+    full_text: string;
+    issues: string[];
+    legal_principles: string[];
+    ratio_decidendi: string;
+    reasoning: string;
   };
 
   if (!caseLaw) {
@@ -92,19 +97,41 @@ const CaselawPage = async (props: CaselawPageProps) => {
         </TabsContent>
 
         <TabsContent value="issues">
-          <p>Issues</p>
+          <div>
+            <ul className="list-inside list-decimal space-y-2 px-4">
+              {caseLaw.issues.map((issue, index) => (
+                <li key={index} className="text-sm sm:text-base">
+                  {issue}
+                </li>
+              ))}
+            </ul>
+          </div>
         </TabsContent>
 
         <TabsContent value="principles">
-          <p>Legal Principles</p>
+          <div>
+            <ul className="list-inside list-disc space-y-5 px-4">
+              {caseLaw.legal_principles.map((principle, index) => (
+                <li key={index} className="text-sm sm:text-base">
+                  {principle}
+                </li>
+              ))}
+            </ul>
+          </div>
         </TabsContent>
 
         <TabsContent value="ratio">
-          <p>Ratio Decidendi</p>
+          <div>
+            <p className="px-4 text-sm sm:text-base">
+              {caseLaw.ratio_decidendi}
+            </p>
+          </div>
         </TabsContent>
 
         <TabsContent value="reasoning">
-          <p>Reasoning</p>
+          <div>
+            <p className="px-4 text-sm sm:text-base">{caseLaw.reasoning}</p>
+          </div>
         </TabsContent>
 
         <TabsContent value="case-details">
@@ -141,7 +168,9 @@ const CaselawPage = async (props: CaselawPageProps) => {
         </TabsContent>
 
         <TabsContent value="full-text">
-          <div>{caseLaw.content}</div>
+          <div className="whitespace-pre-wrap">
+            {caseLaw.full_text?.trim() ? caseLaw.full_text : caseLaw.content}
+          </div>
         </TabsContent>
 
         <TabsContent value="similar-cases">

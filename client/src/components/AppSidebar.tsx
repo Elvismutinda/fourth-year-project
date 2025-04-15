@@ -12,10 +12,10 @@ const AppSidebar = ({ user }: { user: User }) => {
   const pathname = usePathname();
 
   return (
-    <aside className="w-[70px] h-full bg-[#1A1928] flex flex-col items-center py-4 gap-y-2 border-r border-[#2D2C3A]">
-      <div className="mb-4">
+    <aside className="w-[4.25rem] h-full bg-[#14141F] flex flex-col items-center py-4 gap-y-2 border-r border-[#2D2C3A] overflow-y-auto">
+      <div className="mb-4 bg-white-100 rounded-md p-1 flex items-center justify-center">
         <Image
-          src="/assets/icons/logosaas.png"
+          src="/assets/icons/intelaw-logo.png"
           alt="logo"
           width={40}
           height={40}

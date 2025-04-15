@@ -53,29 +53,6 @@ const SearchCase = () => {
 
   const casesPerPage = 10;
 
-  // useEffect(() => {
-  //   const fetchCases = async () => {
-  //     try {
-  //       const response = await getCaseLaws();
-  //       setCases(
-  //         response.map((item) => ({
-  //           ...item,
-  //           metadata: item.metadata as CaseLaw["metadata"],
-  //         }))
-  //       );
-  //       setFilteredCases(
-  //         response.map((item) => ({
-  //           ...item,
-  //           metadata: item.metadata as CaseLaw["metadata"],
-  //         }))
-  //       );
-  //     } catch (error) {
-  //       console.error("Error fetching cases: ", error);
-  //     }
-  //   };
-  //   fetchCases();
-  // }, []);
-
   useEffect(() => {
     const fetchCases = async () => {
       try {
@@ -118,6 +95,10 @@ const SearchCase = () => {
   const indexOfFirstCase = indexOfLastCase - casesPerPage;
   const currentCases = filteredCases.slice(indexOfFirstCase, indexOfLastCase);
   const totalPages = Math.ceil(filteredCases.length / casesPerPage);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
 
   return (
     <motion.div
@@ -247,36 +228,39 @@ const SearchCase = () => {
           <p className="text-gray-500">No case laws found.</p>
         )}
 
+        {/* Pagination */}
         {totalPages > 1 && (
-          <Pagination className="mt-6 cursor-pointer">
-            <PaginationContent>
+          <Pagination className="mt-6">
+            <PaginationContent className="flex justify-center items-center gap-4">
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) setCurrentPage(currentPage - 1);
+                  }}
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
                 />
               </PaginationItem>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      onClick={() => setCurrentPage(page)}
-                      className={`px-4 ${
-                        currentPage === page
-                          ? "bg-accent-foreground text-[#fff] hover:bg-accent-foreground hover:text-[#fff]"
-                          : ""
-                      }`}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                )
-              )}
+              <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages}
+              </span>
 
               <PaginationItem>
                 <PaginationNext
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(p + 1, totalPages))
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages)
+                      setCurrentPage(currentPage + 1);
+                  }}
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : ""
                   }
                 />
               </PaginationItem>

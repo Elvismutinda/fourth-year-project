@@ -91,10 +91,11 @@ export const case_laws = pgTable("case_laws", {
   url: text("url").unique(),
   file_url: text("file_url"),
   metadata: jsonb("metadata"),
-  issues: text("issues"),
-  legal_principles: text("legal_principles"),
+  issues: jsonb("issues"),
+  legal_principles: jsonb("legal_principles"),
   ratio_decidendi: text("ratio_decidendi"),
   reasoning: text("reasoning"),
   content: text("content").notNull(),
   embedding: vector("embedding", { dimensions: 384 }),
+  full_text: text("full_text"),
 });

@@ -74,6 +74,11 @@ const DraftDetails = () => {
           ))}
         </div>
 
+        {/* Selected Category Document Count */}
+        <p className="text-muted-foreground mb-4 text-sm">
+          {totalItems} document{totalItems !== 1 ? "s" : ""}
+        </p>
+
         {/* Document Types */}
         <div className="flex flex-col divide-y divide-gray-200 border-b">
           {paginatedDocuments.map((doc, index) => (

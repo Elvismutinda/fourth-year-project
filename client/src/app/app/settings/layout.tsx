@@ -12,7 +12,7 @@ const SettingsLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[1200px] w-full flex-col px-4 pb-24 pt-6 md:px-6 lg:px-8">
+    <div className="mx-auto flex min-h-screen w-full flex-col px-4 pb-24 pt-6 md:px-6 lg:px-8 bg-[#1A1928]">
       <div className="flex justify-between items-center pb-8">
         <Link
           href="/app/chat/new"
