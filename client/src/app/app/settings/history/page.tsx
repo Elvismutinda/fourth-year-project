@@ -113,16 +113,13 @@ const HistoryPage = () => {
             />
             <Button
               onClick={() => document.getElementById("import-json")?.click()}
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-neutral bg-back shadow-sm hover:bg-neutral/60 h-9 px-4 py-2"
+              variant="main"
             >
               <Download />
               Import
             </Button>
 
-            <Button
-              onClick={handleExport}
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-neutral bg-back shadow-sm hover:bg-neutral/60 h-9 px-4 py-2"
-            >
+            <Button onClick={handleExport} variant="main">
               <Upload />
               Export
             </Button>
