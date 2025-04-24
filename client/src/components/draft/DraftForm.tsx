@@ -89,7 +89,7 @@ export default function DraftForm({ fields, documentType }: DraftFormProps) {
     try {
       // console.log("Document Type:", documentType);
 
-      const response = await fetch("/api/draft", {
+      const response = await fetch("http://localhost:8000/draft", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

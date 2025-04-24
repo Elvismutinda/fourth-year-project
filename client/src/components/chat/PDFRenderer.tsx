@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { useResizeDetector } from "react-resize-detector";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -77,8 +77,16 @@ const PDFRenderer = ({ fileUrl }: PdfRendererProps) => {
     setValue("page", String(page));
   };
 
+  const [pageHeight, setPageHeight] = useState<number>(800); // default fallback
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPageHeight(Math.min(1000, window.innerHeight * 0.8));
+    }
+  }, []);
+
   return (
-    <div className="w-full rounded-md shadow flex flex-col items-center">
+    <div className="w-full bg-[#fff] text-black rounded-md shadow flex flex-col items-center">
       <div className="h-14 w-full border-b border-zinc-200 flex items-center justify-between px-2">
         <div className="flex items-center gap-1.5">
           <Button
@@ -164,8 +172,11 @@ const PDFRenderer = ({ fileUrl }: PdfRendererProps) => {
         </div>
       </div>
 
-      <div className="flex-1 w-full max-h-screen">
-        <SimpleBar autoHide={false} className="max-h-[calc(100vh-10rem)]">
+      <div className="flex-1 w-full overflow-hidden">
+        <SimpleBar
+          autoHide={false}
+          className="max-h-[calc(100vh-10rem)] overflow-y-auto"
+        >
           <div ref={ref}>
             <Document
               loading={
@@ -192,9 +203,9 @@ const PDFRenderer = ({ fileUrl }: PdfRendererProps) => {
 
               <Page
                 className={cn(isLoading ? "hidden" : "")}
-                width={width ? width : 1}
                 pageNumber={currPage}
                 scale={scale}
+                height={pageHeight}
                 rotate={rotation}
                 key={"@" + scale}
                 loading={

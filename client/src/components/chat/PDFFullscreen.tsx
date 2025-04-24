@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "../ui/button";
 import { Expand, Loader2 } from "lucide-react";
 import SimpleBar from "simplebar-react";
@@ -32,6 +38,9 @@ const PDFFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-7xl w-full">
+        <VisuallyHidden>
+          <DialogTitle>PDF Viewer</DialogTitle>
+        </VisuallyHidden>
         <SimpleBar autoHide={false} className="max-h-[calc(100vh-10rem)] mt-6">
           <div ref={ref}>
             <Document

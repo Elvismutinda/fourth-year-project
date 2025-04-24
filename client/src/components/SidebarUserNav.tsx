@@ -13,23 +13,39 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { Separator } from "./ui/separator";
 
-export function SidebarUserNav({ user }: { user: User }) {
+export function SidebarUserNav({
+  user,
+}: {
+  user: User & { role: "USER" | "PREMIUM" };
+}) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#939395] hover:bg-[#939395]/90">
-          {user.image ? (
-            <Image
-              src={user.image}
-              alt={user.name || "User"}
-              className="w-8 h-8 rounded-full"
-            />
+        <div className="relative">
+          {user.role === "PREMIUM" ? (
+            <div className="absolute -top-1.5 -right-1.5 rotate-45 bg-gradient-to-r from-yellow-400 to-yellow-600 text-[10px] text-black font-bold px-1 z-10 rounded-sm shadow">
+              PRO
+            </div>
           ) : (
-            <span className="font-bold text-xl">
-              {user.name?.charAt(0).toUpperCase()}
-            </span>
+            <div className="absolute -top-1.5 -right-1.5 rotate-45 bg-gradient-to-r from-gray-400 to-gray-600 text-[10px] text-black font-bold px-1 z-10 rounded-sm shadow">
+              FREE
+            </div>
           )}
-        </Button>
+
+          <Button className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#939395] hover:bg-[#939395]/90 relative z-0">
+            {user.image ? (
+              <Image
+                src={user.image}
+                alt={user.name || "User"}
+                className="w-8 h-8 rounded-full"
+              />
+            ) : (
+              <span className="font-bold text-xl">
+                {user.name?.charAt(0).toUpperCase()}
+              </span>
+            )}
+          </Button>
+        </div>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col justify-center text-sm ml-[70px] w-56 bg-[#2A2939] border border-gray-700 shadow-lg p-2 rounded-xl text-[#fff]">
         <Link

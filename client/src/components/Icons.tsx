@@ -5,6 +5,7 @@ import {
   KeyRound,
   Sparkles,
   Zap,
+  FileStack,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -17,4 +18,5 @@ export const Icons = {
   trash: Trash,
   sparkles: Sparkles,
   zap: Zap,
+  files: FileStack,
 };

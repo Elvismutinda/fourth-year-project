@@ -177,8 +177,24 @@ const RegisterForm = () => {
           />
 
           <p className="text-sm text-slate-400">
-            By submitting, I agree to the Terms and Conditions and Privacy
-            Policy.
+            By submitting, I agree to the{" "}
+            <Link
+              href="/terms-of-service"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#32c06b] underline"
+            >
+              Terms and Conditions{" "}
+            </Link>
+            and{" "}
+            <Link
+              href="/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#32c06b] underline"
+            >
+              Privacy Policy.
+            </Link>
           </p>
 
           <div>

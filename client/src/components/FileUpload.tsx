@@ -8,8 +8,13 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { uploadToCloudinary } from "@/lib/cloudinary";
+import { User } from "next-auth";
 
-const FileUpload = () => {
+const FileUpload = ({
+  user,
+}: {
+  user: User & { role: "USER" | "PREMIUM" };
+}) => {
   const router = useRouter();
   const [uploading, setUploading] = React.useState(false);
 
@@ -39,9 +44,16 @@ const FileUpload = () => {
       }
 
       const file = acceptedFiles[0];
-      if (file.size > 10 * 1024 * 1024) {
+      const maxSize =
+        user.role === "PREMIUM" ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+
+      if (file.size > maxSize) {
         // bigger than 10mb!
-        toast.error("File too large");
+        toast.error(
+          `File too large. Max size is ${
+            user.role === "PREMIUM" ? "50MB" : "10MB"
+          }`
+        );
         return;
       }
 
@@ -85,7 +97,9 @@ const FileUpload = () => {
       {uploading || isPending ? (
         <>
           <Loader className="h-10 w-10 text-gray-500 animate-spin" />
-          <p className="mt-2 text-sm text-slate-400">Processing your document...</p>
+          <p className="mt-2 text-sm text-slate-400">
+            Processing your document...
+          </p>
         </>
       ) : (
         <>
@@ -95,7 +109,7 @@ const FileUpload = () => {
             or drag & drop your PDF file here
           </p>
           <p className="text-slate-400 text-sm">
-            Maximum PDF file size is 10MB
+            Maximum PDF file size is {user.role === "PREMIUM" ? "50MB" : "10MB"}
           </p>
         </>
       )}

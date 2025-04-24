@@ -3,12 +3,12 @@
 import Image from "next/image";
 import React from "react";
 import SidebarSwitcher from "./SidebarSwitcher";
-import { Brain, Home, PencilLine, Scale } from "lucide-react";
+import { Brain, PencilLine, Scale } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SidebarUserNav } from "./SidebarUserNav";
 import { User } from "next-auth";
 
-const AppSidebar = ({ user }: { user: User }) => {
+const AppSidebar = ({ user }: { user: User & { role: "USER" | "PREMIUM" }}) => {
   const pathname = usePathname();
 
   return (
