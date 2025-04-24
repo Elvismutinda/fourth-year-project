@@ -16,6 +16,8 @@ export const {
       // console.log({ user, account });
       if (account?.provider === "credentials") {
         // check if email is verified
+        if (!user.id) return false;
+
         const existingUser = await getUserById(user.id);
 
         if (!existingUser || !existingUser[0].emailVerified) return false;
@@ -29,9 +31,16 @@ export const {
         session.user.id = token.sub;
       }
 
-      if (token.role && session.user) {
+      if (session.user) {
         session.user.role = token.role as "USER" | "PREMIUM";
+        session.user.phone = token.phone as string;
+        session.user.paystackSubscriptionStart =
+          token.paystackSubscriptionStart as Date;
+        session.user.paystackSubscriptionEnd =
+          token.paystackSubscriptionEnd as Date;
       }
+
+      // console.log(session);
 
       return session;
     },
@@ -40,15 +49,22 @@ export const {
       if (!token.sub) return token;
 
       const existingUser = await getUserById(token.sub);
-
       if (!existingUser) return token;
 
-      token.role = existingUser[0].role;
+      const user = existingUser[0];
+
+      token.role = user.role;
+      token.phone = user.phone;
+      token.paystackSubscriptionStart = user.paystackSubscriptionStart;
+      token.paystackSubscriptionEnd = user.paystackSubscriptionEnd;
 
       return token;
     },
   },
   adapter: DrizzleAdapter(db),
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60 * 24,
+  },
   ...authConfig,
 });
