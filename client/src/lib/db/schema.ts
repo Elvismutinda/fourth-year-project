@@ -4,7 +4,6 @@ import {
   pgEnum,
   varchar,
   timestamp,
-  json,
   jsonb,
   uuid,
   text,
@@ -23,6 +22,8 @@ export const user = pgTable("User", {
   password: varchar("password", { length: 64 }).notNull(),
   role: userRole("role").notNull().default("USER"),
   phone: varchar("phone", { length: 15 }),
+  paystackSubscriptionStart: timestamp("paystackSubscriptionStart"),
+  paystackSubscriptionEnd: timestamp("paystackSubscriptionEnd"),
 });
 
 export type User = InferSelectModel<typeof user>;

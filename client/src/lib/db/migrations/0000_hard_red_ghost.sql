@@ -4,12 +4,13 @@ CREATE TABLE "case_laws" (
 	"url" text,
 	"file_url" text,
 	"metadata" jsonb,
-	"issues" text,
-	"legal_principles" text,
+	"issues" jsonb,
+	"legal_principles" jsonb,
 	"ratio_decidendi" text,
 	"reasoning" text,
 	"content" text NOT NULL,
 	"embedding" vector(384),
+	"full_text" text,
 	CONSTRAINT "case_laws_url_unique" UNIQUE("url")
 );
 --> statement-breakpoint
@@ -52,6 +53,8 @@ CREATE TABLE "User" (
 	"password" varchar(64) NOT NULL,
 	"role" "userRole" DEFAULT 'USER' NOT NULL,
 	"phone" varchar(15),
+	"paystackSubscriptionStart" timestamp,
+	"paystackSubscriptionEnd" timestamp,
 	CONSTRAINT "User_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

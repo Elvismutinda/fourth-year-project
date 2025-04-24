@@ -1,6 +1,6 @@
 {
-  "id": "1f8df252-6c24-4bd8-8d21-210fde09fea3",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "c6823f86-5e00-4e98-b317-98389ad96297",
+  "prevId": "1f8df252-6c24-4bd8-8d21-210fde09fea3",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -355,13 +355,13 @@
         },
         "paystackSubscriptionStart": {
           "name": "paystackSubscriptionStart",
-          "type": "timestamp",
+          "type": "timestamp (3) with time zone",
           "primaryKey": false,
           "notNull": false
         },
         "paystackSubscriptionEnd": {
           "name": "paystackSubscriptionEnd",
-          "type": "timestamp",
+          "type": "timestamp (3) with time zone",
           "primaryKey": false,
           "notNull": false
         }
