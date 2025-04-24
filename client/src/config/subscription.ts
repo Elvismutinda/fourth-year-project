@@ -1,8 +1,13 @@
 export const subscriptionDetails = [
   {
+    icon: "files",
+    title: "Larger File Uploads",
+    description: "Upload upto 50MB file sizes"
+  },
+  {
     icon: "sparkles",
     title: "Generous Message Limits",
-    description: "Receive 1500 standard message credits per month",
+    description: "Receive unlimited standard message credits per month",
   },
   {
     icon: "zap",

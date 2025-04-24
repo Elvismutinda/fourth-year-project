@@ -17,12 +17,12 @@ export const settingsConfig: SettingsConfig = {
     {
       title: "Models",
       href: "/app/settings/models",
-      disabled: true,
     },
     {
       title: "Contact Us",
       href: "/app/settings/contact",
-      disabled: true,
     },
   ],
 };
+
+export const FREE_MESSAGE_LIMIT = 20;
