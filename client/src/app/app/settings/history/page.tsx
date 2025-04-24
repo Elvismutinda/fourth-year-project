@@ -97,7 +97,7 @@ const HistoryPage = () => {
   return (
     <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-12">
       <section className="space-y-2">
-        <h2 className="text-2xl">Message History</h2>
+        <h2 className="text-2xl font-bold">Message History</h2>
         <div className="space-y-6">
           <p className="text-muted/80">
             Save your history as JSON, or import someone else's. Importing will
@@ -127,7 +127,7 @@ const HistoryPage = () => {
         </div>
       </section>
 
-      <section className="-m-4 w-fit space-y-2 rounded-lg border border-muted-foreground/10 p-4 hover:bg-transparent/50">
+      <section className="-m-2 w-fit space-y-2 rounded-lg border border-muted-foreground/10 p-4 hover:bg-transparent/50">
         <h2 className="text-2xl font-bold">Danger Zone</h2>
         <div className="space-y-6">
           <p className="text-sm text-muted/80">
@@ -167,12 +167,6 @@ const HistoryPage = () => {
           </div>
         </div>
       </section>
-
-      <div className="space-y-6 rounded-lg bg-card p-4 md:hidden">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold">Message Usage</span>
-        </div>
-      </div>
     </div>
   );
 };

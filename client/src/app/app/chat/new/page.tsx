@@ -44,7 +44,7 @@ export default async function HomePage() {
           </p>
 
           {/* <span>Hello {userId}</span> */}
-          <div className="w-full mt-4">{isAuth && <FileUpload />}</div>
+          <div className="w-full mt-4">{isAuth && <FileUpload user={session.user} />}</div>
 
           <div className="flex flex-col mt-4">
             {isAuth && firstChat && (

@@ -12,7 +12,10 @@ import { db } from "@/lib/db";
 import { chat, documents, message, user } from "@/lib/db/schema";
 import { auth } from "../../../../auth";
 import { getUserById } from "@/data/user";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, gt, inArray } from "drizzle-orm";
+import { setHours, setMinutes, setSeconds, subDays } from "date-fns";
+import { FREE_MESSAGE_LIMIT } from "@/config/settings";
+import { getCachedUsage, setCachedUsage } from "@/lib/cache";
 
 export const updatePassword = async (values: UpdatePasswordRequest) => {
   const validatedFields = updatePasswordSchema.safeParse(values);
@@ -264,3 +267,91 @@ export const importChatHistory = async (importedChats: any[]) => {
     return { error: "Failed to import chat history." };
   }
 };
+
+export async function upgradeToPremium(email: string) {
+  const now = new Date();
+  const oneMonthLater = new Date(now);
+  oneMonthLater.setMonth(now.getMonth() + 1);
+
+  try {
+    await db
+      .update(user)
+      .set({
+        role: "PREMIUM",
+        paystackSubscriptionStart: now,
+        paystackSubscriptionEnd: oneMonthLater,
+      })
+      .where(eq(user.email, email));
+
+    return { success: "Account upgraded to Premium! Enjoy." };
+  } catch (error) {
+    console.error("Failed to upgrade user:", error);
+    return { error: "Failed to upgrade account!" };
+  }
+}
+
+function getLastResetDate(): Date {
+  const now = new Date();
+  let resetTime = setSeconds(setMinutes(setHours(now, 3), 0), 0); // Today at 3:00 AM
+
+  if (now < resetTime) {
+    // If current time is before 3 AM, use yesterday's 3 AM
+    resetTime = subDays(resetTime, 1);
+  }
+
+  return resetTime;
+}
+
+export async function getUsageInfo() {
+  const session = await auth();
+  const currentUser = session?.user;
+
+  if (!currentUser?.id) {
+    throw new Error("Unauthorized or missing user ID.");
+  }
+
+  const [userData] = await db
+    .select({ role: user.role })
+    .from(user)
+    .where(eq(user.id, currentUser.id));
+
+  const isPremium = userData?.role === "PREMIUM";
+  if (isPremium) {
+    return { isPremium: true, totalUsed: 0, remaining: null };
+  }
+
+  // Check cache first
+  const cached = getCachedUsage(currentUser.id);
+  if (cached) {
+    return {
+      isPremium,
+      totalUsed: cached.totalUsed,
+      remaining: FREE_MESSAGE_LIMIT - cached.totalUsed,
+    };
+  }
+
+  // Count messages created after last reset
+  const resetDate = getLastResetDate();
+
+  const totalMessages = await db
+    .select()
+    .from(message)
+    .innerJoin(chat, eq(chat.id, message.chatId))
+    .where(
+      and(
+        eq(chat.userId, currentUser.id),
+        gt(message.createdAt, resetDate) // Only messages after last 3AM
+      )
+    );
+
+  const totalUsed = totalMessages.length;
+
+  // Set cache
+  setCachedUsage(currentUser.id, totalUsed);
+
+  return {
+    isPremium,
+    totalUsed,
+    remaining: FREE_MESSAGE_LIMIT - totalUsed,
+  };
+}

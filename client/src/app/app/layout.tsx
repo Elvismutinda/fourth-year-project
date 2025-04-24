@@ -8,10 +8,14 @@ export default async function AppLayout({
 }) {
   const session = await auth();
 
+  if (!session?.user || !session.user.role) {
+    return null;
+  }
+
   return (
     <div className="relative flex h-screen w-full bg-[#1A1928]">
       <div className="fixed top-0 left-0 z-20 h-full">
-        <AppSidebar user={session?.user ?? {}} />
+        <AppSidebar user={session.user} />
       </div>
       <main className="ml-[4.25rem] flex-1 ">{children}</main>
     </div>

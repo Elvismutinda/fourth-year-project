@@ -7,9 +7,19 @@ import { ChevronLeft } from "lucide-react";
 import SettingsNav from "@/components/settings/SettingsNav";
 import { settingsConfig } from "@/config/settings";
 import { UserDetails } from "@/components/settings/UserDetails";
+import { redirect } from "next/navigation";
+import { User } from "next-auth";
 
 const SettingsLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
+
+  const user = session?.user as
+    | (User & { role: "USER" | "PREMIUM" })
+    | undefined;
+
+  if (!user) {
+    return redirect("/login");
+  }
 
   return (
     <div className="mx-auto flex min-h-screen w-full flex-col px-4 pb-24 pt-6 md:px-6 lg:px-8 bg-[#1A1928]">
@@ -41,7 +51,7 @@ const SettingsLayout = async ({ children }: { children: React.ReactNode }) => {
       </div>
 
       <div className="flex flex-grow flex-col gap-4 md:flex-row">
-        <UserDetails user={session?.user ?? {}} />
+        <UserDetails user={user} />
 
         <div className="md:w-3/4 md:pl-12">
           <div className="space-y-6">

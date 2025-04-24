@@ -20,8 +20,14 @@ export const login = async (values: LoginRequest) => {
 
   const existingUser = await getUserByEmail(email);
 
-  if (!existingUser || existingUser.length === 0 || !existingUser[0].email || !existingUser[0].password) {
-    return { error: "User does not exist!" };
+  if (
+    !existingUser ||
+    existingUser.length === 0 ||
+    !existingUser[0].email ||
+    !existingUser[0].password
+  ) {
+    return { error: "Invalid credentials!" };
+    // return { error: "User does not exist!" };
   }
 
   if (!existingUser[0].emailVerified) {
