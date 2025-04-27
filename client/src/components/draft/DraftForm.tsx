@@ -233,7 +233,7 @@ export default function DraftForm({ fields, documentType }: DraftFormProps) {
         <DialogContent className="max-w-3xl text-primary">
           <DialogHeader>
             <DialogTitle>
-              Document Generation.
+              Document Generation
               <p className="text-sm text-muted-foreground">
                 <span className="underline font-bold">Note: </span>Once you
                 leave this dialog the document cannot be retrieved again.

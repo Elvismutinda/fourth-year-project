@@ -14,6 +14,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -21,7 +22,6 @@ import {
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { PencilLine } from "lucide-react";
-import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
 import { marked } from "marked";
 import htmlToDocx from "html-to-docx";
@@ -118,7 +118,13 @@ const DraftDetails = () => {
           className="container mx-auto flex-grow px-4"
         >
           <div className="mb-4 flex flex-col ">
-            <h1 className="text-2xl font-bold mb-4">Draft Legal Documents <span className="text-sm text-slate-200">(use the AI assistant or select a document from our library to draft a document)</span></h1>
+            <h1 className="text-2xl font-bold mb-4">
+              Draft Legal Documents{" "}
+              <span className="text-sm text-slate-200">
+                (use the AI assistant or select a document from our library to
+                draft a document)
+              </span>
+            </h1>
             <div className="w-full flex flex-row gap-2">
               <Input
                 value={customInput}
@@ -126,7 +132,11 @@ const DraftDetails = () => {
                 placeholder="Describe the legal document you need..."
                 className="bg-gray-600/80 border-none rounded-md text-[#fff] placeholder-slate-200"
               />
-              <Button onClick={generateCustomDocument} disabled={isLoading} variant='main'>
+              <Button
+                onClick={generateCustomDocument}
+                disabled={isLoading}
+                variant="main"
+              >
                 {isLoading ? "Generating..." : "Generate Custom Document"}
               </Button>
             </div>
@@ -217,7 +227,16 @@ const DraftDetails = () => {
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-3xl text-primary">
           <DialogHeader>
-            <DialogTitle>Generated Document</DialogTitle>
+            <DialogTitle>
+              Document Generation
+              <p className="text-sm text-muted-foreground">
+                <span className="underline font-bold">Note: </span>Once you
+                leave this dialog the document cannot be retrieved again.
+              </p>
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              {isLoading ? "Please wait while we draft your document..." : null}
+            </DialogDescription>
           </DialogHeader>
           <div className="max-h-[60vh] overflow-auto whitespace-pre-wrap text-sm">
             {isLoading ? (
