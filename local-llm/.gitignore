@@ -4,4 +4,4 @@ __pycache__/
 *$py.class
 
 llm-venv
-*.gguf
+llama.cpp/
