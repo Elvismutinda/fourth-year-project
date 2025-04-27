@@ -14,7 +14,10 @@ const SettingsLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
 
   const user = session?.user as
-    | (User & { role: "USER" | "PREMIUM" })
+    | (User & {
+        role: "USER" | "PREMIUM";
+        paystackSubscriptionEnd: string | null;
+      })
     | undefined;
 
   if (!user) {

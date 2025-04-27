@@ -5,12 +5,16 @@ import { Loader2 } from "lucide-react";
 import { User } from "next-auth";
 import { useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
+import { cn } from "@/lib/utils";
 
 export function MessageInfo({
   user,
   className,
 }: {
-  user: User & { role: "USER" | "PREMIUM" };
+  user: User & {
+    role: "USER" | "PREMIUM";
+    paystackSubscriptionEnd: string | null;
+  };
   className?: string;
 }) {
   const isPremium = user.role === "PREMIUM";
@@ -38,15 +42,25 @@ export function MessageInfo({
   const totalLimit = isPremium ? 1500 : 20;
   const usedPercent = (totalUsed / totalLimit) * 100;
 
+  const subscriptionResetDate = user.paystackSubscriptionEnd
+    ? new Date(user.paystackSubscriptionEnd).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : null;
+
   return (
-    <div className={`space-y-6 rounded-lg bg-card p-4 ${className ?? ""}`}>
+    <div className={cn("space-y-6 rounded-lg bg-card p-4", className)}>
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-black">Message Usage</span>
-        {!isPremium && (
-          <div className="text-xs text-muted-foreground">
+        <div className="text-xs text-muted-foreground">
+          {isPremium ? (
+            <p>Resets {subscriptionResetDate ?? "N/A"}</p>
+          ) : (
             <p>Resets tomorrow at 3:00 AM</p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className="space-y-6">
         <div className="space-y-2">

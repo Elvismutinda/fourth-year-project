@@ -12,7 +12,6 @@ const PaystackButton = dynamic(
 );
 import { useTransition } from "react";
 import { User } from "next-auth";
-import { differenceInDays, format, parse } from "date-fns";
 import { useSession } from "next-auth/react";
 
 import { upgradeToPremium } from "../../app/app/settings/actions";
@@ -20,6 +19,7 @@ import { subscriptionDetails } from "@/config/subscription";
 import { Icons } from "@/components/Icons";
 import { toast } from "sonner";
 import { MessageInfo } from "../settings/MessageInfo";
+import { ManageSubscription } from "./ManageSubscription";
 
 export default function PaystackPayment({
   user,
@@ -30,6 +30,8 @@ export default function PaystackPayment({
     paystackSubscriptionEnd: string | null;
   };
 }) {
+  const isPremium = user?.role === "PREMIUM";
+
   const { update } = useSession();
   const [isPending, startTransition] = useTransition();
 
@@ -68,7 +70,6 @@ export default function PaystackPayment({
             toast.success(data?.success);
 
             await update();
-            window.location.reload();
           }
         });
       });
@@ -81,57 +82,27 @@ export default function PaystackPayment({
     },
   };
 
-  const isPremium = user?.role === "PREMIUM";
-  const now = new Date();
-
-  if (isPremium && user.paystackSubscriptionEnd) {
-    const expiryDate = new Date(user.paystackSubscriptionEnd);
-    const daysLeft = differenceInDays(expiryDate, now);
-
-    return (
-      <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-8">
-        <div className="space-y-2">
-          <div className="flex flex-col lg:gap-2">
-            <h2 className="text-2xl font-bold text-left">
-              Current Plan
-              <p className="text-lg text-muted/80">Premium Plan</p>
-            </h2>
-          </div>
-
-          <div className="flex flex-col text-base space-y-4">
-            <p className="text-lg font-bold">
-              Next Billing Date:{" "}
-              {user.paystackSubscriptionEnd &&
-                format(new Date(user.paystackSubscriptionEnd), "PPP")}
-            </p>
-            <p className="text-base font-semibold">
-              {daysLeft > 0
-                ? `Your subscription expires in ${daysLeft} day${
-                    daysLeft > 1 ? "s" : ""
-                  }.`
-                : "Your subscription has expired. Please renew to continue enjoying premium features."}
-            </p>
-          </div>
-        </div>
-
-        <MessageInfo user={user} className="md:hidden" />
-      </div>
-    );
-  }
-
   return (
     <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-8">
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-          <h2 className="text-center text-2xl font-bold md:text-left">
-            Upgrade to Pro
-          </h2>
-          <div className="mt-2 flex flex-col items-center justify-center text-right md:mt-0 md:flex-row md:items-center md:justify-center md:text-right">
-            <div className="text-xl font-bold md:text-3xl">
-              Ksh. 500
-              <span className="text-lg text-muted/80">/month</span>
-            </div>
-          </div>
+          {isPremium ? (
+            <h2 className="text-center text-2xl font-bold md:text-left">
+              Pro Plan Benefits
+            </h2>
+          ) : (
+            <>
+              <h2 className="text-center text-2xl font-bold md:text-left">
+                Upgrade to Pro
+              </h2>
+              <div className="mt-2 flex flex-col items-center justify-center text-right md:mt-0 md:flex-row md:items-center md:justify-center md:text-right">
+                <div className="text-xl font-bold md:text-3xl">
+                  Ksh. 500
+                  <span className="text-lg text-muted/80">/month</span>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -152,12 +123,16 @@ export default function PaystackPayment({
         </div>
 
         <div className="flex flex-col gap-4 md:flex-row">
-          <PaystackButton
-            {...paystackConfig}
-            text="Upgrade Now"
-            disabled={isPending}
-            className="bg-[#61bd73] text-[#130c49] hover:bg-[#61bd73]/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 w-full md:w-64"
-          />
+          {isPremium ? (
+            <ManageSubscription user={user} />
+          ) : (
+            <PaystackButton
+              {...paystackConfig}
+              text="Upgrade Now"
+              disabled={isPending}
+              className="bg-[#61bd73] text-[#130c49] hover:bg-[#61bd73]/90 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 w-full md:w-64"
+            />
+          )}
         </div>
       </div>
 

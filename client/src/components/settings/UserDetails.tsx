@@ -1,11 +1,15 @@
 import { User } from "next-auth";
 import Image from "next/image";
 import { MessageInfo } from "./MessageInfo";
+import { cn } from "@/lib/utils";
 
 export function UserDetails({
   user,
 }: {
-  user: User & { role: "USER" | "PREMIUM" };
+  user: User & {
+    role: "USER" | "PREMIUM";
+    paystackSubscriptionEnd: string | null;
+  };
 }) {
   const isPremium = user.role === "PREMIUM";
 
@@ -27,8 +31,13 @@ export function UserDetails({
         </div>
         <h1 className="mt-4 text-2xl font-bold">{user.name}</h1>
         <p className="break-all text-muted/80">{user.email}</p>
-        <span className="mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-secondary text-primary-foreground">
-          {isPremium ? "Premium Plan" : "Free Plan"}
+        <span
+          className={cn(
+            "mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium text-primary-foreground",
+            isPremium ? "bg-[#61bd73] text-[#130c49]" : "bg-secondary"
+          )}
+        >
+          {isPremium ? "Pro Plan" : "Free Plan"}
         </span>
       </div>
 

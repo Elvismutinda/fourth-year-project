@@ -16,6 +16,7 @@ import { and, eq, gt, inArray } from "drizzle-orm";
 import { setHours, setMinutes, setSeconds, subDays } from "date-fns";
 import { FREE_MESSAGE_LIMIT, PREMIUM_MESSAGE_LIMIT } from "@/config/settings";
 import { getCachedUsage, setCachedUsage } from "@/lib/cache";
+import { revalidatePath } from "next/cache";
 
 export const updatePassword = async (values: UpdatePasswordRequest) => {
   const validatedFields = updatePasswordSchema.safeParse(values);
@@ -269,6 +270,16 @@ export const importChatHistory = async (importedChats: any[]) => {
 };
 
 export async function upgradeToPremium(email: string) {
+  const session = await auth();
+
+  if (!session?.user) {
+    return { error: "Unauthorized" };
+  }
+
+  if (session.user.email !== email) {
+    return { error: "Unauthorized" };
+  }
+
   const now = new Date();
   const oneMonthLater = new Date(now);
   oneMonthLater.setMonth(now.getMonth() + 1);
@@ -283,10 +294,40 @@ export async function upgradeToPremium(email: string) {
       })
       .where(eq(user.email, email));
 
+    revalidatePath("/app/settings");
     return { success: "Account upgraded to Premium! Enjoy." };
   } catch (error) {
     console.error("Failed to upgrade user:", error);
     return { error: "Failed to upgrade account!" };
+  }
+}
+
+export async function downgradeToFree(email: string) {
+  const session = await auth();
+
+  if (!session?.user) {
+    return { error: "Unauthorized" };
+  }
+
+  if (session.user.email !== email) {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    await db
+      .update(user)
+      .set({
+        role: "USER",
+        paystackSubscriptionStart: null,
+        paystackSubscriptionEnd: null,
+      })
+      .where(eq(user.email, email));
+
+    revalidatePath("/app/settings");
+    return { success: "Subscription cancelled. You are now on the free plan." };
+  } catch (error) {
+    console.error("Failed to downgrade user:", error);
+    return { error: "Failed to cancel subscription. Try again later." };
   }
 }
 

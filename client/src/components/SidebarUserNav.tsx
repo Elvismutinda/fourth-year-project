@@ -21,31 +21,19 @@ export function SidebarUserNav({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="relative">
-          {user.role === "PREMIUM" ? (
-            <div className="absolute -top-1.5 -right-1.5 rotate-45 bg-gradient-to-r from-yellow-400 to-yellow-600 text-[10px] text-black font-bold px-1 z-10 rounded-sm shadow">
-              PRO
-            </div>
+        <Button className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#939395] hover:bg-[#939395]/90 relative z-0">
+          {user.image ? (
+            <Image
+              src={user.image}
+              alt={user.name || "User"}
+              className="w-8 h-8 rounded-full"
+            />
           ) : (
-            <div className="absolute -top-1.5 -right-1.5 rotate-45 bg-gradient-to-r from-gray-400 to-gray-600 text-[10px] text-black font-bold px-1 z-10 rounded-sm shadow">
-              FREE
-            </div>
+            <span className="font-bold text-xl">
+              {user.name?.charAt(0).toUpperCase()}
+            </span>
           )}
-
-          <Button className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#939395] hover:bg-[#939395]/90 relative z-0">
-            {user.image ? (
-              <Image
-                src={user.image}
-                alt={user.name || "User"}
-                className="w-8 h-8 rounded-full"
-              />
-            ) : (
-              <span className="font-bold text-xl">
-                {user.name?.charAt(0).toUpperCase()}
-              </span>
-            )}
-          </Button>
-        </div>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col justify-center text-sm ml-[70px] w-56 bg-[#2A2939] border border-gray-700 shadow-lg p-2 rounded-xl text-[#fff]">
         <Link
