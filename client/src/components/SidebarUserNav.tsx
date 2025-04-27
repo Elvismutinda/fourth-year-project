@@ -18,6 +18,8 @@ export function SidebarUserNav({
 }: {
   user: User & { role: "USER" | "PREMIUM" };
 }) {
+  const isPremium = user.role === "PREMIUM";
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -36,20 +38,19 @@ export function SidebarUserNav({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col justify-center text-sm ml-[70px] w-56 bg-[#2A2939] border border-gray-700 shadow-lg p-2 rounded-xl text-[#fff]">
-        <Link
-          href="/app/settings/account"
-          className="flex gap-2 p-2 mt-1 hover:bg-gray-700 rounded-md cursor-pointer"
-        >
-          <Button className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#939395] hover:bg-[#939395] border-[#205DC2] transition">
+        <div className="flex gap-2 p-2 mt-1 rounded-md">
+          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#939395] border-[#205DC2]">
             <span className="font-bold text-xl">
               {user.name?.charAt(0).toUpperCase()}
             </span>
-          </Button>
+          </div>
           <div>
             <div className="font-medium">{user.name}</div>
-            <div className="text-slate-400 text-xs">{user.email}</div>
+            <div className="text-slate-400 text-xs">
+              {isPremium ? "Premium" : "Free"}
+            </div>
           </div>
-        </Link>
+        </div>
 
         <Separator className="my-2 bg-gray-600" />
 

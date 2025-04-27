@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import Chat from "@/components/chat/Chat";
 import React from "react";
 import { auth } from "../../../../../auth";
@@ -7,11 +6,6 @@ import { db } from "@/lib/db";
 import { chat } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import PDFRenderer from "@/components/chat/PDFRenderer";
-
-export const metadata: Metadata = {
-  title: "Chat",
-  description: "Chat with your documents",
-};
 
 type ChatPageProps = {
   params: {

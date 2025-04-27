@@ -37,7 +37,7 @@ export function UserDetails({
             isPremium ? "bg-[#61bd73] text-[#130c49]" : "bg-secondary"
           )}
         >
-          {isPremium ? "Pro Plan" : "Free Plan"}
+          {isPremium ? "Premium Plan" : "Free Plan"}
         </span>
       </div>
 

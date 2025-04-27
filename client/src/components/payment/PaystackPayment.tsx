@@ -88,12 +88,12 @@ export default function PaystackPayment({
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           {isPremium ? (
             <h2 className="text-center text-2xl font-bold md:text-left">
-              Pro Plan Benefits
+              Premium Plan Benefits
             </h2>
           ) : (
             <>
               <h2 className="text-center text-2xl font-bold md:text-left">
-                Upgrade to Pro
+                Upgrade to Premium
               </h2>
               <div className="mt-2 flex flex-col items-center justify-center text-right md:mt-0 md:flex-row md:items-center md:justify-center md:text-right">
                 <div className="text-xl font-bold md:text-3xl">
