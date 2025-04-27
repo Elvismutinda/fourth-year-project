@@ -14,7 +14,7 @@ import { auth } from "../../../../auth";
 import { getUserById } from "@/data/user";
 import { and, eq, gt, inArray } from "drizzle-orm";
 import { setHours, setMinutes, setSeconds, subDays } from "date-fns";
-import { FREE_MESSAGE_LIMIT } from "@/config/settings";
+import { FREE_MESSAGE_LIMIT, PREMIUM_MESSAGE_LIMIT } from "@/config/settings";
 import { getCachedUsage, setCachedUsage } from "@/lib/cache";
 
 export const updatePassword = async (values: UpdatePasswordRequest) => {
@@ -290,16 +290,26 @@ export async function upgradeToPremium(email: string) {
   }
 }
 
-function getLastResetDate(): Date {
+function getMessageLimit(role: "USER" | "PREMIUM") {
+  return role === "PREMIUM" ? PREMIUM_MESSAGE_LIMIT : FREE_MESSAGE_LIMIT;
+}
+
+function getLastResetDate(role: "USER" | "PREMIUM"): Date {
   const now = new Date();
-  let resetTime = setSeconds(setMinutes(setHours(now, 3), 0), 0); // Today at 3:00 AM
 
-  if (now < resetTime) {
-    // If current time is before 3 AM, use yesterday's 3 AM
-    resetTime = subDays(resetTime, 1);
+  if (role === "PREMIUM") {
+    // Premium users have no reset time
+    return new Date(0); // Epoch time
+  } else {
+    let resetTime = setSeconds(setMinutes(setHours(now, 3), 0), 0); // Today at 3:00 AM
+
+    if (now < resetTime) {
+      // If current time is before 3 AM, use yesterday's 3 AM
+      resetTime = subDays(resetTime, 1);
+    }
+
+    return resetTime;
   }
-
-  return resetTime;
 }
 
 export async function getUsageInfo() {
@@ -315,23 +325,21 @@ export async function getUsageInfo() {
     .from(user)
     .where(eq(user.id, currentUser.id));
 
-  const isPremium = userData?.role === "PREMIUM";
-  if (isPremium) {
-    return { isPremium: true, totalUsed: 0, remaining: null };
-  }
+  const role = userData?.role === "PREMIUM" ? "PREMIUM" : "USER";
+  const messageLimit = getMessageLimit(role);
 
   // Check cache first
-  const cached = getCachedUsage(currentUser.id);
+  const cached = getCachedUsage(currentUser.id, role);
   if (cached) {
     return {
-      isPremium,
+      isPremium: role === "PREMIUM",
       totalUsed: cached.totalUsed,
-      remaining: FREE_MESSAGE_LIMIT - cached.totalUsed,
+      remaining: messageLimit - cached.totalUsed,
     };
   }
 
   // Count messages created after last reset
-  const resetDate = getLastResetDate();
+  const resetDate = getLastResetDate(role);
 
   const totalMessages = await db
     .select()
@@ -350,8 +358,8 @@ export async function getUsageInfo() {
   setCachedUsage(currentUser.id, totalUsed);
 
   return {
-    isPremium,
+    isPremium: role === "PREMIUM",
     totalUsed,
-    remaining: FREE_MESSAGE_LIMIT - totalUsed,
+    remaining: messageLimit - totalUsed,
   };
 }

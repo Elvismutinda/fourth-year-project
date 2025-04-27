@@ -27,21 +27,23 @@ const PDFFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
     <Dialog
       open={isOpen}
       onOpenChange={(v) => {
-        if (!v) {
-          setIsOpen(v);
-        }
+        setIsOpen(v);
       }}
     >
-      <DialogTrigger onClick={() => setIsOpen(true)} asChild>
+      <DialogTrigger asChild>
         <Button variant="ghost" className="gap-1.5" aria-label="fullscreen">
           <Expand className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-7xl w-full">
+      <DialogContent className="max-w-7xl w-full max-h-[95vh] overflow-hidden text-[#2c3854] flex flex-col">
         <VisuallyHidden>
           <DialogTitle>PDF Viewer</DialogTitle>
         </VisuallyHidden>
-        <SimpleBar autoHide={false} className="max-h-[calc(100vh-10rem)] mt-6">
+        <SimpleBar
+          autoHide={false}
+          className="flex-1 overflow-y-auto"
+          style={{ maxHeight: "calc(95vh - 4rem)" }}
+        >
           <div ref={ref}>
             <Document
               loading={
@@ -54,10 +56,15 @@ const PDFFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
               }}
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}
               file={fileUrl}
-              className="max-h-full"
+              className="w-full"
             >
-              {new Array(numPages).fill(0).map((_, i) => (
-                <Page key={i} width={width ? width : 1} pageNumber={i + 1} />
+              {Array.from(new Array(numPages), (_, i) => (
+                <Page
+                  key={`page_${i + 1}`}
+                  pageNumber={i + 1}
+                  width={width ?? 800}
+                  className="mb-4"
+                />
               ))}
             </Document>
           </div>

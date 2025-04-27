@@ -50,6 +50,7 @@ const CaselawPage = async (props: CaselawPageProps) => {
       case_number: string;
       judges: string;
     };
+    distance: number;
   }[];
 
   return (
@@ -86,7 +87,9 @@ const CaselawPage = async (props: CaselawPageProps) => {
           <TabsTrigger value="reasoning">Reasoning</TabsTrigger>
           <TabsTrigger value="case-details">Case Details</TabsTrigger>
           <TabsTrigger value="full-text">Full Case Law</TabsTrigger>
-          <TabsTrigger value="similar-cases">Similar Cases</TabsTrigger>
+          {similarCases.length > 0 && (
+            <TabsTrigger value="similar-cases">Similar Cases</TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="ai-chat">
           <div>
@@ -187,13 +190,17 @@ const CaselawPage = async (props: CaselawPageProps) => {
                           className="block"
                         >
                           <Card className="cursor-pointer transition-transform hover:scale-[1.02]">
-                            <CardHeader>
+                            <CardHeader className="flex md:flex-row flex-col justify-between">
                               <CardTitle className="text-xl font-bold">
                                 {similar.metadata.citation.replace(
                                   /\s*copy\s*$/i,
                                   ""
                                 )}
                               </CardTitle>
+                              <p>
+                                <strong>Similarity Score:</strong>{" "}
+                                {1 - similar.distance}
+                              </p>
                             </CardHeader>
                             <CardContent>
                               <div className="space-y-2 py-2">

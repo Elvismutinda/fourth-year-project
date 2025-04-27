@@ -1,14 +1,16 @@
 const usageCache = new Map<string, { totalUsed: number; timestamp: number }>();
 
-export function getCachedUsage(userId: string) {
+export function getCachedUsage(userId: string, role: "USER" | "PREMIUM") {
   const cached = usageCache.get(userId);
   if (!cached) return null;
 
   const now = Date.now();
-  const threeHoursInMs = 1000 * 60 * 60 * 3;
+  const oneDay = 1000 * 60 * 60 * 24;
+  const thirtyOneDays = 1000 * 60 * 60 * 24 * 31;
 
-  // If the cache is older than a day or past reset time, invalidate
-  if (now - cached.timestamp > 1000 * 60 * 60 * 24) {
+  const maxAge = role === "PREMIUM" ? thirtyOneDays : oneDay;
+
+  if (now - cached.timestamp > maxAge) {
     usageCache.delete(userId);
     return null;
   }

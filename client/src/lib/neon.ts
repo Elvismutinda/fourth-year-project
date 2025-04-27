@@ -1,7 +1,7 @@
 import { downloadFromCloudinary } from "./cloudinary-server";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import md5 from "md5";
-import { Document } from "langchain/document";
+import { Document } from "@langchain/core/documents";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { generateEmbedding } from "./embeddings";
 import { db } from "@/lib/db";

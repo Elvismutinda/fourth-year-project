@@ -5,6 +5,7 @@ import AppLayoutWrapper from "./layoutWrapper";
 import { Toaster } from "sonner";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+import KeyboardShortcutHandler from "@/components/KeyboardShortcutHandler";
 
 const mulishFont = Mulish({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(mulishFont.className, "antialiased")}>
         <AppLayoutWrapper>
+          <KeyboardShortcutHandler />
           <div className="mx-auto min-h-screen justify-center items-center">
             {children}
           </div>

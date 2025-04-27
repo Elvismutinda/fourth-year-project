@@ -16,7 +16,7 @@ const ModelPage = () => {
 
   const toggleShowMore = () => setShowMore((prev) => !prev);
   return (
-    <TooltipProvider delayDuration={200}>
+    <TooltipProvider delayDuration={100}>
       <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-8">
         <div className="flex h-full flex-col space-y-6">
           <div>
@@ -28,7 +28,7 @@ const ModelPage = () => {
           </div>
           <div className="flex-1 overflow-hidden">
             <div className="h-full space-y-4 overflow-y-auto sm:h-[65vh] sm:min-h-[670px]">
-              <div className="relative flex flex-col rounded-lg border border-input p-3 sm:p-4">
+              <div className="relative flex flex-col rounded-lg border border-input/40 p-3 sm:p-4">
                 <div className="flex w-full items-start gap-4">
                   <div className="relative h-8 w-8 flex-shrink-0 sm:h-10 sm:w-10">
                     <Image

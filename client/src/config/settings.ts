@@ -26,3 +26,4 @@ export const settingsConfig: SettingsConfig = {
 };
 
 export const FREE_MESSAGE_LIMIT = 20;
+export const PREMIUM_MESSAGE_LIMIT = 1500;

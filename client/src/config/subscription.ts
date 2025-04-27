@@ -7,7 +7,7 @@ export const subscriptionDetails = [
   {
     icon: "sparkles",
     title: "Generous Message Limits",
-    description: "Receive unlimited standard message credits per month",
+    description: "Receive 1500 standard message credits per month",
   },
   {
     icon: "zap",

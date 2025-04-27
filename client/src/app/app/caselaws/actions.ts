@@ -44,12 +44,17 @@ export const getSimilarCases = async (caseId: string) => {
     const embeddingVector = caseEmbedding[0].embedding as number[];
     const embeddingArrayString = `'[${embeddingVector.join(",")}]'::vector`;
 
+    const SIMILARITY_THRESHOLD = 0.8;
+
     // Find top 5 most similar cases
     const similarCases = await db.execute(sql`
       SELECT id, metadata, file_url, url, 
         (embedding <=> ${sql.raw(embeddingArrayString)}) AS distance
       FROM case_laws
       WHERE id != ${caseId}
+      AND (embedding <=> ${sql.raw(
+        embeddingArrayString
+      )}) <= ${SIMILARITY_THRESHOLD}
       ORDER BY distance
       LIMIT 5;
     `);
