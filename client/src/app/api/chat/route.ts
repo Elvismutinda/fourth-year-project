@@ -7,6 +7,9 @@ import { auth } from "../../../../auth";
 import { deleteChatById, getChatById } from "@/app/app/chat/actions";
 import { chat_llm } from "@/lib/ai/hf_llm";
 
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+
 export async function POST(req: Request) {
   // const { chatId, messages }: { chatId: string; messages: Array<UIMessage> } = await req.json();
 

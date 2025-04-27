@@ -10,6 +10,7 @@ import {
   uniqueIndex,
   vector,
   serial,
+  index,
 } from "drizzle-orm/pg-core";
 
 export const userRole = pgEnum("userRole", ["USER", "PREMIUM"]);
@@ -46,8 +47,9 @@ export type Chat = InferSelectModel<typeof chat>;
 export const message = pgTable("Message", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   chatId: uuid("chatId")
-    .notNull()
     .references(() => chat.id),
+  caseLawId: uuid("caseLawId")
+    .references(() => case_laws.id),
   role: varchar("role").notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("createdAt").notNull(),
@@ -71,32 +73,61 @@ export const verificationToken = pgTable(
   })
 );
 
-export const documents = pgTable("documents", {
-  id: serial("id").primaryKey(),
-  userId: uuid("userId")
-    .notNull()
-    .references(() => user.id),
-  fileUrl: text("file_url").notNull(),
-  content: text("content").notNull(),
-  embedding: vector("embedding", { dimensions: 384 }),
-});
+export const documents = pgTable(
+  "documents",
+  {
+    id: serial("id").primaryKey(),
+    userId: uuid("userId")
+      .notNull()
+      .references(() => user.id),
+    fileUrl: text("file_url").notNull(),
+    content: text("content").notNull(),
+    embedding: vector("embedding", { dimensions: 384 }).notNull(),
+  },
+  (table) => ({
+    embeddingIndex: index("documents_embedding_idx").using(
+      "hnsw",
+      table.embedding.op("vector_cosine_ops")
+    ),
+  })
+);
 
-export const klr_docs = pgTable("klr_docs", {
-  file_id: text("file_id").primaryKey(),
-  content: text("content").notNull(),
-  embedding: vector("embedding", { dimensions: 384 }),
-});
+export const klr_docs = pgTable(
+  "klr_docs",
+  {
+    file_id: text("file_id").primaryKey(),
+    content: text("content").notNull(),
+    embedding: vector("embedding", { dimensions: 384 }),
+  },
 
-export const case_laws = pgTable("case_laws", {
-  id: uuid("id").primaryKey().notNull().defaultRandom(),
-  url: text("url").unique(),
-  file_url: text("file_url"),
-  metadata: jsonb("metadata"),
-  issues: jsonb("issues"),
-  legal_principles: jsonb("legal_principles"),
-  ratio_decidendi: text("ratio_decidendi"),
-  reasoning: text("reasoning"),
-  content: text("content").notNull(),
-  embedding: vector("embedding", { dimensions: 384 }),
-  full_text: text("full_text"),
-});
+  (table) => ({
+    embeddingIndex: index("acts_embedding_idx").using(
+      "hnsw",
+      table.embedding.op("vector_cosine_ops")
+    ),
+  })
+);
+
+export const case_laws = pgTable(
+  "case_laws",
+  {
+    id: uuid("id").primaryKey().notNull().defaultRandom(),
+    url: text("url").unique(),
+    file_url: text("file_url"),
+    metadata: jsonb("metadata"),
+    issues: jsonb("issues"),
+    legal_principles: jsonb("legal_principles"),
+    ratio_decidendi: text("ratio_decidendi"),
+    reasoning: text("reasoning"),
+    content: text("content").notNull(),
+    embedding: vector("embedding", { dimensions: 384 }),
+    full_text: text("full_text"),
+  },
+
+  (table) => ({
+    embeddingIndex: index("cases_embedding_idx").using(
+      "hnsw",
+      table.embedding.op("vector_cosine_ops")
+    ),
+  })
+);
