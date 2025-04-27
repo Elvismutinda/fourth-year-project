@@ -5,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],  # or your frontend URL
@@ -13,7 +12,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 class DraftRequest(BaseModel):
     documentType: str
@@ -27,3 +25,16 @@ async def draft_document(request: DraftRequest):
     except Exception as e:
         print("Error generating document:", str(e))
         raise HTTPException(status_code=500, detail="Failed to generate document")
+
+class ChatRequest(BaseModel):
+    messages: list[dict[str, str]]
+    
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    try:
+        from local_model import run_llm_chat
+        response = run_llm_chat(request.messages)
+        return {"response": response}
+    except Exception as e:
+        print("Error during chat:", str(e))
+        raise HTTPException(status_code=500, detail="Failed to generate chat response")
