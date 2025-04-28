@@ -8,7 +8,7 @@ load_dotenv()
 DB_URL = os.getenv("DATABASE_URL")
 
 # Load the JSON data
-with open("output/case_law_data.json", "r", encoding="utf-8") as f:
+with open("output/case_law_info.json", "r", encoding="utf-8") as f:
     case_laws = json.load(f)
 
 def update_case_law(case):
