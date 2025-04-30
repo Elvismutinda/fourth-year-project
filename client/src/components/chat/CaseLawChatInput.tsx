@@ -12,7 +12,7 @@ import type { UseChatHelpers } from "@ai-sdk/react";
 import { SuggestedActions } from "./SuggestedActions";
 
 export const PureCaseLawChatInput = ({
-  chatId,
+  caseLawId,
   input,
   setInput,
   handleSubmit,
@@ -23,7 +23,7 @@ export const PureCaseLawChatInput = ({
   append,
   className,
 }: {
-  chatId: string;
+  caseLawId: string;
   input: UseChatHelpers["input"];
   setInput: UseChatHelpers["setInput"];
   handleSubmit: UseChatHelpers["handleSubmit"];
@@ -46,7 +46,9 @@ export const PureCaseLawChatInput = ({
   const adjustHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`;
+      textareaRef.current.style.height = `${
+        textareaRef.current.scrollHeight + 2
+      }px`;
     }
   };
 
@@ -82,7 +84,7 @@ export const PureCaseLawChatInput = ({
   };
 
   const submitForm = useCallback(() => {
-    window.history.replaceState({}, "", `/app/chat/${chatId}`);
+    window.history.replaceState({}, "", `/app/caselaws/${caseLawId}`);
 
     handleSubmit();
     setLocalStorageInput("");
@@ -91,12 +93,12 @@ export const PureCaseLawChatInput = ({
     if (width && width > 768) {
       textareaRef.current?.focus();
     }
-  }, [handleSubmit, setLocalStorageInput, chatId, width]);
+  }, [handleSubmit, setLocalStorageInput, caseLawId, width]);
 
   return (
     <div className="relative w-full flex flex-col gap-4">
       {messages.length === 0 && (
-        <SuggestedActions append={append} chatId={chatId} />
+        <SuggestedActions append={append} caseLawId={caseLawId} />
       )}
 
       <Textarea
@@ -105,7 +107,7 @@ export const PureCaseLawChatInput = ({
         value={input}
         onChange={handleInput}
         className={cx(
-          "min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-accent text-accent-foreground pb-10 placeholder:text-accent-foreground border-zinc-700",
+          "min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none rounded-2xl !text-base bg-transparent/20 text-slate-300 pb-10 placeholder:text-slate-300 border-zinc-700",
           className
         )}
         rows={2}

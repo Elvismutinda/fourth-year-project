@@ -1,16 +1,78 @@
+"use server";
+
 import { db } from "@/lib/db";
 import { case_laws } from "@/lib/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
-export async function getCaseLaws(filters = {}) {
-  const query = new URLSearchParams(filters).toString();
-  const res = await fetch(`/api/caselaws?${query}`);
+interface SearchFilters {
+  query?: string;
+  judge?: string;
+  court?: string;
+  topic?: string;
+}
 
-  if (!res.ok) {
+export async function getAllCaseLaws() {
+  try {
+    const cases = await db
+      .select({
+        id: case_laws.id,
+        url: case_laws.url,
+        file_url: case_laws.file_url,
+        metadata: case_laws.metadata,
+      })
+      .from(case_laws);
+
+    return cases;
+  } catch (error) {
+    console.error("Error fetching all case laws:", error);
+    throw new Error("Failed to fetch all case laws");
+  }
+}
+
+export async function searchCaseLaws(filters: SearchFilters = {}) {
+  const { query, judge, court, topic } = filters;
+
+  try {
+    let whereConditions = [];
+
+    if (judge) {
+      whereConditions.push(sql`${case_laws.metadata} ->> 'judges' = ${judge}`);
+    }
+
+    if (court) {
+      whereConditions.push(sql`${case_laws.metadata} ->> 'court' = ${court}`);
+    }
+
+    if (topic) {
+      whereConditions.push(
+        sql`${case_laws.metadata} ->> 'court_division' = ${topic}`
+      );
+    }
+
+    if (query) {
+      whereConditions.push(
+        sql`(${case_laws.metadata} ->> 'case_number' ILIKE ${`%${query}%`} OR
+              ${case_laws.metadata} ->> 'citation' ILIKE ${`%${query}%`} OR
+              ${case_laws.metadata} ->> 'judges' ILIKE ${`%${query}%`} OR
+              ${case_laws.metadata} ->> 'court' ILIKE ${`%${query}%`} )`
+      );
+    }
+
+    const cases = db
+      .select({
+        id: case_laws.id,
+        url: case_laws.url,
+        file_url: case_laws.file_url,
+        metadata: case_laws.metadata,
+      })
+      .from(case_laws)
+      .where(whereConditions.length ? and(...whereConditions) : undefined);
+
+    return cases;
+  } catch (error) {
+    console.error("Error fetching case laws:", error);
     throw new Error("Failed to fetch case laws");
   }
-
-  return res.json();
 }
 
 export const getCaseLawById = async (id: string) => {
@@ -20,6 +82,7 @@ export const getCaseLawById = async (id: string) => {
       .from(case_laws)
       .where(eq(case_laws.id, id))
       .limit(1);
+
     return caseLaw.length ? caseLaw[0] : null;
   } catch (error) {
     console.error("Error fetching case law:", error);

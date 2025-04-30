@@ -4,7 +4,6 @@ import { VisibilityType } from "@/components/chat/VisibilitySelector";
 import { updateChatVisiblityById } from "@/data/chat";
 import { db } from "@/lib/db";
 import { chat, message } from "@/lib/db/schema";
-import { generateText, Message } from "ai";
 import { desc, eq } from "drizzle-orm";
 
 export async function getChatsByUserId({ id }: { id: string }) {

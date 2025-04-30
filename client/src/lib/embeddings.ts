@@ -6,6 +6,8 @@ if (!HF_TOKEN) {
   throw new Error("Missing Hugging Face API token.");
 }
 
+console.log("HF_TOKEN loaded:", !!HF_TOKEN);
+
 const hf = new HfInference(HF_TOKEN);
 
 export async function generateEmbedding(text: string): Promise<number[]> {

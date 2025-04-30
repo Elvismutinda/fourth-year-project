@@ -33,12 +33,16 @@ export const chat = pgTable("Chat", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   fileName: text("file_name"),
   fileUrl: text("file_url"),
+  caseLawId: uuid("caseLawId").references(() => case_laws.id),
   userId: uuid("userId")
     .notNull()
     .references(() => user.id),
   visibility: varchar("visibility", { enum: ["public", "private"] })
     .notNull()
     .default("private"),
+  type: varchar("type", { enum: ["upload", "case_law"] }) // optional helper
+    .notNull()
+    .default("upload"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
 
@@ -46,10 +50,8 @@ export type Chat = InferSelectModel<typeof chat>;
 
 export const message = pgTable("Message", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
-  chatId: uuid("chatId")
-    .references(() => chat.id),
-  caseLawId: uuid("caseLawId")
-    .references(() => case_laws.id),
+  chatId: uuid("chatId").references(() => chat.id),
+  caseLawId: uuid("caseLawId").references(() => case_laws.id),
   role: varchar("role").notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("createdAt").notNull(),
@@ -123,7 +125,6 @@ export const case_laws = pgTable(
     embedding: vector("embedding", { dimensions: 384 }),
     full_text: text("full_text"),
   },
-
   (table) => ({
     embeddingIndex: index("cases_embedding_idx").using(
       "hnsw",

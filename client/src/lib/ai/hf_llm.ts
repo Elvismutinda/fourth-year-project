@@ -128,3 +128,36 @@ export async function draft_llm(
 
   return document;
 }
+
+export async function caselaw_llm(
+  query: string,
+  additionalContext?: string
+): Promise<string> {
+  const messages = [
+    { role: "system", content: SYSTEM_PROMPT },
+    ...(additionalContext
+      ? [
+          {
+            role: "system",
+            content: `Relevant Document Context: ${additionalContext}`,
+          },
+        ]
+      : []),
+    { role: "user", content: query },
+  ];
+
+  const response = await fetch("http://localhost:8000/caselaw", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ messages }),
+  });
+
+  if (!response.ok) {
+    console.error("Error fetching from local LLM server:", response.statusText);
+  }
+
+  const data = await response.json();
+  return data.response ?? "I'm sorry, but I couldn't generate a response.";
+}

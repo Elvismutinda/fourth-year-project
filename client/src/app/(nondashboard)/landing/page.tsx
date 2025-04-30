@@ -142,26 +142,28 @@ const LandingPage = () => {
         transition={{ duration: 0.5 }}
         className="mx-auto py-12"
       >
-        <h2 className="text-center text-lg font-semibold text-gray-500 uppercase">
+        <div className="w-full lg:w-7/12 md:w-10/12 flex-none mx-auto relative">
+        <h2 className="text-center text-sm font-extrabold text-[#aab0bc] uppercase">
           The Intelaw Advantage, Time to Over Deliver.
         </h2>
-        <h1 className="text-center text-4xl font-bold text-gray-900 mt-2">
+        <h3 className="text-center text-3xl md:text-4xl font-bold text-gray-900 mt-2 px-8">
           Elevate your legal research with{" "}
           <span className="text-blue-600">unparalleled</span> clarity
-        </h1>
+        </h3>
+        </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center mt-12 gap-8">
           {/* Left use cases */}
           <div className="flex flex-col md:w-1/3 space-y-8">
             {useCases.slice(0, 2).map((useCase) => (
               <div key={useCase.id} className="text-center">
-                <h3 className="text-4xl font-semibold text-blue-600">
+                <h3 className="mb-3 text-5xl font-semibold text-blue-600">
                   {useCase.id}
                 </h3>
-                <h4 className="text-lg font-bold text-gray-900">
+                <h4 className="mb-2 text-base font-bold text-gray-900">
                   {useCase.title}
                 </h4>
-                <p className="text-gray-600 mt-2">{useCase.description}</p>
+                <p className="text-gray-600 px-7">{useCase.description}</p>
               </div>
             ))}
           </div>
@@ -202,13 +204,13 @@ const LandingPage = () => {
           <div className="flex flex-col md:w-1/3 space-y-8">
             {useCases.slice(2, 4).map((useCase) => (
               <div key={useCase.id} className="text-center">
-                <h3 className="text-4xl font-semibold text-blue-600">
+                <h3 className="mb-3 text-5xl font-semibold text-blue-600">
                   {useCase.id}
                 </h3>
-                <h4 className="text-lg font-bold text-gray-900">
+                <h4 className="mb-2 text-base font-bold text-gray-900">
                   {useCase.title}
                 </h4>
-                <p className="text-gray-600 mt-2">{useCase.description}</p>
+                <p className="text-gray-600 px-7">{useCase.description}</p>
               </div>
             ))}
           </div>

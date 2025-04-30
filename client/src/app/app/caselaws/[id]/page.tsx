@@ -30,7 +30,10 @@ const CaselawPage = async (props: CaselawPageProps) => {
     content: string;
     full_text: string;
     issues: string[];
-    legal_principles: string[];
+    legal_principles: {
+      principle: string;
+      reference: string;
+    }[];
     ratio_decidendi: string;
     reasoning: string;
   };
@@ -51,7 +54,7 @@ const CaselawPage = async (props: CaselawPageProps) => {
   }[];
 
   return (
-    <div className="rounded-md p-6">
+    <div className="rounded-md p-6 text-slate-300">
       <h2 className="mb-4 text-center text-base font-bold sm:text-lg">
         {caseLaw.metadata.citation.replace(/\s*copy\s*$/i, "")}
       </h2>
@@ -76,7 +79,7 @@ const CaselawPage = async (props: CaselawPageProps) => {
       </div>
 
       <Tabs defaultValue="ai-chat" className="w-full">
-        <TabsList className="grid w-full grid-cols-8 mb-4">
+        <TabsList className="grid w-full grid-cols-8 mb-4 bg-transparent/20">
           <TabsTrigger value="ai-chat">AI Chat</TabsTrigger>
           <TabsTrigger value="issues">Issues</TabsTrigger>
           <TabsTrigger value="principles">Legal Principles</TabsTrigger>
@@ -90,8 +93,8 @@ const CaselawPage = async (props: CaselawPageProps) => {
         </TabsList>
         <TabsContent value="ai-chat">
           <div>
-            <div className="relative m-4 min-h-0 min-w-0 rounded-2xl border-gray-500 bg-gray-200 md:m-10">
-              <CaseLawChat chatId={id} />
+            <div className="relative m-4 min-h-0 min-w-0 rounded-2xl border-gray-500 bg-transparent/30 md:m-10">
+              <CaseLawChat caseLawId={id} />
             </div>
           </div>
         </TabsContent>
@@ -111,10 +114,15 @@ const CaselawPage = async (props: CaselawPageProps) => {
         <TabsContent value="principles">
           <div>
             <ul className="list-inside list-disc space-y-5 px-4">
-              {caseLaw.legal_principles.map((principle, index) => (
-                <li key={index} className="text-sm sm:text-base">
-                  {principle}
-                </li>
+              {caseLaw.legal_principles.map((item, index) => (
+                <div key={index} className="flex flex-col space-y-2">
+                  <li className="text-sm sm:text-base">{item.principle}</li>
+                  {item.reference && (
+                    <span className="text-xs italic text-blue-400 sm:text-sm">
+                      {item.reference}
+                    </span>
+                  )}
+                </div>
               ))}
             </ul>
           </div>
@@ -186,7 +194,7 @@ const CaselawPage = async (props: CaselawPageProps) => {
                           href={`/app/caselaws/${similar.id}`}
                           className="block"
                         >
-                          <Card className="cursor-pointer transition-transform hover:scale-[1.02]">
+                          <Card className="bg-transparent/50 text-slate-300 border-gray-800 cursor-pointer transition-transform hover:scale-[1.02]">
                             <CardHeader className="flex md:flex-row flex-col justify-between">
                               <CardTitle className="text-xl font-bold">
                                 {similar.metadata.citation.replace(
