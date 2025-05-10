@@ -58,7 +58,7 @@ const PDFFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
               file={fileUrl}
               className="w-full"
             >
-              {Array.from(new Array(numPages), (_, i) => (
+              {Array.from({ length: numPages || 0 }, (_, i) => (
                 <Page
                   key={`page_${i + 1}`}
                   pageNumber={i + 1}

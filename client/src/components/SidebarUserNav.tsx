@@ -46,7 +46,7 @@ export function SidebarUserNav({
           </div>
           <div>
             <div className="font-medium">{user.name}</div>
-            <div className="text-slate-400 text-xs">
+            <div className="text-slate-300 text-xs">
               {isPremium ? "Premium" : "Free"}
             </div>
           </div>

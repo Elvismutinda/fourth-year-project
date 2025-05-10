@@ -54,7 +54,7 @@ const CaselawPage = async (props: CaselawPageProps) => {
   }[];
 
   return (
-    <div className="rounded-md p-6 text-slate-300">
+    <div className="rounded-md p-6 text-[#fff]">
       <h2 className="mb-4 text-center text-base font-bold sm:text-lg">
         {caseLaw.metadata.citation.replace(/\s*copy\s*$/i, "")}
       </h2>
@@ -194,7 +194,7 @@ const CaselawPage = async (props: CaselawPageProps) => {
                           href={`/app/caselaws/${similar.id}`}
                           className="block"
                         >
-                          <Card className="bg-transparent/50 text-slate-300 border-gray-800 cursor-pointer transition-transform hover:scale-[1.02]">
+                          <Card className="bg-transparent/50 text-[#fff] border-gray-800 cursor-pointer transition-transform hover:scale-[1.02]">
                             <CardHeader className="flex md:flex-row flex-col justify-between">
                               <CardTitle className="text-xl font-bold">
                                 {similar.metadata.citation.replace(

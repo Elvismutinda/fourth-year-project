@@ -28,7 +28,13 @@ export async function POST(req: Request) {
       );
     }
 
+    interface CaseMetadata {
+      citation?: string;
+    }
+
     const fileUrl = _caseLaw.file_url;
+    const metadata = _caseLaw.metadata as CaseMetadata;
+    const citation = metadata?.citation;
     const lastMessage = messages[messages.length - 1];
 
     let context = "";
@@ -56,7 +62,7 @@ export async function POST(req: Request) {
         .values({
           userId,
           caseLawId,
-          // file_url: fileUrl,
+          fileName: citation,
           type: "case_law",
           createdAt: new Date(),
         })

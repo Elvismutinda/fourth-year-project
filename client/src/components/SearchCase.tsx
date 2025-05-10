@@ -142,7 +142,7 @@ const SearchCase = () => {
             placeholder="Search case laws..."
             value={query}
             onChange={handleQueryChange}
-            className="h-11 flex-grow text-slate-300 placeholder:text-slate-300"
+            className="h-11 flex-grow text-[#fff] placeholder:text-[#fff]"
           />
           {/* <Button onClick={handleSearch}
             disabled={isPending} variant="purple" className="h-11">
@@ -150,7 +150,7 @@ const SearchCase = () => {
           </Button> */}
         </div>
 
-        <div className="mb-8 grid grid-cols-1 gap-3 lg:grid-cols-3 text-slate-300">
+        <div className="mb-8 grid grid-cols-1 gap-3 lg:grid-cols-3 text-[#fff]">
           <Select onValueChange={(value) => handleFilterChange("judge", value)}>
             <SelectTrigger className="h-11">
               <SelectValue placeholder="Search judges..." />
@@ -223,7 +223,7 @@ const SearchCase = () => {
                 href={`/app/caselaws/${caseLaw.id}`}
                 className="block"
               >
-                <Card className="bg-transparent/50 text-slate-300 border-gray-800 cursor-pointer transition-transform hover:scale-[1.02]">
+                <Card className="bg-transparent/50 text-[#fff] border-gray-800 cursor-pointer transition-transform hover:scale-[1.02]">
                   <CardHeader>
                     <CardTitle className="text-xl font-bold">
                       {caseLaw.metadata.citation.replace(/\s*copy\s*$/i, "")}
@@ -248,7 +248,7 @@ const SearchCase = () => {
             ))}
           </div>
         ) : (
-          <p className="flex items-center justify-center text-slate-300">No case laws found.</p>
+          <p className="flex items-center justify-center text-[#fff]">No case laws found.</p>
         )}
 
         {/* Pagination */}
