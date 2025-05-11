@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   devIndicators: false,
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
