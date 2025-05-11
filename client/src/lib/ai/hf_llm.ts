@@ -1,12 +1,12 @@
-import { HfInference } from "@huggingface/inference";
+// import { HfInference } from "@huggingface/inference";
 
-const HF_TOKEN = process.env.HF_TOKEN;
+// const HF_TOKEN = process.env.HF_TOKEN;
 
-if (!HF_TOKEN) {
-  throw new Error("Missing Hugging Face API token");
-}
+// if (!HF_TOKEN) {
+//   throw new Error("Missing Hugging Face API token");
+// }
 
-const hf = new HfInference(HF_TOKEN);
+// const hf = new HfInference(HF_TOKEN);
 
 const SYSTEM_PROMPT = `
 You are Intelaw, an advanced AI legal research assistant specializing in Kenyan case law and legal statutes.
@@ -82,51 +82,6 @@ export async function chat_llm(
 
   const data = await response.json();
   return data.response ?? "I'm sorry, but I couldn't generate a response.";
-}
-
-export async function draft_llm(
-  documentType: string,
-  fieldDetails?: Record<string, string>
-): Promise<string> {
-  console.log("Document Type in draft_llm:", documentType);
-  console.log("Field Details in draft_llm:", fieldDetails);
-
-  const fieldsString = fieldDetails
-    ? Object.entries(fieldDetails)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join("\n")
-    : "";
-
-  const DRAFT_PROMPT = `
-    You are a legal expert drafting a ${documentType} document template under Kenyan law.
-
-    ### Field Details:
-    ${fieldsString}
-
-    If provided, use the details to generate a professional and legally accurate document.
-  `;
-
-  const messages = [
-    { role: "system", content: SYSTEM_PROMPT },
-    { role: "user", content: DRAFT_PROMPT },
-  ];
-
-  const response = await hf.chatCompletion({
-    model: "meta-llama/Llama-3.2-3B-Instruct",
-    messages,
-    max_tokens: 1024,
-    temperature: 0.7,
-  });
-
-  console.log("Response from Hugging Face:", JSON.stringify(response, null, 2));
-
-  const document = response.choices[0]?.message?.content;
-  if (!document) {
-    console.error("Error: Failed to generate valid document.");
-    return "I'm sorry, but I couldn't generate the document.";
-  }
-
-  return document;
 }
 
 export async function caselaw_llm(

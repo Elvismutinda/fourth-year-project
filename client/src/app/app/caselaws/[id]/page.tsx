@@ -13,45 +13,49 @@ type CaselawPageProps = {
   };
 };
 
-const CaselawPage = async (props: CaselawPageProps) => {
-  const { id } = await props.params;
+const CaselawPage = async ({ params }: CaselawPageProps) => {
+  const { id } = await params;
 
-  const caseLaw = (await getCaseLawById(id)) as {
-    metadata: {
-      citation: string;
-      court: string;
-      court_station: string;
-      type: string;
-      case_number: string;
-      judges: string;
+  let caseLaw = null;
+  let similarCases = [];
+
+  try {
+    caseLaw = (await getCaseLawById(id)) as {
+      metadata: {
+        citation: string;
+        court: string;
+        court_station: string;
+        type: string;
+        case_number: string;
+        judges: string;
+      };
+      file_url: string;
+      url: string;
+      content: string;
+      full_text: string;
+      issues: string[];
+      legal_principles: {
+        principle: string;
+        reference: string;
+      }[];
+      ratio_decidendi: string;
+      reasoning: string;
     };
-    file_url: string;
-    url: string;
-    content: string;
-    full_text: string;
-    issues: string[];
-    legal_principles: {
-      principle: string;
-      reference: string;
+
+    similarCases = (await getSimilarCases(id)) as {
+      id: string;
+      metadata: {
+        citation: string;
+        court: string;
+        case_number: string;
+        judges: string;
+      };
+      distance: number;
     }[];
-    ratio_decidendi: string;
-    reasoning: string;
-  };
-
-  if (!caseLaw) {
-    return <p className="text-center text-red-500">Case law not found.</p>;
+  } catch (error) {
+    console.error("Error fetching case data:", error);
+    return <p className="text-center text-red-500">Failed to load case law.</p>;
   }
-
-  const similarCases = (await getSimilarCases(id)) as {
-    id: string;
-    metadata: {
-      citation: string;
-      court: string;
-      case_number: string;
-      judges: string;
-    };
-    distance: number;
-  }[];
 
   return (
     <div className="rounded-md p-6 text-[#fff]">
