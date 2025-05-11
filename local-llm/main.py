@@ -2,8 +2,11 @@ from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseModel
 from local_llm import draft_with_llm  # Your custom LLM call logic
 from fastapi.middleware.cors import CORSMiddleware
+from sentence_transformers import SentenceTransformer
 
 app = FastAPI()
+
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,3 +41,19 @@ async def chat(request: ChatRequest):
     except Exception as e:
         print("Error during chat:", str(e))
         raise HTTPException(status_code=500, detail="Failed to generate chat response")
+    
+class EmbeddingRequest(BaseModel):
+    text: str
+
+@app.post("/embed")
+async def embed_text(request: EmbeddingRequest):
+    try:
+        cleaned_text = request.text.strip().replace("\n", " ")
+        if not cleaned_text:
+            raise HTTPException(status_code=400, detail="Empty text provided")
+
+        embedding = embedding_model.encode(cleaned_text, normalize_embeddings=True)
+        return {"embedding": embedding.tolist()}
+    except Exception as e:
+        print("Error generating embedding:", str(e))
+        raise HTTPException(status_code=500, detail="Embedding generation failed")
