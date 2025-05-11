@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import DescriptionRenderer from "@/components/draft/DescriptionRenderer";
 import DraftForm from "@/components/draft/DraftForm";
 
-type DraftPageProps = {
+interface PageProps {
   params: {
     slug: string;
   };
@@ -21,7 +21,7 @@ const allDocs = documents.flatMap((category) =>
   }))
 );
 
-export default async function SlugDraftPage(props: DraftPageProps) {
+export default async function SlugDraftPage(props: PageProps) {
   const { slug } = await props.params;
 
   const doc = allDocs.find((d) => d.slug === slug);

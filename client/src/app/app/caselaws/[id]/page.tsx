@@ -7,14 +7,14 @@ import { getCaseLawById, getSimilarCases } from "../actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CaseLawChat from "@/components/chat/CaseLawChat";
 
-type CaselawPageProps = {
+interface PageProps {
   params: {
     id: string;
   };
 };
 
-const CaselawPage = async (props: CaselawPageProps) => {
-  const { id } = await props.params;
+const CaselawPage = async ({ params }: PageProps) => {
+  const { id } = params;
 
   let caseLaw = null;
   let similarCases = [];
