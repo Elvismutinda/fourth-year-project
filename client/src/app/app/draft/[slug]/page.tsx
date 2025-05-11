@@ -21,8 +21,10 @@ const allDocs = documents.flatMap((category) =>
   }))
 );
 
-export default async function SlugDraftPage({ params }: DraftPageProps) {
-  const doc = allDocs.find((d) => d.slug === params.slug);
+export default async function SlugDraftPage(props: DraftPageProps) {
+  const { slug } = await props.params;
+
+  const doc = allDocs.find((d) => d.slug === slug);
 
   if (!doc) return notFound();
 

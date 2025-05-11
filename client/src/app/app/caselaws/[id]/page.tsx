@@ -13,8 +13,8 @@ type CaselawPageProps = {
   };
 };
 
-const CaselawPage = async ({ params }: CaselawPageProps) => {
-  const { id } = await params;
+const CaselawPage = async (props: CaselawPageProps) => {
+  const { id } = await props.params;
 
   let caseLaw = null;
   let similarCases = [];
