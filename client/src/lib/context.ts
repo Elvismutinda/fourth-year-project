@@ -39,7 +39,7 @@ export async function getContext(query: string, fileUrl: string) {
 
   // Filter results with score > 0.7
   const qualifyingDocs = matches.filter(
-    (match) => typeof match.score === "number" && match.score > 0.5
+    (match) => typeof match.score === "number" && match.score > 0.2
   );
 
   let docs = qualifyingDocs.map((match) => match.text);

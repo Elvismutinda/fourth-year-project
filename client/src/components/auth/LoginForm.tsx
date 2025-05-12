@@ -8,8 +8,6 @@ import { siteConfig } from "@/config/site";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
-// import { FcGoogle } from "react-icons/fc";
-// import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginRequest, LoginSchema } from "@/lib/validations/auth";

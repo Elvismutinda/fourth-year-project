@@ -107,7 +107,7 @@ export const getSimilarCases = async (caseId: string) => {
     const embeddingVector = caseEmbedding[0].embedding as number[];
     const embeddingArrayString = `'[${embeddingVector.join(",")}]'::vector`;
 
-    const SIMILARITY_THRESHOLD = 0.8;
+    const SIMILARITY_THRESHOLD = 0.95;
 
     // Find top 5 most similar cases
     const similarCases = await db.execute(sql`
