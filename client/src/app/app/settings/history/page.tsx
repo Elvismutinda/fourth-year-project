@@ -100,7 +100,7 @@ const HistoryPage = () => {
         <h2 className="text-2xl font-bold">Message History</h2>
         <div className="space-y-6">
           <p className="text-muted/80">
-            Save your history as JSON, or import someone else's. Importing will
+            Save your history as JSON, or import someone else&apos;s. Importing will
             NOT delete existing messages
           </p>
           <div className="flex flex-row gap-2">

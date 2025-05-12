@@ -22,7 +22,7 @@ const ModelPage = () => {
           <div>
             <h2 className="text-xl font-bold sm:text-2xl">Available Models</h2>
             <p className="mt-2 text-sm text-muted/80 sm:text-base">
-              Choose your preferred model from the model selector. This won't
+              Choose your preferred model from the model selector. This won&apos;t
               affect existing conversations.
             </p>
           </div>
