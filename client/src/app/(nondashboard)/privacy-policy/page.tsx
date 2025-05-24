@@ -1,10 +1,3 @@
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "",
-};
-
 const PolicyPage = () => {
   return (
     <div className="mx-auto h-full max-w-5xl text-black">

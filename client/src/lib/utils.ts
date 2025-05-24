@@ -26,3 +26,11 @@ export const fetcher = async (url: string) => {
 
   return res.json();
 };
+
+export function encryptKey(passkey: string) {
+  return btoa(passkey);
+}
+
+export function decryptKey(passkey: string) {
+  return atob(passkey);
+}

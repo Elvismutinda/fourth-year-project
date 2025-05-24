@@ -14,7 +14,7 @@ interface PageProps {
 };
 
 const CaselawPage = async ({ params }: PageProps) => {
-  const { id } = params;
+  const { id } = await params;
 
   let caseLaw = null;
   let similarCases = [];

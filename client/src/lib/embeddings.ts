@@ -26,7 +26,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 
     return embedding;
   } catch (error) {
-    console.error("Error calling Hugging Face embeddings API: ", error);
+    console.error("Error calling FastAPI embeddings API: ", error);
     throw error;
   }
 }

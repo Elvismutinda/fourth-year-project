@@ -8,7 +8,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #2c6189, #224F71);
+  background: linear-gradient(45deg, #2c6189, #224f71);
   border-radius: 30px;
 }
 
@@ -100,5 +100,31 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-14-regular {
+    @apply text-[14px] leading-[18px] font-normal;
+  }
+
+  .text-36-bold {
+    @apply text-[36px] leading-[40px] font-bold;
+  }
+
+  .shad-alert-dialog {
+    @apply space-y-5 bg-dark-400 border-dark-500 outline-none !important;
+  }
+
+  .shad-otp {
+    @apply w-full flex justify-between !important;
+  }
+
+  .shad-otp-slot {
+    @apply text-36-bold justify-center flex border border-dark-500 rounded-lg size-16 gap-4 !important;
+  }
+
+  .shad-error {
+    @apply text-red-400 !important;
   }
 }

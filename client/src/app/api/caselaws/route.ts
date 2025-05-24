@@ -4,7 +4,7 @@ import { auth } from "../../../../auth";
 import { getCaseLawById } from "@/app/app/caselaws/actions";
 import { message as _messages, chat } from "@/lib/db/schema";
 import { chat_llm } from "@/lib/ai/hf_llm";
-import { getContext } from "@/lib/context";
+import { getCaseContext } from "@/lib/context";
 import { and, eq } from "drizzle-orm";
 
 export const maxDuration = 30;
@@ -32,16 +32,13 @@ export async function POST(req: Request) {
       citation?: string;
     }
 
-    const fileUrl = _caseLaw.file_url;
     const metadata = _caseLaw.metadata as CaseMetadata;
     const citation = metadata?.citation;
     const lastMessage = messages[messages.length - 1];
 
     let context = "";
 
-    if (fileUrl) {
-      context = await getContext(lastMessage.content, fileUrl);
-    }
+    context = await getCaseContext(lastMessage.content, caseLawId);
 
     const response = await chat_llm(lastMessage.content, context);
 
