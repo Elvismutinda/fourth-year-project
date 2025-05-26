@@ -51,7 +51,7 @@ const ModelPage = () => {
                     <div className="relative">
                       <p className="mr-12 text-xs sm:text-sm">
                         Intelaw&apos;s INSTRUCT model is our latest flagship
-                        Kenyan model, trained using a novel RLHF method that
+                        Kenyan model, trained using a novel RAG-based method that
                         delivers top performance on various legal benchmarks.
                         This advanced state-of-the-art model is built upon a
                         comprehensive corpus of Kenyan legal datasets, ensuring
