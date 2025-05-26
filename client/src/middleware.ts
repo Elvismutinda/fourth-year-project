@@ -7,6 +7,8 @@ import {
   authRoutes,
   publicRoutes,
 } from "../routes";
+import { NextRequest, NextResponse } from "next/server";
+import { decryptKey } from "./lib/utils";
 
 const { auth } = NextAuth(authConfig);
 
@@ -36,6 +38,24 @@ export default auth((req) => {
 
   return null;
 });
+
+export function middleware(req: NextRequest) {
+  const url = req.nextUrl;
+  const isAdminRoute = url.pathname.startsWith("/admin");
+
+  if (isAdminRoute) {
+    const encryptedKey = req.cookies.get("accessKey")?.value;
+    const decryptedKey = encryptedKey ? decryptKey(encryptedKey) : null;
+
+    const adminPasskey = process.env.NEXT_PUBLIC_ADMIN_PASSKEY;
+
+    if (!decryptedKey || decryptedKey !== adminPasskey) {
+      return NextResponse.redirect(new URL("/login?admin=true", req.url));
+    }
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

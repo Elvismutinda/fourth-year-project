@@ -111,18 +111,24 @@ const config = {
           "5": "hsl(var(--chart-5))",
         },
         dark: {
-          200: "#0D0F10",
-          300: "#131619",
-          400: "#1A1D21",
-          500: "#363A3D",
-          600: "#76828D",
-          700: "#ABB8C4",
+          "200": "#0D0F10",
+          "300": "#131619",
+          "400": "#1A1D21",
+          "500": "#363A3D",
+          "600": "#76828D",
+          "700": "#ABB8C4",
         },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      backgroundImage: {
+        users: "url('/assets/images/users-bg.png')",
+        chats: "url('/assets/images/chats-bg.png')",
+        messages: "url('/assets/images/messages-bg.png')",
+        documents: "url('/assets/images/documents-bg.png')",
       },
       keyframes: {
         "accordion-down": {

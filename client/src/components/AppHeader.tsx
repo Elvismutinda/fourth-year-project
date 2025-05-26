@@ -21,7 +21,7 @@ export const AppHeader = async () => {
 
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center">
-          <div className="text-white text-sm font-semibold">
+          <div className="text-[#fff] text-sm font-semibold">
             <span>{greeting}, </span>
             <span>{session?.user?.name}</span>
           </div>

@@ -171,7 +171,7 @@ export default function DraftForm({ fields, documentType }: DraftFormProps) {
                             <TooltipTrigger className="ml-1 cursor-pointer">
                               <Asterisk className="size-4 text-red-500" />
                             </TooltipTrigger>
-                            <TooltipContent className="text-sm text-white bg-black p-2 rounded">
+                            <TooltipContent className="text-sm text-[#fff] bg-black p-2 rounded">
                               This field is required
                             </TooltipContent>
                           </Tooltip>

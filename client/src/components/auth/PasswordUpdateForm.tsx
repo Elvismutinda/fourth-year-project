@@ -77,7 +77,7 @@ const PasswordUpdateForm = () => {
                     />
                     <button
                       type="button"
-                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-[#fff]"
                       onClick={() =>
                         setShowCurrentPassword(!showCurrentPassword)
                       }
@@ -112,7 +112,7 @@ const PasswordUpdateForm = () => {
                     />
                     <button
                       type="button"
-                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-[#fff]"
                       onClick={() => setShowNewPassword(!showNewPassword)}
                     >
                       {showNewPassword ? (
@@ -145,7 +145,7 @@ const PasswordUpdateForm = () => {
                     />
                     <button
                       type="button"
-                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-[#fff]"
                       onClick={() =>
                         setShowConfirmNewPassword(!showConfirmNewPassword)
                       }

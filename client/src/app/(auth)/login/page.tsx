@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import LoginForm from "@/components/auth/LoginForm";
-import PasskeyModal from "@/components/PasskeyModal";
+import PasskeyModal from "@/components/admin/PasskeyModal";
 
 export const metadata: Metadata = {
   title: "Login",

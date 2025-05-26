@@ -37,3 +37,22 @@ export type MainNavItem = NavItem;
 export type SettingsConfig = {
   mainNav: MainNavItem[];
 };
+
+export type RecentUpload = {
+  file_name: string;
+  user: string;
+  size_kb: number;
+  date_uploaded: string;
+  chats_started: number;
+};
+
+export type UserData = {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified?: Date | null;
+  role: "USER" | "PREMIUM" | string;
+  phone?: string | null;
+  paystackSubscriptionStart?: Date | null;
+  paystackSubscriptionEnd?: Date | null;
+};
