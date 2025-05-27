@@ -20,13 +20,13 @@ import { toast } from "sonner";
 import { deleteUser } from "@/app/admin/reports/actions";
 
 export const columns: ColumnDef<RecentUpload>[] = [
-  // {
-  //   accessorKey: "file_name",
-  //   header: "File Name",
-  //   cell: ({ row }) => (
-  //     <p className="text-14-medium">{row.original.file_name}</p>
-  //   ),
-  // },
+  {
+    accessorKey: "file_name",
+    header: "File Name",
+    cell: ({ row }) => (
+      <p className="text-14-medium">{row.original.file_name}</p>
+    ),
+  },
   {
     accessorKey: "user",
     header: "Uploaded By",

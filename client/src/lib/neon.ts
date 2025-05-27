@@ -124,8 +124,8 @@ async function prepareDocument(page: PDFPage) {
   pageContent = pageContent.replace(/\n\n+/g, "\n");
 
   const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 100,
+    chunkSize: 256,
+    chunkOverlap: 25,
   });
   const docs = await splitter.splitDocuments([
     new Document({

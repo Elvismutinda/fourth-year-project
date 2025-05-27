@@ -129,7 +129,7 @@ const DraftDetails = () => {
               <Input
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
-                placeholder="Describe the legal document you need..."
+                placeholder="Describe the legal document you need. Example: Draft a cross-border guarantee and indemnity."
                 className="bg-gray-600/80 border-none rounded-md text-[#fff] placeholder-slate-200"
               />
               <Button

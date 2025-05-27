@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
@@ -22,7 +23,9 @@ const VerifyEmailPage = () => {
         </Button>
       </Link>
 
-      <VerifyEmailForm />
+      <Suspense fallback={<div>Loading...</div>}>
+        <VerifyEmailForm />
+      </Suspense>
     </div>
   );
 };

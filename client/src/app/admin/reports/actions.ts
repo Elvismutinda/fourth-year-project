@@ -20,7 +20,7 @@ export const getAdminStats = async () => {
     .from(message);
 
   const [{ count: documentCount }] = await db
-    .select({ count: sql<number>`COUNT(*)` })
+    .select({ count: sql<number>`COUNT(DISTINCT ${documents.fileUrl})` })
     .from(documents);
 
   return {
@@ -92,22 +92,22 @@ export async function getUploadChatReports() {
   };
 }
 
-export async function getRecentUploads(limit = 10) {
+// To add a limit, you can add limit = 10 as a parameter to the function and in the sql query add LIMIT ${limit} at the bottom
+export async function getRecentUploads() {
   const result = await db.execute(sql`
     SELECT 
-      d.file_url AS file_name,
+      ch."file_name" AS file_name,
       u.name AS user,
-      (LENGTH(d.content)::int / 1024) AS size_kb,
-      ch."createdAt"::date AS date_uploaded,
-      COUNT(m.id) AS chats_started
+      SUM(LENGTH(d.content)::int) / 1024 AS size_kb,
+      MAX(ch."createdAt")::date AS date_uploaded,
+      COUNT(DISTINCT m.id) AS chats_started
     FROM ${documents} d
     JOIN ${user} u ON d."userId" = u.id
     LEFT JOIN ${chat} ch ON d.file_url = ch."file_url"
     LEFT JOIN ${message} m ON ch.id = m."chatId"
     WHERE ch.type = 'upload'
-    GROUP BY d.file_url, u.name, d.content, ch."createdAt"
-    ORDER BY ch."createdAt" DESC
-    LIMIT ${limit}
+    GROUP BY ch."file_name", u.name, d.file_url
+    ORDER BY date_uploaded DESC
   `);
 
   return result.rows as RecentUpload[];

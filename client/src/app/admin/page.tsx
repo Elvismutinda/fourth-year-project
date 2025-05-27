@@ -24,6 +24,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import SignOutButton from "@/components/admin/SignOutButton";
+import Link from "next/link";
 
 export default async function AdminPage() {
   const stats = await getAdminStats();
@@ -54,8 +55,8 @@ export default async function AdminPage() {
           <TabsList className="grid w-full grid-cols-4 mb-4 bg-transparent/20">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="uploads">Document Uploads</TabsTrigger>
-            <TabsTrigger value="stats">Chat Reports</TabsTrigger>
+            <TabsTrigger value="uploads">Document Upload Reports</TabsTrigger>
+            <TabsTrigger value="chat">Chat Reports</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-4">
@@ -96,35 +97,55 @@ export default async function AdminPage() {
                 <Accordion type="single" collapsible className="w-full">
                   {cases.map((caseLaw: any) => (
                     <AccordionItem value={caseLaw.id} key={caseLaw.id}>
-                      <AccordionTrigger>
-                        {caseLaw.metadata?.citation ?? "Untitled Case"}
+                      <AccordionTrigger className="text-base">
+                        {caseLaw.metadata?.citation.replace(/\s*copy\s*$/i, "")}
                       </AccordionTrigger>
-                      <AccordionContent className="text-sm text-gray-600 space-y-2">
-                        {caseLaw.metadata?.parties && (
-                          <div>
-                            <strong>Parties:</strong> {caseLaw.metadata.parties}
-                          </div>
-                        )}
-                        {caseLaw.metadata?.court && (
-                          <div>
-                            <strong>Court:</strong> {caseLaw.metadata.court}
-                          </div>
-                        )}
-                        {caseLaw.metadata?.date && (
-                          <div>
-                            <strong>Date:</strong> {caseLaw.metadata.date}
-                          </div>
-                        )}
-                        <div>
-                          <strong>Chats:</strong> {caseLaw.chat_count}
+                      <AccordionContent className="grid grid-cols-1 gap-2 ">
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-[200px,1fr]">
+                          {caseLaw.metadata?.court && (
+                            <div className="text-sm sm:text-base">
+                              <strong>Court: </strong>
+                              <span>{caseLaw.metadata.court}</span>
+                            </div>
+                          )}
+                          {caseLaw.metadata?.court_station && (
+                            <div className="text-sm sm:text-base">
+                              <strong>Court Station: </strong>
+                              <span>{caseLaw.metadata.court_station}</span>
+                            </div>
+                          )}
+                          {caseLaw.metadata?.type && (
+                            <div className="text-sm sm:text-base">
+                              <strong>Case Type: </strong>
+                              <span>{caseLaw.metadata.type}</span>
+                            </div>
+                          )}
+                          {caseLaw.metadata?.case_number && (
+                            <div className="text-sm sm:text-base">
+                              <strong>Case Number: </strong>
+                              <span>{caseLaw.metadata.case_number}</span>
+                            </div>
+                          )}
+                          {caseLaw.metadata?.judges && (
+                            <div className="text-sm sm:text-base">
+                              <strong>Judges: </strong>
+                              <span>{caseLaw.metadata.judges}</span>
+                            </div>
+                          )}
                         </div>
-                        <a
+
+                        <div className="text-sm sm:text-base mt-2">
+                          <strong>Chat Count: </strong>
+                          <span>{caseLaw.chat_count}</span>
+                        </div>
+
+                        <Link
                           href={caseLaw.url}
                           target="_blank"
-                          className="text-blue-600 underline"
+                          className="text-base text-blue-400 font-medium underline"
                         >
                           View Full Case
-                        </a>
+                        </Link>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
@@ -154,7 +175,7 @@ export default async function AdminPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="stats">
+          <TabsContent value="chat">
             <div className="space-y-4">
               <ChatActivityChart
                 data={(chatActivity?.rows ?? []).map((row) => ({
