@@ -11,12 +11,12 @@ export const metadata: Metadata = {
   description: "Login to your account",
 };
 
-declare type SearchParamProps = {
+interface SearchParamProps {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-const LoginPage = ({ searchParams }: SearchParamProps) => {
-  const isAdmin = searchParams.admin === "true";
+const LoginPage = async ({ searchParams }: SearchParamProps) => {
+  const isAdmin = await searchParams?.admin === "true";
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
@@ -34,7 +34,6 @@ const LoginPage = ({ searchParams }: SearchParamProps) => {
       <LoginForm />
 
       <div className="absolute right-4 bottom-4 md:right-8 md:bottom-8">
-        {isAdmin && <PasskeyModal />}
         <Link
           href="/login/?admin=true"
           className="text-green-500 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input shadow-sm h-9 px-4 py-2 mt-2 sm:mt-0 bg-muted/10 hover:bg-muted/15 border-none"
