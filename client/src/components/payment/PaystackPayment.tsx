@@ -47,20 +47,6 @@ export default function PaystackPayment({
     amount: 20000,
     publicKey,
     currency: "KES",
-    metadata: {
-      custom_fields: [
-        {
-          display_name: "Name",
-          variable_name: "name",
-          value: user.name,
-        },
-        // {
-        //   display_name: "Phone",
-        //   variable_name: "phone",
-        //   value: phone,
-        // },
-      ],
-    },
     onSuccess: () => {
       startTransition(() => {
         upgradeToPremium(user.email).then(async (data) => {
@@ -79,6 +65,15 @@ export default function PaystackPayment({
     },
     onError: () => {
       toast.error("Payment failed. Try again later!");
+    },
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "Name",
+          variable_name: "name",
+          value: user.name,
+        },
+      ],
     },
   };
 

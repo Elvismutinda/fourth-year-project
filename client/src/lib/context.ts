@@ -1,7 +1,6 @@
-import { eq, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { db } from "./db";
 import { generateEmbedding } from "./embeddings";
-import { case_laws } from "./db/schema";
 
 export async function getMatchesFromEmbeddings(
   embeddings: number[],
