@@ -35,5 +35,5 @@ export const register = async (values: RegisterRequest) => {
 
   await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
-  return { success: "Verification email sent!" };
+  return { success: "Verification email sent! (Check inbox or spam)" };
 };

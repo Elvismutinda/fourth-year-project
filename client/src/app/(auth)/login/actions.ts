@@ -40,7 +40,7 @@ export const login = async (values: LoginRequest) => {
       verificationToken.token
     );
 
-    return { success: "Verification email sent!" };
+    return { success: "Verification email sent! (Check inbox or spam)" };
   }
 
   try {
