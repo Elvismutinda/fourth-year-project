@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from local_llm import draft_with_llm
 from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer
+from constants import SYSTEM_PROMPT
 
 app = FastAPI()
 
@@ -36,7 +37,8 @@ class ChatRequest(BaseModel):
 async def chat(request: ChatRequest):
     try:
         from local_model import run_llm_chat
-        response = run_llm_chat(request.messages)
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + request.messages
+        response = run_llm_chat(messages)
         return {"response": response}
     except Exception as e:
         print("Error during chat:", str(e))

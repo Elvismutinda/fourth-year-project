@@ -48,8 +48,8 @@ export async function chat_llm(
   query: string,
   additionalContext?: string
 ): Promise<string> {
-  const messages = [
-    { role: "system", content: SYSTEM_PROMPT },
+  const userMessages = [
+    // { role: "system", content: SYSTEM_PROMPT },
     ...(additionalContext
       ? [
           {
@@ -73,7 +73,7 @@ export async function chat_llm(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages: userMessages }),
   });
 
   if (!response.ok) {
@@ -88,8 +88,8 @@ export async function caselaw_llm(
   query: string,
   additionalContext?: string
 ): Promise<string> {
-  const messages = [
-    { role: "system", content: SYSTEM_PROMPT },
+  const userMessages = [
+    // { role: "system", content: SYSTEM_PROMPT },
     ...(additionalContext
       ? [
           {
@@ -106,7 +106,7 @@ export async function caselaw_llm(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages: userMessages }),
   });
 
   if (!response.ok) {
