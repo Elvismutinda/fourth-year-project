@@ -35,7 +35,7 @@ export default function PaystackPayment({
   const { update } = useSession();
   const [isPending, startTransition] = useTransition();
 
-  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_LIVE_PUBLIC_KEY;
 
   if (!publicKey) {
     toast.error("Paystack public key is not set!");
@@ -44,7 +44,7 @@ export default function PaystackPayment({
 
   const paystackConfig = {
     email: user.email,
-    amount: 20000,
+    amount: 500, // Change to 20000 for KES 200
     publicKey,
     currency: "KES",
     onSuccess: () => {
