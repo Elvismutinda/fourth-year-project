@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from local_llm import draft_with_llm
 from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer
-from constants import SYSTEM_PROMPT
+
+from draft import draft_with_llm
+from hf_model import run_hf_chat
 
 app = FastAPI()
 
@@ -36,9 +37,12 @@ class ChatRequest(BaseModel):
 @app.post("/chat")
 async def chat(request: ChatRequest):
     try:
-        from local_model import run_llm_chat
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + request.messages
-        response = run_llm_chat(messages)
+        # Just log and pass through messages
+        print("Received messages:")
+        for msg in request.messages:
+            print(f"{msg['role']}: {msg['content']}")
+
+        response = run_hf_chat(request.messages)
         return {"response": response}
     except Exception as e:
         print("Error during chat:", str(e))

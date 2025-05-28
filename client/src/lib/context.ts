@@ -7,11 +7,11 @@ export async function getMatchesFromEmbeddings(
   fileUrl: string
 ) {
   try {
-    const embeddingsVectors = `[${embeddings.join(", ")}]`;
+    const vectorLiteral = sql.raw(`'[${embeddings.join(", ")}]'::vector`);
 
     const queryResult = await db.execute(
       sql`
-        SELECT content, 1 - (embedding <=> ${embeddingsVectors}::vector) AS similarity
+        SELECT content, 1 - (embedding <=> ${vectorLiteral}::vector) AS similarity
         FROM documents
         WHERE file_url = ${fileUrl}
         ORDER BY similarity DESC
@@ -37,9 +37,9 @@ export async function getContext(query: string, fileUrl: string) {
   const queryEmbeddings = await generateEmbedding(query);
   const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileUrl);
 
-  // Filter results with score > 0.7
+  // Filter results with score > 0.5
   const qualifyingDocs = matches.filter(
-    (match) => typeof match.score === "number" && match.score > 0.2
+    (match) => typeof match.score === "number" && match.score > 0.5
   );
 
   let docs = qualifyingDocs.map((match) => match.text);

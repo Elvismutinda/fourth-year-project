@@ -8,7 +8,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     }
 
     // console.log(
-    //   "Sending text to Hugging Face for embedding:",
+    //   "Sending text to FastAPI for embedding:",
     //   cleanedText.slice(0, 200),
     //   "..."
     // );
