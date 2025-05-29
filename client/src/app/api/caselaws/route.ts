@@ -2,10 +2,20 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "../../../../auth";
 import { getCaseLawById } from "@/app/app/caselaws/actions";
-import { message as _messages, chat } from "@/lib/db/schema";
-import { chat_llm } from "@/lib/ai/hf_llm";
+import { message as _messages, case_law_chunks, chat } from "@/lib/db/schema";
 import { getCaseContext } from "@/lib/context";
 import { and, eq } from "drizzle-orm";
+import { HfInference } from "@huggingface/inference";
+import { Message } from "ai";
+import { loadCaseLawToNeon } from "@/lib/caselawLoader";
+
+const HF_TOKEN = process.env.HF_TOKEN;
+
+if (!HF_TOKEN) {
+  throw new Error("Missing Hugging Face API token");
+}
+
+const hf = new HfInference(HF_TOKEN);
 
 export const maxDuration = 30;
 
@@ -28,6 +38,16 @@ export async function POST(req: Request) {
       );
     }
 
+    const [chunkExists] = await db
+      .select({ id: case_law_chunks.id })
+      .from(case_law_chunks)
+      .where(eq(case_law_chunks.caseLawId, caseLawId))
+      .limit(1);
+
+    if (!chunkExists) {
+      await loadCaseLawToNeon({ id: _caseLaw.id, content: _caseLaw.content });
+    }
+
     interface CaseMetadata {
       citation?: string;
     }
@@ -40,9 +60,31 @@ export async function POST(req: Request) {
 
     context = await getCaseContext(lastMessage.content, caseLawId);
 
-    const response = await chat_llm(lastMessage.content, context);
+    const prompt = {
+      role: "system",
+      content: `You are Intelaw, an advanced AI legal research assistant, specifically tailored to assist legal practitioners in Kenyan law. Your expertise lies in conducting thorough legal research and providing insightful legal analysis.
+      START CONTEXT BLOCK
+      ${context}
+      END CONTEXT BLOCK
+      Your task is to accurately and comprehensively address the user legal query, prioritizing the use of the provided context only if it enhances the response. For identity or informational queries, respond without utilizing the context.\n.
+      Maintain a formal, professional tone. Reference case law and constitutional provisions if relevant.
+      `,
+    };
 
-    console.log("Response:", response);
+    let response = "";
+    for await (const chunk of hf.chatCompletionStream({
+      model: "HuggingFaceH4/zephyr-7b-beta",
+      messages: [
+        prompt,
+        ...messages.filter((message: Message) => message.role === "user"),
+      ],
+      max_tokens: 512,
+      temperature: 0.7,
+    })) {
+      if (chunk.choices && chunk.choices.length > 0) {
+        response += chunk.choices[0].delta.content;
+      }
+    }
 
     // Check if a chat already exists for the user + caseLawId
     const [existingChat] = await db

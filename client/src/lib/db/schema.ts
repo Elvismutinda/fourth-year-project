@@ -132,3 +132,10 @@ export const case_laws = pgTable(
     ),
   })
 );
+
+export const case_law_chunks = pgTable("case_law_chunks", {
+  id: text("id").primaryKey(),
+  caseLawId: uuid("case_law_id").references(() => case_laws.id),
+  content: text("content"),
+  embedding: vector("embedding", { dimensions: 384 }),
+});

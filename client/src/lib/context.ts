@@ -15,7 +15,7 @@ export async function getMatchesFromEmbeddings(
         FROM documents
         WHERE file_url = ${fileUrl}
         ORDER BY similarity DESC
-        LIMIT 3;
+        LIMIT 5;
       `
     );
 
@@ -37,9 +37,9 @@ export async function getContext(query: string, fileUrl: string) {
   const queryEmbeddings = await generateEmbedding(query);
   const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileUrl);
 
-  // Filter results with score > 0.5
+  // Filter results with score > 0.7
   const qualifyingDocs = matches.filter(
-    (match) => typeof match.score === "number" && match.score > 0.5
+    (match) => typeof match.score === "number" && match.score > 0.2
   );
 
   let docs = qualifyingDocs.map((match) => match.text);
@@ -52,15 +52,15 @@ export async function getContext(query: string, fileUrl: string) {
 export async function getCaseContext(query: string, caseLawId: string) {
   try {
     const queryEmbeddings = await generateEmbedding(query);
-    const embeddingsVectors = `[${queryEmbeddings.join(", ")}]`;
+    const vectorLiteral = sql.raw(`'[${queryEmbeddings.join(", ")}]'::vector`);
 
     const queryResult = await db.execute(
       sql`
-        SELECT content, 1 - (embedding <=> ${embeddingsVectors}::vector) AS similarity
-        FROM case_laws
-        WHERE id = ${caseLawId}
+        SELECT content, 1 - (embedding <=> ${vectorLiteral}::vector) AS similarity
+        FROM case_law_chunks
+        WHERE case_law_id = ${caseLawId}
         ORDER BY similarity DESC
-        LIMIT 3;
+        LIMIT 5;
       `
     );
 
@@ -71,10 +71,6 @@ export async function getCaseContext(query: string, caseLawId: string) {
         (row) => typeof row.similarity === "number" && row.similarity > 0.2
       )
       .map((row) => row.content);
-
-    if (bestChunks.length === 0) {
-      console.warn("No relevant chunks found, consider lowering threshold.");
-    }
 
     return bestChunks.join("\n").substring(0, 3000);
   } catch (error) {

@@ -5,7 +5,16 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { auth } from "../../../../auth";
 import { deleteChatById, getChatById } from "@/app/app/chat/actions";
-import { chat_llm } from "@/lib/ai/hf_llm";
+import { Message } from "ai";
+import { HfInference } from "@huggingface/inference";
+
+const HF_TOKEN = process.env.HF_TOKEN;
+
+if (!HF_TOKEN) {
+  throw new Error("Missing Hugging Face API token");
+}
+
+const hf = new HfInference(HF_TOKEN);
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -36,9 +45,31 @@ export async function POST(req: Request) {
       context = await getContext(lastMessage.content, fileUrl);
     }
 
-    const response = await chat_llm(lastMessage.content, context);
+    const prompt = {
+      role: "system",
+      content: `You are Intelaw, an advanced AI legal research assistant, specifically tailored to assist legal practitioners in Kenyan law. Your expertise lies in conducting thorough legal research and providing insightful legal analysis.
+      START CONTEXT BLOCK
+      ${context}
+      END CONTEXT BLOCK
+      Your task is to accurately and comprehensively address the user legal query, prioritizing the use of the provided context only if it enhances the response. For identity or informational queries, respond without utilizing the context.\n.
+      Maintain a formal, professional tone. Reference case law and constitutional provisions if relevant.
+      `,
+    };
 
-    console.log("Response:", response);
+    let response = "";
+    for await (const chunk of hf.chatCompletionStream({
+      model: "HuggingFaceH4/zephyr-7b-beta",
+      messages: [
+        prompt,
+        ...messages.filter((message: Message) => message.role === "user"),
+      ],
+      max_tokens: 512,
+      temperature: 0.7,
+    })) {
+      if (chunk.choices && chunk.choices.length > 0) {
+        response += chunk.choices[0].delta.content;
+      }
+    }
 
     await db.insert(_messages).values([
       {
